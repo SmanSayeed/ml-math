@@ -1,0 +1,111 @@
+{
+  "slug": "scalar",
+  "title": "Scalar — একটাই সংখ্যা",
+  "titleEn": "Scalar",
+  "category": "linear-algebra",
+  "order": 1,
+  "readTime": 5,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🍵",
+    "title": "রহিমের চায়ের দোকান",
+    "content": "ধর তোর বন্ধু রহিম মিরপুরে চায়ের দোকান দিছে। সন্ধ্যায় তুই জিজ্ঞেস করলি 'মামা, আজকে কত কামাইলি?' সে বলল 'ভাই, ৫০০ টাকা।' শুধু একটা সংখ্যা — ৫০০। আর কিছু না।",
+    "reveal": "এইটাই হইল Scalar! একটামাত্র সংখ্যা, একটাই জিনিস বোঝায়। বুঝলা মামা?"
+  },
+  "definition": {
+    "content": "Scalar হইল একটা single number — কোনো direction নাই, শুধু magnitude আছে। Real number-এর যেকোনো value হইতে পারে।",
+    "formula": "s \\in \\mathbb{R}",
+    "formulaLabel": "Scalar s — যেকোনো real number"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Scalar-এর বৈশিষ্ট্য",
+        "content": "Scalar-এ শুধু একটাই সংখ্যা থাকে। কোনো direction নাই, কোনো dimension নাই। ৫, -৩.১৪, ২০০ — সবই scalar।"
+      },
+      {
+        "title": "ML-এ Scalar কোথায় দেখবা",
+        "content": "Learning rate, loss value, একটা neuron-এর output, temperature parameter — সব scalar। এইগুলা ছাড়া ML চলবে না।",
+        "formula": "\\alpha = 0.01 \\text{ (learning rate)}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Scalar দিয়া Learning Rate",
+    "problem": "তোর neural network-এর loss হইল ২.৪। Learning rate ০.০১। একবার gradient descent step-এ loss কতটুকু পরিবর্তন হইব?",
+    "steps": [
+      {
+        "label": "Step 1: Values নাও",
+        "content": "Loss = 2.4, learning rate (α) = 0.01 — দুইটাই scalar",
+        "formula": "L = 2.4, \\quad \\alpha = 0.01"
+      },
+      {
+        "label": "Step 2: Update",
+        "content": "Gradient ধরো 1.0 হইলে",
+        "formula": "L_{new} = L - \\alpha \\cdot g = 2.4 - 0.01 \\times 1.0 = 2.39"
+      }
+    ],
+    "answer": "Loss ২.৪০ থেকে ২.৩৯ হইল — scalar multiplication দিয়া!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Learning Rate",
+      "icon": "⚡",
+      "explanation": "Neural network train করার সময় প্রতিটা weight কতটুকু update হইব সেইটা একটা scalar দিয়া control করা হয় — এইটাই learning rate। বড় হইলে fast কিন্তু unstable, ছোট হইলে slow কিন্তু stable।",
+      "realExample": "GPT-4 training-এ Adam optimizer-এ learning rate = 3e-4 use হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\nlearning_rate = 0.001  # scalar\noptimizer = torch.optim.Adam(\n    model.parameters(), \n    lr=learning_rate\n)\n# প্রতিটা parameter এই scalar দিয়া scale হইব"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Loss Value",
+      "icon": "📉",
+      "explanation": "Training-এ model কতটা ভুল করতেছে সেইটা একটা scalar number-এ express হয় — এইটাই loss। ০ এর দিকে যাইতেছে মানে model শিখতেছে।",
+      "realExample": "Image classifier-এ Cross Entropy Loss = 0.043 মানে model অনেক confident এবং accurate।",
+      "code": {
+        "language": "python",
+        "snippet": "criterion = torch.nn.CrossEntropyLoss()\nloss = criterion(predictions, labels)\nprint(f'Loss: {loss.item():.4f}')  # scalar!\n# loss.item() একটা Python float (scalar)"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Temperature in LLMs",
+      "icon": "🌡️",
+      "explanation": "ChatGPT বা Claude-এ temperature একটা scalar — বড় হইলে creative/random output, ছোট হইলে deterministic। তুমি API-তে এইটা set করতে পারো।",
+      "realExample": "Claude API-তে temperature=0 দিলে always same answer, temperature=1 দিলে varied creative answers।",
+      "code": {
+        "language": "python",
+        "snippet": "import anthropic\n\nclient = anthropic.Anthropic()\nresponse = client.messages.create(\n    model='claude-sonnet-4-5',\n    max_tokens=1000,\n    temperature=0.7,  # scalar: 0.0 to 1.0\n    messages=[{'role': 'user', 'content': 'Hello'}]\n)"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Confidence Score",
+      "icon": "🎯",
+      "explanation": "ML model যখন prediction করে, সে একটা scalar confidence score দেয়। ০.৯৫ মানে ৯৫% confident।",
+      "realExample": "Face recognition system: match_score = 0.97 মানে ৯৭% sure এই মুখ same person।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.linear_model import LogisticRegression\n\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\n\nproba = model.predict_proba(X_test)\nconfidence = proba[0][1]  # scalar: 0.0 to 1.0\nprint(f'Confidence: {confidence:.2%}')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Regularization Strength",
+      "icon": "🛡️",
+      "explanation": "Overfitting রোধ করতে loss-এ একটা penalty যোগ করা হয়, সেই penalty-র strength একটা scalar lambda (λ) দিয়া control হয়।",
+      "realExample": "Ridge Regression-এ λ=0.1 দিলে moderate regularization — weights বেশি বড় হইতে পারব না।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.linear_model import Ridge\n\nlambda_val = 0.1  # scalar regularization strength\nmodel = Ridge(alpha=lambda_val)\nmodel.fit(X_train, y_train)\n# lambda বড় → simpler model, ছোট → complex model"
+      }
+    }
+  ],
+  "memoryTrick": "Scalar = শুধু একটা সংখ্যা — রহিমের ৫০০ টাকার মতো। দিকটিক নাই, শুধু পরিমাণ।",
+  "tags": ["scalar", "number", "magnitude", "basic"],
+  "prev": null,
+  "next": "vector"
+}

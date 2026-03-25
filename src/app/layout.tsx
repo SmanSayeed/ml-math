@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hind_Siliguri, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { AppShell } from "@/components/layout/AppShell";
 
 const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
@@ -64,7 +65,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-base font-[family-name:var(--font-hind-siliguri)]">
-        {children}
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
