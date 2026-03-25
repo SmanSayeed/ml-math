@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+  --bg-base: #0b0f1a;
+  --bg-surface: #131929;
+  --bg-card: #161d2e;
+  --bg-card2: #1e2740;
+  --accent-amber: #f59e0b;
+  --accent-green: #10b981;
+  --accent-blue: #0ea5e9;
+  --accent-purple: #6366f1;
+  --accent-red: #f43f5e;
+  --accent-orange: #f97316;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-default: rgba(255, 255, 255, 0.12);
+}
+
+@theme inline {
+  --color-base: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-card: var(--bg-card);
+  --color-card2: var(--bg-card2);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-green: var(--accent-green);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-red: var(--accent-red);
+  --color-accent-orange: var(--accent-orange);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --font-bengali: var(--font-hind-siliguri);
+  --font-code: var(--font-jetbrains-mono);
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-bengali), sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* MathJax overrides */
+.MathJax {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+mjx-container {
+  overflow-x: auto !important;
+  max-width: 100% !important;
+}
+
+/* Code block */
+.code-block {
+  background: #0d1117;
+  font-family: var(--font-code), monospace;
+}
+
+/* Selection */
+::selection {
+  background: rgba(245, 158, 11, 0.3);
+  color: var(--text-primary);
+}
