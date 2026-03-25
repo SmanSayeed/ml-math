@@ -1,0 +1,107 @@
+{
+  "categories": [
+    {
+      "id": "linear-algebra",
+      "title": "Linear Algebra",
+      "titleBn": "লিনিয়ার অ্যালজেব্রা",
+      "icon": "🔢",
+      "color": "amber",
+      "chapters": [
+        "scalar",
+        "vector",
+        "vector-norm",
+        "unit-vector",
+        "dot-product",
+        "cosine-similarity",
+        "vector-operations",
+        "matrix",
+        "matrix-multiplication",
+        "matrix-transpose",
+        "identity-inverse",
+        "determinant",
+        "rank-independence",
+        "eigenvalue-eigenvector",
+        "svd",
+        "pca",
+        "tensor"
+      ]
+    },
+    {
+      "id": "calculus",
+      "title": "Calculus",
+      "titleBn": "ক্যালকুলাস",
+      "icon": "📈",
+      "color": "blue",
+      "chapters": [
+        "functions-limits",
+        "derivative",
+        "partial-derivative",
+        "chain-rule",
+        "gradient",
+        "gradient-descent",
+        "learning-rate",
+        "local-global-minimum",
+        "jacobian",
+        "hessian",
+        "taylor-series",
+        "convexity"
+      ]
+    },
+    {
+      "id": "probability-stats",
+      "title": "Probability & Statistics",
+      "titleBn": "প্রোবাবিলিটি ও স্ট্যাটিসটিক্স",
+      "icon": "🎲",
+      "color": "red",
+      "chapters": [
+        "probability-basics",
+        "conditional-probability",
+        "bayes-theorem",
+        "random-variables",
+        "expected-value",
+        "variance-std",
+        "covariance-correlation",
+        "normal-distribution",
+        "bernoulli-binomial",
+        "uniform-distribution",
+        "softmax-categorical",
+        "mle",
+        "map",
+        "law-large-numbers",
+        "central-limit-theorem"
+      ]
+    },
+    {
+      "id": "information-theory",
+      "title": "Information Theory",
+      "titleBn": "ইনফরমেশন থিওরি",
+      "icon": "🧠",
+      "color": "orange",
+      "chapters": [
+        "entropy",
+        "cross-entropy",
+        "kl-divergence",
+        "information-gain",
+        "mutual-information"
+      ]
+    },
+    {
+      "id": "optimization",
+      "title": "Optimization",
+      "titleBn": "অপ্টিমাইজেশন",
+      "icon": "⚡",
+      "color": "green",
+      "chapters": [
+        "loss-functions",
+        "convex-optimization",
+        "optimizers",
+        "l1-l2-regularization",
+        "dropout",
+        "overfitting-underfitting",
+        "bias-variance-tradeoff"
+      ]
+    }
+  ],
+  "totalChapters": 56,
+  "version": "1.0.0"
+}
