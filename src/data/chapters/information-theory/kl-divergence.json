@@ -1,0 +1,111 @@
+{
+  "slug": "kl-divergence",
+  "title": "KL Divergence — বণ্টনের দূরত্ব",
+  "titleEn": "KL Divergence",
+  "category": "information-theory",
+  "order": 3,
+  "readTime": 10,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🍛",
+    "title": "ফেক বিরিয়ানি vs আসল বিরিয়ানি",
+    "content": "ধর পুরান ঢাকার হাজীর বিরিয়ানি-তে আসল রেসিপি আছে — চাল ৪০%, মাংস ৩০%, মসলা ২০%, ঘি ১০%। এইটা হইল 'true distribution'। এখন মিরপুরে একটা নতুন দোকান ওপেন হইল 'হাজীর বিরিয়ানি স্টাইল'। তারা দেয় — চাল ৬০%, মাংস ১৫%, মসলা ২০%, ঘি ৫%। দেখতে same লাগে কিন্তু একটু খাইলেই বুঝবি — 'এইটা আসল হাজীর না!' চাল বেশি, মাংস কম — ফেক!",
+    "reveal": "এই আসল আর নকল রেসিপি-র মধ্যে পার্থক্যটা measure করাই হইল KL Divergence! গুরু বলে — 'KL Divergence বলে দেয় একটা distribution আরেকটা থেকে কতটুকু আলাদা। zero হইলে হুবহু same, বেশি হইলে বেশি ভিন্ন!'"
+  },
+  "definition": {
+    "content": "KL Divergence (Kullback-Leibler Divergence) measure করে একটা probability distribution Q, reference distribution P থেকে কতটুকু আলাদা। এইটা asymmetric — D_KL(P||Q) আর D_KL(Q||P) সমান না।",
+    "formula": "D_{KL}(P \\| Q) = \\sum_{i} P(x_i) \\log \\frac{P(x_i)}{Q(x_i)}",
+    "formulaLabel": "KL Divergence — P থেকে Q কত দূরে"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Cross-Entropy আর Entropy-র সম্পর্ক",
+        "content": "KL Divergence = Cross-Entropy - Entropy। মানে actual distribution-এর entropy বাদ দিলে যেটুকু extra cost থাকে wrong distribution use করার জন্য, সেইটাই KL Divergence।",
+        "formula": "D_{KL}(P \\| Q) = H(P, Q) - H(P)"
+      },
+      {
+        "title": "Asymmetric — দিক গুরুত্বপূর্ণ",
+        "content": "হাজীর বিরিয়ানি থেকে ফেক-এর distance আর ফেক থেকে হাজীর-এর distance same না। D_KL(P||Q) ≠ D_KL(Q||P)। এই কারণে KL Divergence-কে 'distance' না বইলা 'divergence' বলে।",
+        "formula": "D_{KL}(P \\| Q) \\neq D_{KL}(Q \\| P)"
+      },
+      {
+        "title": "সবসময় Non-negative",
+        "content": "KL Divergence কখনো negative হয় না। Gibbs' inequality অনুযায়ী D_KL ≥ 0, আর zero শুধু তখনই হয় যখন P আর Q হুবহু same distribution।",
+        "formula": "D_{KL}(P \\| Q) \\geq 0, \\quad D_{KL}(P \\| Q) = 0 \\iff P = Q"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "বিরিয়ানি রেসিপি-র KL Divergence",
+    "problem": "আসল: P = [0.4, 0.3, 0.2, 0.1] (চাল, মাংস, মসলা, ঘি)। নকল: Q = [0.6, 0.15, 0.2, 0.05]। D_KL(P||Q) কত?",
+    "steps": [
+      {
+        "label": "Step 1: Formula লেখ",
+        "content": "প্রতিটা ingredient-এর জন্য P(i) × log(P(i)/Q(i)) বের করো",
+        "formula": "D_{KL} = \\sum_i P(i) \\log \\frac{P(i)}{Q(i)}"
+      },
+      {
+        "label": "Step 2: প্রতিটা term",
+        "content": "Natural log (ln) use করি",
+        "formula": "0.4 \\ln\\frac{0.4}{0.6} + 0.3 \\ln\\frac{0.3}{0.15} + 0.2 \\ln\\frac{0.2}{0.2} + 0.1 \\ln\\frac{0.1}{0.05}"
+      },
+      {
+        "label": "Step 3: Calculate",
+        "content": "প্রতিটা value বের করো",
+        "formula": "= 0.4(-0.405) + 0.3(0.693) + 0.2(0) + 0.1(0.693) = -0.162 + 0.208 + 0 + 0.069 = 0.115"
+      }
+    ],
+    "answer": "D_KL(P||Q) ≈ 0.115 nats। মানে নকল রেসিপি আসল থেকে বেশ আলাদা — চালের ratio-র পার্থক্যটা main contributor।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "VAE (Variational Autoencoder)",
+      "icon": "🎨",
+      "explanation": "VAE-তে latent space-এর distribution-কে standard normal-এর কাছাকাছি রাখতে KL Divergence use হয়। এইটা regularization-এর কাজ করে — latent space smooth থাকে।",
+      "realExample": "DALL-E-এর আগের version VAE-based ছিল। Image generate করতে KL term ensure করে latent space meaningful এবং continuous থাকে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\ndef vae_loss(recon_x, x, mu, logvar):\n    \"\"\"VAE loss = Reconstruction + KL Divergence\"\"\"\n    # Reconstruction loss\n    recon_loss = torch.nn.functional.mse_loss(recon_x, x, reduction='sum')\n    \n    # KL Divergence: q(z|x) || p(z)\n    # p(z) = N(0,1), q(z|x) = N(mu, sigma^2)\n    kl_div = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())\n    \n    return recon_loss + kl_div\n\n# Example\nmu = torch.randn(32, 64)  # batch=32, latent=64\nlogvar = torch.randn(32, 64)\nkl = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())\nprint(f'KL Divergence: {kl.item():.2f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Policy Optimization (PPO)",
+      "icon": "🤖",
+      "explanation": "Reinforcement Learning-এ PPO algorithm-এ new policy আর old policy-র মধ্যে KL Divergence constraint রাখা হয় যাতে policy update খুব বেশি বড় না হয়।",
+      "realExample": "ChatGPT-র RLHF training-এ PPO use হয় — KL penalty ensure করে model original pretrained model থেকে বেশি দূরে সরে না যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\ndef kl_divergence(p_logits, q_logits):\n    \"\"\"KL(P || Q) for discrete distributions\"\"\"\n    p = F.softmax(p_logits, dim=-1)\n    q = F.softmax(q_logits, dim=-1)\n    return (p * (p.log() - q.log())).sum(dim=-1).mean()\n\n# Old policy vs New policy\nold_logits = torch.tensor([1.0, 2.0, 0.5])\nnew_logits = torch.tensor([1.2, 1.8, 0.6])\n\nkl = kl_divergence(old_logits.unsqueeze(0), new_logits.unsqueeze(0))\nprint(f'Policy KL: {kl.item():.6f}')\n# KL ছোট → policy stable update হইতেছে"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Knowledge Distillation",
+      "icon": "📚",
+      "explanation": "বড় teacher model-এর output distribution আর ছোট student model-এর output-এর KL Divergence minimize করে student শেখে। Soft labels-এ teacher-এর knowledge encoded থাকে।",
+      "realExample": "TinyBERT training-এ BERT-base-এর সাথে KL Divergence minimize করা হয় — 4x ছোট model কিন্তু 96% accuracy retain করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\ndef distill_kl(student_logits, teacher_logits, temperature=4.0):\n    \"\"\"KL Divergence for distillation\"\"\"\n    p = F.softmax(teacher_logits / temperature, dim=-1)\n    q = F.log_softmax(student_logits / temperature, dim=-1)\n    # KL(teacher || student)\n    kl = F.kl_div(q, p, reduction='batchmean') * (temperature ** 2)\n    return kl\n\nteacher_out = torch.tensor([[5.0, 2.0, 1.0]])\nstudent_out = torch.tensor([[3.0, 2.5, 1.5]])\n\nloss = distill_kl(student_out, teacher_out)\nprint(f'Distillation KL: {loss.item():.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "GAN Training Monitoring",
+      "icon": "🖼️",
+      "explanation": "GAN-এ generator-এর output distribution আর real data distribution-এর মধ্যে KL Divergence track করলে training progress বোঝা যায়। কমতে থাকলে generator ভালো হইতেছে।",
+      "realExample": "StyleGAN training-এ generated face distribution আর real face distribution-এর divergence monitor করে training quality check করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import entropy\n\ndef kl_divergence_empirical(p_samples, q_samples, bins=50):\n    \"\"\"Empirical KL divergence from samples\"\"\"\n    # Histogram বানাও\n    range_min = min(p_samples.min(), q_samples.min())\n    range_max = max(p_samples.max(), q_samples.max())\n    \n    p_hist, _ = np.histogram(p_samples, bins=bins, range=(range_min, range_max), density=True)\n    q_hist, _ = np.histogram(q_samples, bins=bins, range=(range_min, range_max), density=True)\n    \n    # Smoothing (avoid log(0))\n    p_hist = p_hist + 1e-10\n    q_hist = q_hist + 1e-10\n    \n    return entropy(p_hist, q_hist)\n\n# Real vs Generated data\nreal_data = np.random.normal(0, 1, 10000)\nfake_data = np.random.normal(0.5, 1.2, 10000)  # slightly off\n\nkl = kl_divergence_empirical(real_data, fake_data)\nprint(f'KL(real || fake): {kl:.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "KL Divergence = আসল হাজীর বিরিয়ানি আর নকল-এর পার্থক্য। Zero মানে হুবহু same রেসিপি, বেশি মানে ভেজাল বেশি! আর মনে রাখবি — এইটা one-way, আসল→নকল আর নকল→আসল দিলে answer আলাদা।",
+  "tags": ["kl-divergence", "kullback-leibler", "divergence", "distribution", "vae", "ppo"],
+  "prev": "cross-entropy",
+  "next": "information-gain"
+}

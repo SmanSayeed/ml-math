@@ -1,0 +1,131 @@
+{
+  "slug": "bayes-theorem",
+  "title": "Bayes Theorem — বেইজের সূত্র",
+  "titleEn": "Bayes Theorem",
+  "category": "probability-stats",
+  "order": 3,
+  "readTime": 14,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🏥",
+    "title": "ডাক্তার আর COVID টেস্টের গল্প",
+    "content": "ধর ভাই, ঢাকায় COVID-এর সময়। তোর গলা ব্যথা, তুই ল্যাবে গেলি টেস্ট করাতে। রিপোর্ট আসল — Positive! তুই ভয়ে কাঁপতেছিস। কিন্তু তোর ডাক্তার মামা (পুরান ঢাকার ফেমাস ডাক্তার) শান্ত গলায় বলল 'ঘাবড়াস না মিয়া। এই টেস্টের accuracy 99% ঠিকই, কিন্তু ঢাকায় আসলে COVID আছে মাত্র 1% মানুষের। তোর actually COVID হওয়ার chance মাত্র 50%!' তুই অবাক — 99% accurate test, তাও 50% chance? ডাক্তার মামা বলল 'এইটাই Bayes Theorem-এর ম্যাজিক, বাবা!'",
+    "reveal": "এইটাই Bayes Theorem, মামা! Test positive আসছে — এইটা evidence। কিন্তু actual probability বাইর করতে তোকে prior probability (আগে থেকে কত % মানুষের COVID) আর test-এর accuracy — দুইটাই consider করতে হবে। P(COVID | Positive) = P(Positive | COVID) × P(COVID) / P(Positive)। Prior কে evidence দিয়া update করাই Bayes-এর কাজ!"
+  },
+  "definition": {
+    "content": "Bayes Theorem conditional probability-কে 'উল্টায়া' দেয়। P(A|B) জানা থাকলে P(B|A) বাইর করা যায়, অথবা prior belief কে নতুন evidence দিয়া update করা যায়। ML-এর backbone এই theorem।",
+    "formula": "P(A|B) = \\frac{P(B|A) \\cdot P(A)}{P(B)}",
+    "formulaLabel": "Bayes Theorem — Posterior = (Likelihood × Prior) / Evidence"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Prior, Likelihood, Posterior কী?",
+        "content": "Prior P(A) = নতুন data দেখার আগে তোর বিশ্বাস। ঢাকায় 1% মানুষের COVID — এইটা prior। Likelihood P(B|A) = COVID থাকলে test positive আসার chance = 99%। Posterior P(A|B) = test positive আসার পরে actually COVID হওয়ার chance। Evidence P(B) = যেকোনোভাবে test positive আসার overall chance।",
+        "formula": "\\underbrace{P(A|B)}_{\\text{Posterior}} = \\frac{\\overbrace{P(B|A)}^{\\text{Likelihood}} \\cdot \\overbrace{P(A)}^{\\text{Prior}}}{\\underbrace{P(B)}_{\\text{Evidence}}}"
+      },
+      {
+        "title": "Evidence (P(B)) কিভাবে Calculate করি?",
+        "content": "P(B) বাইর করতে Law of Total Probability লাগে। Test positive আসতে পারে দুইভাবে: (১) সত্যিই COVID আছে আর test ধরছে, (২) COVID নাই কিন্তু test ভুল করছে (false positive)। দুইটা path-ই consider করতে হবে।",
+        "formula": "P(B) = P(B|A) \\cdot P(A) + P(B|A^c) \\cdot P(A^c)"
+      },
+      {
+        "title": "Base Rate Fallacy",
+        "content": "এইটা মানুষের common ভুল — test-এর accuracy দেখে ভাবে 99% sure COVID আছে। কিন্তু base rate (prior) ignore করে! যদি 1% মানুষের COVID থাকে, তাইলে 99% accurate test-ও অনেক false positive দেয়। ঢাকার ডাক্তার মামা এই fallacy-টা ভালো বুঝে!",
+        "formula": "\\text{High accuracy} \\neq \\text{High posterior if prior is low!}"
+      },
+      {
+        "title": "Bayesian Update — বারবার Update করা",
+        "content": "Bayes Theorem-র আসল power হইল iterative update। আজকের posterior কালকের prior হয়। নতুন evidence আসলে আবার update। ঢাকার আবহাওয়া ভবিষ্যদ্বাণীও এইভাবে কাজ করে — প্রতি ঘণ্টায় নতুন data আসে, prediction update হয়।",
+        "formula": "P(A|B_1, B_2) \\propto P(B_2|A) \\cdot P(A|B_1)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "COVID Test — ডাক্তার মামার Calculation",
+    "problem": "ঢাকায় 1% মানুষের COVID আছে। একটা test-এর sensitivity 99% (COVID থাকলে positive আসে) আর specificity 99% (COVID না থাকলে negative আসে)। তোর test positive আসছে — actually COVID হওয়ার probability কত?",
+    "steps": [
+      {
+        "label": "Step 1: Given তথ্য সাজাও",
+        "content": "P(COVID) = 0.01 (prior), P(+|COVID) = 0.99 (sensitivity), P(-|No COVID) = 0.99 (specificity), তাই P(+|No COVID) = 0.01 (false positive rate)",
+        "formula": "P(C) = 0.01, \\quad P(+|C) = 0.99, \\quad P(+|C^c) = 0.01"
+      },
+      {
+        "label": "Step 2: Evidence P(+) Calculate কর",
+        "content": "Total probability of positive = COVID থাকলে positive + COVID না থাকলে false positive",
+        "formula": "P(+) = P(+|C) \\cdot P(C) + P(+|C^c) \\cdot P(C^c) = 0.99 \\times 0.01 + 0.01 \\times 0.99 = 0.0198"
+      },
+      {
+        "label": "Step 3: Bayes Theorem Apply কর",
+        "content": "Posterior = Likelihood × Prior ÷ Evidence",
+        "formula": "P(C|+) = \\frac{P(+|C) \\cdot P(C)}{P(+)} = \\frac{0.99 \\times 0.01}{0.0198} = \\frac{0.0099}{0.0198} = 0.5"
+      },
+      {
+        "label": "Step 4: ব্যাখ্যা",
+        "content": "99% accurate test দিয়াও positive আসলে actually COVID-এর chance মাত্র 50%! কারণ base rate মাত্র 1%। 99 জন healthy মানুষের মধ্যে ~1 জনেও false positive আসে, আর 1 জন actual COVID patient-এরও positive আসে। তাই 50-50!"
+      }
+    ],
+    "answer": "P(COVID | Positive) = 0.5 বা 50%। 99% accurate test-এও positive মানে 50% chance! এই জন্যই ডাক্তার মামা বলছে 'ঘাবড়াস না' — base rate low হইলে false positive অনেক বেশি হয়!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Bayesian Spam Filter",
+      "icon": "📧",
+      "explanation": "Email spam detection-এ Bayes Theorem directly ব্যবহার হয়। P(spam | word_list) calculate করে। Prior হইল overall spam rate, likelihood হইল spam email-এ ওই word গুলা আসার chance। নতুন email আসলে posterior update হয়।",
+      "realExample": "Paul Graham-র বিখ্যাত 'A Plan for Spam' paper Bayesian filtering নিয়া। Gmail আজও এই approach ব্যবহার করে।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.naive_bayes import BernoulliNB\nfrom sklearn.feature_extraction.text import CountVectorizer\nimport numpy as np\n\n# Training emails\nemails = [\n    'buy cheap viagra now', 'free lottery winner',\n    'team meeting tomorrow', 'project update attached',\n    'discount offer limited', 'lunch plans friday'\n]\nlabels = [1, 1, 0, 0, 1, 0]  # 1=spam\n\nvec = CountVectorizer(binary=True)\nX = vec.fit_transform(emails)\n\n# Bayesian classifier\n# P(spam|words) = P(words|spam) * P(spam) / P(words)\nclf = BernoulliNB()\nclf.fit(X, labels)\n\ntest = vec.transform(['free discount buy now'])\nposterior = clf.predict_proba(test)\nprint(f'P(spam|email) = {posterior[0][1]:.3f}')\nprint(f'P(ham|email) = {posterior[0][0]:.3f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Bayesian Optimization (Hyperparameter Tuning)",
+      "icon": "⚙️",
+      "explanation": "ML model-এর hyperparameter tune করতে Bayesian optimization ব্যবহার হয়। Prior: hyperparameter space-এ কোথায় best result হতে পারে। নতুন experiment-এর result = evidence। Posterior update করে পরের experiment কোথায় করবে decide করে।",
+      "realExample": "Google Vizier Bayesian optimization ব্যবহার করে TPU-তে model training-এর learning rate, batch size optimize করে।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.gaussian_process import GaussianProcessRegressor\nimport numpy as np\n\n# Bayesian Optimization concept\nnp.random.seed(42)\n\n# Unknown objective function (simulate)\ndef objective(x):\n    return -(x - 2)**2 + 4\n\n# Prior: initial random samples\nX_observed = np.array([[0], [4]])\ny_observed = np.array([objective(0), objective(4)])\n\n# Gaussian Process = Bayesian prior over functions\ngp = GaussianProcessRegressor()\ngp.fit(X_observed, y_observed)\n\n# Posterior prediction (updated belief)\nX_test = np.linspace(-1, 5, 100).reshape(-1, 1)\ny_pred, y_std = gp.predict(X_test, return_std=True)\n\n# Next point = where uncertainty is high (exploration)\nnext_x = X_test[np.argmax(y_std)]\nprint(f'Next experiment at x = {next_x[0]:.2f}')\nprint(f'Posterior updates with each new observation!')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Medical Diagnosis (ML in Healthcare)",
+      "icon": "🩺",
+      "explanation": "Exactly আমাদের COVID test-র মতো! ML model disease predict করলে, doctor-কে base rate consider করতে হয়। Model বলল 'cancer likely' — কিন্তু rare disease-এ false positive অনেক বেশি। Bayes Theorem ছাড়া proper diagnosis impossible!",
+      "realExample": "Google Health-এর mammography AI 99% sensitivity claim করে। কিন্তু breast cancer prevalence ~1%, তাই positive result-এর actual predictive value অনেক কম। Doctors Bayes Theorem ব্যবহার করে interpret করে।",
+      "code": {
+        "language": "python",
+        "snippet": "def bayes_medical_test(prevalence, sensitivity, specificity):\n    \"\"\"ডাক্তার মামার Bayes Calculator\"\"\"\n    # P(Disease) = prevalence (prior)\n    # P(+|Disease) = sensitivity (likelihood)\n    # P(-|No Disease) = specificity\n    \n    p_positive = (sensitivity * prevalence + \n                  (1 - specificity) * (1 - prevalence))\n    \n    posterior = (sensitivity * prevalence) / p_positive\n    \n    return posterior\n\n# COVID test scenario\nresult = bayes_medical_test(\n    prevalence=0.01,\n    sensitivity=0.99,\n    specificity=0.99\n)\nprint(f'P(COVID | Positive) = {result:.2%}')\n\n# Rare disease scenario\nresult2 = bayes_medical_test(\n    prevalence=0.001,  # 0.1% prevalence\n    sensitivity=0.95,\n    specificity=0.95\n)\nprint(f'P(Rare Disease | Positive) = {result2:.2%}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Bayesian Neural Networks",
+      "icon": "🧠",
+      "explanation": "Normal neural network একটা fixed weight দেয়। Bayesian NN weight-এর উপর probability distribution রাখে — P(weights | data)। নতুন data আসলে Bayes Theorem দিয়া weight distribution update হয়। এইভাবে model uncertainty ও measure করতে পারে!",
+      "realExample": "Self-driving car-এ Bayesian NN ব্যবহার হয় — শুধু prediction না, কতটুকু uncertain সেইটাও বলে। Uncertainty বেশি হইলে car speed কমায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Bayesian Linear Layer concept\nclass BayesianLinear(nn.Module):\n    def __init__(self, in_features, out_features):\n        super().__init__()\n        # Weight-এর mean আর variance (uncertainty)\n        self.weight_mu = nn.Parameter(\n            torch.randn(out_features, in_features) * 0.1\n        )\n        self.weight_sigma = nn.Parameter(\n            torch.ones(out_features, in_features) * -3\n        )\n    \n    def forward(self, x):\n        # Weight sample করি distribution থেকে\n        sigma = torch.log1p(torch.exp(self.weight_sigma))\n        weight = self.weight_mu + sigma * torch.randn_like(sigma)\n        return x @ weight.t()\n\nlayer = BayesianLinear(10, 1)\nprint('Bayesian NN: P(weights|data) via Bayes!')\nprint(f'Weight uncertainty: {layer.weight_sigma.exp().mean():.4f}')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "A/B Testing ও Bayesian Inference",
+      "icon": "📊",
+      "explanation": "Website-এ দুইটা design test করতে Bayesian A/B testing ব্যবহার হয়। Prior: দুইটাই সমান ভালো। Data আসলে posterior update হয়। Traditional A/B testing-এর চেয়ে Bayesian approach তাড়াতাড়ি result দেয় আর easily interpretable।",
+      "realExample": "Netflix thumbnail A/B testing-এ Bayesian approach ব্যবহার করে — কোন thumbnail-এ click rate বেশি সেইটা Bayes দিয়া continuously update করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy import stats\n\n# Bayesian A/B Test\n# Design A: 50 clicks out of 1000 views\n# Design B: 65 clicks out of 1000 views\n\n# Prior: Beta(1,1) = uniform (কোনো ধারণা নাই)\n# Posterior: Beta(1+clicks, 1+views-clicks)\n\nposterior_A = stats.beta(1 + 50, 1 + 950)\nposterior_B = stats.beta(1 + 65, 1 + 935)\n\n# Monte Carlo sampling\nsamples_A = posterior_A.rvs(100000)\nsamples_B = posterior_B.rvs(100000)\n\n# P(B > A) = B better হওয়ার probability\nprob_B_better = np.mean(samples_B > samples_A)\n\nprint(f'P(Design B better) = {prob_B_better:.2%}')\nprint(f'A rate: {posterior_A.mean():.3f}')\nprint(f'B rate: {posterior_B.mean():.3f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Bayes মনে রাখ ঢাকার ডাক্তারের style-এ: 'আগে কী ভাবতি (Prior) × নতুন কী দেখলি (Likelihood) ÷ overall কত chance (Evidence) = এখন কী ভাবিস (Posterior)'। আর Base Rate Fallacy মনে রাখ — ঢাকায় যদি মাত্র 1% মানুষ ক্রিকেটার হয়, তাইলে তুই bat ধইরা পোজ দিলেই তোকে ক্রিকেটার ভাবার কোনো মানে নাই!",
+  "tags": ["bayes-theorem", "prior", "posterior", "likelihood", "evidence", "base-rate-fallacy", "bayesian-inference", "bayesian-optimization"],
+  "prev": "conditional-probability",
+  "next": "random-variables"
+}

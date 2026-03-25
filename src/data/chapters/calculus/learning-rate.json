@@ -1,0 +1,120 @@
+{
+  "slug": "learning-rate",
+  "title": "Learning Rate — শেখার গতি",
+  "titleEn": "Learning Rate",
+  "category": "calculus",
+  "order": 7,
+  "readTime": 8,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🚗",
+    "title": "করিমের ড্রাইভিং ক্লাস",
+    "content": "ধর তোর বন্ধু করিম সদ্য ড্রাইভিং শিখতেছে। ইন্সট্রাক্টর বলল 'মিরপুর থেকে গুলশান যাও।' করিম প্রথমদিন এত জোরে গাড়ি চালাইল যে ফার্মগেটের সিগন্যালে ব্রেক মাইরা গাড়ি ফুটপাতে উঠল — crash! পরের দিন এত আস্তে চালাইল যে ঘণ্টা দুয়েক লাগল, রাস্তায় সবাই হর্ন দিয়া গালি দিল। তৃতীয় দিন moderate speed-এ চালাইল — ঠিক সময়ে, safely পৌঁছাইল।",
+    "reveal": "এইটাই হইল Learning Rate, গুরু! বেশি বড় হইলে overshoot কইরা crash, বেশি ছোট হইলে সারাদিন লাইগা যায়, আর ঠিকমতো হইলে model সুন্দর করে শিখে!"
+  },
+  "definition": {
+    "content": "Learning Rate (α) হইল একটা positive scalar যেইটা gradient descent-এ প্রতি step-এ weight কতটুকু update হইব সেইটা control করে। এইটা ML training-এর সবচেয়ে important hyperparameter।",
+    "formula": "\\theta_{t+1} = \\theta_t - \\alpha \\cdot \\nabla L(\\theta_t)",
+    "formulaLabel": "Weight update rule — α হইল learning rate"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Learning Rate কী করে",
+        "content": "Gradient descent-এ gradient বলে কোন direction-এ loss কমবে, আর learning rate বলে সেই direction-এ কতদূর যাইবা। ছোট α মানে ছোট step, বড় α মানে বড় step।",
+        "formula": "\\text{step size} = \\alpha \\times |\\nabla L|"
+      },
+      {
+        "title": "বড় Learning Rate-এর সমস্যা",
+        "content": "α বেশি বড় হইলে minimum-কে লাফ দিয়া পার হইয়া যায়। Loss কমার বদলে বাড়তে থাকে — এইটাকে divergence বলে। করিমের গাড়ির মতো ফুটপাতে উঠে যায়!",
+        "formula": "\\alpha > \\frac{2}{L_{\\text{smooth}}} \\implies \\text{divergence}"
+      },
+      {
+        "title": "ছোট Learning Rate-এর সমস্যা",
+        "content": "α বেশি ছোট হইলে training অনেক slow হয়। হাজার epoch পরেও loss তেমন কমে না। আবার local minimum-এ আটকে যাইতে পারে কারণ step size এত ছোট যে বাইর হইতে পারে না।"
+      },
+      {
+        "title": "Learning Rate Schedule",
+        "content": "Smart approach হইল শুরুতে বড় α দিয়া start করো, তারপর আস্তে আস্তে কমাও। এইভাবে শুরুতে fast converge করে, শেষে fine-tune করে। অনেকটা গাড়ি চালানোর মতো — হাইওয়েতে speed বাড়াও, destination-এর কাছে slow করো।",
+        "formula": "\\alpha_t = \\alpha_0 \\cdot \\frac{1}{1 + \\text{decay} \\times t}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Learning Rate দিয়ে Weight Update",
+    "problem": "তোর model-এর একটা weight θ = 5.0, gradient ∇L = 2.0। তিনটা different learning rate (0.001, 0.1, 2.0) দিয়া update করলে কী হয়?",
+    "steps": [
+      {
+        "label": "Step 1: Values সেট করি",
+        "content": "θ = 5.0, ∇L = 2.0 — এখন তিন রকম α try করি",
+        "formula": "\\theta_{new} = \\theta - \\alpha \\cdot \\nabla L"
+      },
+      {
+        "label": "Step 2: ছোট α = 0.001",
+        "content": "খুব ছোট step — weight সামান্য change হইল",
+        "formula": "\\theta_{new} = 5.0 - 0.001 \\times 2.0 = 4.998"
+      },
+      {
+        "label": "Step 3: মাঝারি α = 0.1",
+        "content": "ভালো step size — meaningful update",
+        "formula": "\\theta_{new} = 5.0 - 0.1 \\times 2.0 = 4.8"
+      },
+      {
+        "label": "Step 4: বড় α = 2.0",
+        "content": "বিশাল লাফ — weight এত বদলাইল যে opposite direction-এ চলে গেল!",
+        "formula": "\\theta_{new} = 5.0 - 2.0 \\times 2.0 = 1.0"
+      }
+    ],
+    "answer": "α = 0.001 এ weight মাত্র 0.002 কমল (অনেক slow), α = 0.1 এ 0.2 কমল (ভালো), α = 2.0 এ 4.0 কমে গেল (overshoot risk)। মাঝামাঝি α-ই best, গুরু!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Adam Optimizer-এ Adaptive Learning Rate",
+      "icon": "🧠",
+      "explanation": "Adam optimizer প্রতিটা parameter-এর জন্য আলাদা আলাদা learning rate maintain করে। যেই parameter-এর gradient stable, তার learning rate বাড়ায়; যেইটার gradient বেশি vary করে, তার learning rate কমায়। ঢাকার traffic-এর মতো — যেই রাস্তা smooth, সেখানে fast যাও; যেই রাস্তা bumpy, সেখানে slow যাও।",
+      "realExample": "GPT, BERT, ResNet — প্রায় সব modern model Adam use করে initial lr = 3e-4 দিয়া।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 1)\noptimizer = torch.optim.Adam(\n    model.parameters(),\n    lr=3e-4,          # initial learning rate\n    betas=(0.9, 0.999),\n    weight_decay=1e-5\n)\n\n# Training loop\nfor epoch in range(100):\n    loss = criterion(model(X), y)\n    optimizer.zero_grad()\n    loss.backward()\n    optimizer.step()  # Adam internally adjusts lr per param"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Learning Rate Scheduler",
+      "icon": "📉",
+      "explanation": "Training-এ একই learning rate রাখলে শেষের দিকে model oscillate করে minimum-এর আশেপাশে। Scheduler ব্যবহার করলে lr আস্তে আস্তে কমে, ফলে model precisely converge করে। অনেকটা destination-এর কাছে গাড়ি slow করার মতো।",
+      "realExample": "ImageNet training-এ ResNet50 প্রতি 30 epoch-এ learning rate 10x কমায় (step decay)।",
+      "code": {
+        "language": "python",
+        "snippet": "from torch.optim.lr_scheduler import CosineAnnealingLR\n\noptimizer = torch.optim.SGD(model.parameters(), lr=0.1)\nscheduler = CosineAnnealingLR(\n    optimizer,\n    T_max=100,    # total epochs\n    eta_min=1e-6  # minimum lr\n)\n\nfor epoch in range(100):\n    train_one_epoch(model, optimizer)\n    scheduler.step()\n    print(f'Epoch {epoch}, LR: {scheduler.get_last_lr()[0]:.6f}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Learning Rate Finder",
+      "icon": "🔍",
+      "explanation": "Training শুরুর আগে best learning rate খুঁজে বাইর করার technique — খুব ছোট lr থেকে শুরু কইরা exponentially বাড়াও, loss track করো। যেইখানে loss সবচেয়ে fast কমে, সেইটা optimal lr। ঢাকায় নতুন route-এ প্রথমে আস্তে যাও, তারপর speed বাড়াও — যেই speed-এ comfortable, সেইটাই best।",
+      "realExample": "FastAI library-তে lr_find() function এই technique automatically করে দেয়।",
+      "code": {
+        "language": "python",
+        "snippet": "# Learning Rate Range Test\nlrs = []\nlosses = []\nlr = 1e-7\nmax_lr = 10\nmultiply_factor = 1.2\n\nfor batch in dataloader:\n    optimizer.param_groups[0]['lr'] = lr\n    loss = train_step(model, batch)\n    lrs.append(lr)\n    losses.append(loss.item())\n    lr *= multiply_factor\n    if lr > max_lr or loss > 4 * min(losses):\n        break\n\n# Plot to find the steepest descent point\nimport matplotlib.pyplot as plt\nplt.plot(lrs, losses)\nplt.xscale('log')\nplt.xlabel('Learning Rate')\nplt.ylabel('Loss')\nplt.title('LR Finder — সবচেয়ে steep যেইখানে, সেইটা best!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Warmup Strategy",
+      "icon": "🔥",
+      "explanation": "Training-এর একদম শুরুতে weights random থাকে, তাই বড় learning rate দিলে gradient explode করতে পারে। Warmup-এ প্রথম কিছু step lr ০ থেকে আস্তে আস্তে বাড়ানো হয়। সকালে ঘুম থেইকা উইঠা সরাসরি দৌড় দেওয়া ঠিক না — আগে stretch করো, তারপর দৌড়াও!",
+      "realExample": "Transformer model-এ (BERT, GPT) প্রথম 10% step warmup করা standard practice।",
+      "code": {
+        "language": "python",
+        "snippet": "from torch.optim.lr_scheduler import LambdaLR\n\ndef warmup_schedule(step):\n    warmup_steps = 1000\n    if step < warmup_steps:\n        return step / warmup_steps  # linear warmup\n    return 1.0  # full learning rate after warmup\n\noptimizer = torch.optim.AdamW(model.parameters(), lr=5e-5)\nscheduler = LambdaLR(optimizer, lr_lambda=warmup_schedule)\n\nfor step, batch in enumerate(dataloader):\n    loss = model(batch).loss\n    loss.backward()\n    optimizer.step()\n    scheduler.step()\n    optimizer.zero_grad()"
+      }
+    }
+  ],
+  "memoryTrick": "Learning Rate = গাড়ির Accelerator। বেশি চাপলে crash (overshoot), কম চাপলে দেরি (slow convergence), ঠিকমতো চাপলে destination-এ পৌঁছাও (convergence)। মনে রাখ — গুরু বলেছে 'গাড়ি চালাও মাথা দিয়া, পা দিয়া না!'",
+  "tags": ["learning-rate", "hyperparameter", "gradient-descent", "optimization", "training", "adam", "scheduler"],
+  "prev": "gradient-descent",
+  "next": "local-global-minimum"
+}

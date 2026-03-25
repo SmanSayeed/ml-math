@@ -1,0 +1,126 @@
+{
+  "slug": "covariance-correlation",
+  "title": "Covariance ও Correlation — সম্পর্কের মাপ",
+  "titleEn": "Covariance and Correlation",
+  "category": "probability-stats",
+  "order": 7,
+  "readTime": 13,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "📚",
+    "title": "পড়াশোনা আর মার্কসের সম্পর্ক",
+    "content": "ধর ভাই, ঢাকা কলেজের ৫ জন ছাত্র — রহিম, করিম, জামাল, হাসান, আর কালাম। তাদের দৈনিক পড়াশোনার ঘণ্টা আর পরীক্ষার মার্কস নোট করলাম। রহিম: ২ ঘণ্টা পড়ে, ৪০ মার্কস। করিম: ৪ ঘণ্টা, ৬০ মার্কস। জামাল: ৬ ঘণ্টা, ৮০ মার্কস। হাসান: ৩ ঘণ্টা, ৫০ মার্কস। কালাম: ৫ ঘণ্টা, ৭০ মার্কস। তুই দেখতে পাচ্ছিস — বেশি পড়লে বেশি মার্কস! এই সম্পর্কটা mathematically কিভাবে মাপবি?",
+    "reveal": "এইখানেই আসে Covariance আর Correlation, মামা! Covariance বলে দুইটা variable একসাথে কোনদিকে যায় — positive মানে একটা বাড়লে আরেকটাও বাড়ে, negative মানে একটা বাড়লে আরেকটা কমে। আর Correlation হইল normalized covariance — -1 থেকে +1 এর মধ্যে, তাই compare করা easy। পড়াশোনা আর মার্কসের correlation প্রায় +1 — strong positive relationship!"
+  },
+  "definition": {
+    "content": "Covariance দুইটা random variable-র joint variability measure করে। Positive covariance মানে একসাথে বাড়ে-কমে, negative মানে বিপরীত। Correlation হইল standardized covariance — -1 থেকে +1 এর মধ্যে।",
+    "formula": "\\text{Cov}(X, Y) = E[(X - \\mu_X)(Y - \\mu_Y)], \\quad \\rho(X, Y) = \\frac{\\text{Cov}(X, Y)}{\\sigma_X \\cdot \\sigma_Y}",
+    "formulaLabel": "Covariance ও Pearson Correlation Coefficient"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Covariance কিভাবে কাজ করে?",
+        "content": "প্রতিটা data point-এর X deviation আর Y deviation multiply করি। দুইটাই mean-র উপরে (++ = +) বা দুইটাই নিচে (-- = +) হইলে product positive। একটা উপরে একটা নিচে (+- = -) হইলে product negative। সব product-এর average = covariance!",
+        "formula": "\\text{Cov}(X, Y) = E[XY] - E[X] \\cdot E[Y] = \\frac{1}{n}\\sum_{i=1}^{n}(x_i - \\bar{x})(y_i - \\bar{y})"
+      },
+      {
+        "title": "Covariance-র সমস্যা",
+        "content": "Covariance-র unit হইল X-এর unit × Y-এর unit। ঘণ্টা × মার্কস = কী জিনিস? আর Cov-র size depend করে variable-র scale-এর উপর। ঢাকায় income (লক্ষ টাকা) vs height (cm) — Cov বিশাল বড় হবে শুধু unit-এর জন্য, actual relationship ছোট হইলেও!",
+        "formula": "\\text{Cov}(X, Y) \\in (-\\infty, +\\infty) \\quad \\text{(unbounded, scale-dependent)}"
+      },
+      {
+        "title": "Correlation — Normalized Version",
+        "content": "Correlation = Covariance-কে দুইটা standard deviation দিয়া ভাগ। Result: -1 থেকে +1 এর মধ্যে। +1 = perfect positive (ঢাকার তাপমাত্রা বাড়লে AC বিক্রি বাড়ে), -1 = perfect negative (তাপমাত্রা বাড়লে চায়ের বিক্রি কমে), 0 = কোনো linear সম্পর্ক নাই।",
+        "formula": "\\rho = \\frac{\\text{Cov}(X, Y)}{\\sigma_X \\sigma_Y}, \\quad -1 \\leq \\rho \\leq 1"
+      },
+      {
+        "title": "Correlation ≠ Causation!",
+        "content": "সবচেয়ে famous warning! ঢাকায় আইসক্রিম বিক্রি আর drowning — দুইটার correlation high। কিন্তু আইসক্রিম কি drowning cause করে? না! দুইটাই গরমের effect। Confounding variable (তাপমাত্রা) আসল কারণ। ML-এ এই ভুল করলে model garbage হবে!",
+        "formula": "\\text{Correlation}(X, Y) \\neq X \\text{ causes } Y"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "পড়াশোনা ও মার্কসের সম্পর্ক",
+    "problem": "৫ জন ছাত্রের study hours X = [2,4,6,3,5] আর marks Y = [40,60,80,50,70]। Covariance আর Correlation calculate কর।",
+    "steps": [
+      {
+        "label": "Step 1: Mean বাইর কর",
+        "content": "X আর Y-র mean আলাদা আলাদা calculate করি",
+        "formula": "\\bar{X} = \\frac{2+4+6+3+5}{5} = 4, \\quad \\bar{Y} = \\frac{40+60+80+50+70}{5} = 60"
+      },
+      {
+        "label": "Step 2: Deviations-র Product",
+        "content": "প্রতিটা point-এর (xᵢ - x̄)(yᵢ - ȳ) calculate করি: (-2)(-20)=40, (0)(0)=0, (2)(20)=40, (-1)(-10)=10, (1)(10)=10",
+        "formula": "\\sum(x_i - \\bar{x})(y_i - \\bar{y}) = 40+0+40+10+10 = 100"
+      },
+      {
+        "label": "Step 3: Covariance",
+        "content": "Products-র average নিই",
+        "formula": "\\text{Cov}(X,Y) = \\frac{100}{5} = 20 \\text{ (ঘণ্টা×মার্কস)}"
+      },
+      {
+        "label": "Step 4: Standard Deviations",
+        "content": "Correlation-এর জন্য σ_X আর σ_Y লাগবে",
+        "formula": "\\sigma_X = \\sqrt{\\frac{4+0+4+1+1}{5}} = \\sqrt{2} \\approx 1.414, \\quad \\sigma_Y = \\sqrt{\\frac{400+0+400+100+100}{5}} = \\sqrt{200} \\approx 14.14"
+      },
+      {
+        "label": "Step 5: Correlation",
+        "content": "Covariance-কে দুই σ দিয়া ভাগ করি",
+        "formula": "\\rho = \\frac{20}{1.414 \\times 14.14} = \\frac{20}{20} = 1.0"
+      }
+    ],
+    "answer": "Cov(X,Y) = 20, ρ = 1.0 — perfect positive correlation! বেশি পড়লে বেশি মার্কস, exact linear relationship। বাস্তবে ρ = 1.0 rare — এইখানে data intentionally perfect linear করা হইছে। Real data-তে 0.7-0.9 হইলেই strong positive বলা হয়।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Feature Selection (Multicollinearity)",
+      "icon": "🔍",
+      "explanation": "দুইটা feature-র মধ্যে high correlation থাকলে (|ρ| > 0.9) একটা redundant — দুইটা রাখার দরকার নাই। এইটা multicollinearity। area_sqft আর area_m2 — perfect correlation! একটা বাদ দাও, model ভালো হবে।",
+      "realExample": "Boston Housing dataset-এ RAD (highway access) আর TAX (property tax) highly correlated। দুইটা রাখলে linear regression-এর coefficients unstable হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport pandas as pd\n\n# ঢাকার বাসার features\nnp.random.seed(42)\nn = 100\narea_sqft = np.random.normal(1200, 300, n)\nrooms = 1 + area_sqft / 400 + np.random.normal(0, 0.5, n)  # correlated!\nprice = 20 + 0.05 * area_sqft + np.random.normal(0, 5, n)\n\ndf = pd.DataFrame({'area': area_sqft, 'rooms': rooms, 'price': price})\n\n# Correlation matrix\ncorr = df.corr()\nprint('Correlation Matrix:')\nprint(corr.round(3))\n\n# High correlation features detect করি\nfor i in range(len(corr.columns)):\n    for j in range(i+1, len(corr.columns)):\n        if abs(corr.iloc[i,j]) > 0.8:\n            print(f'\\n⚠️ High correlation: {corr.columns[i]} & {corr.columns[j]} = {corr.iloc[i,j]:.3f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Covariance Matrix in PCA",
+      "icon": "📐",
+      "explanation": "PCA (Principal Component Analysis) covariance matrix-র eigenvalues আর eigenvectors বাইর করে। Covariance matrix বলে কোন direction-এ data সবচেয়ে বেশি vary করে — সেই direction-ই principal component! Dimensionality reduction-র backbone।",
+      "realExample": "Face recognition-এ PCA ব্যবহার হয় — হাজার pixel-র image-কে ৫০-১০০ principal component-এ কমায়। Eigenfaces বানায় covariance matrix থেকে!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\n\n# 2D data with correlation\nnp.random.seed(42)\nn = 200\nx1 = np.random.normal(0, 2, n)\nx2 = 0.8 * x1 + np.random.normal(0, 1, n)  # correlated\nX = np.column_stack([x1, x2])\n\n# Covariance matrix\ncov_matrix = np.cov(X.T)\nprint('Covariance Matrix:')\nprint(cov_matrix.round(3))\n\n# PCA uses this covariance matrix!\npca = PCA(n_components=2)\npca.fit(X)\n\nprint(f'\\nPrincipal directions: {pca.components_.round(3)}')\nprint(f'Explained variance: {pca.explained_variance_ratio_.round(3)}')\nprint(f'PC1 explains {pca.explained_variance_ratio_[0]:.1%} of variance!')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Portfolio Optimization",
+      "icon": "💹",
+      "explanation": "Finance ML-এ stock returns-এর covariance matrix ব্যবহার হয় risk minimize করতে। Negative correlation-এ থাকা stocks একসাথে রাখলে portfolio risk কমে — একটা পড়লে আরেকটা ওঠে! Markowitz portfolio theory-র ভিত্তি covariance।",
+      "realExample": "BlackRock-এর AI-powered portfolio management covariance matrix ব্যবহার করে বাংলাদেশের stock market-এও mutual fund manager-রা এই approach ব্যবহার করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# ৩টা stock-এর daily returns\nnp.random.seed(42)\nstock_A = np.random.normal(0.001, 0.02, 252)  # Tech stock\nstock_B = np.random.normal(0.0005, 0.015, 252)  # Bank stock\nstock_C = -0.5 * stock_A + np.random.normal(0.0008, 0.01, 252)  # Inverse!\n\nreturns = np.column_stack([stock_A, stock_B, stock_C])\n\n# Covariance matrix of returns\ncov = np.cov(returns.T) * 252  # Annualized\ncorr = np.corrcoef(returns.T)\n\nprint('Correlation Matrix:')\nstocks = ['Tech', 'Bank', 'Inverse']\nfor i, s in enumerate(stocks):\n    print(f'  {s}: {corr[i].round(3)}')\n\nprint(f'\\nTech-Inverse correlation: {corr[0,2]:.3f}')\nprint('Negative correlation = good diversification!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Gaussian Mixture Models (GMM)",
+      "icon": "🎯",
+      "explanation": "GMM-এ প্রতিটা cluster একটা multivariate Gaussian distribution — যেইটার shape নির্ভর করে covariance matrix-এর উপর। Diagonal covariance = axis-aligned ellipse, full covariance = tilted ellipse। Cluster-এর shape আর orientation covariance থেকে আসে!",
+      "realExample": "Speaker recognition-এ GMM ব্যবহার হয় — প্রতিটা speaker-র voice features-এর distribution model করতে। Covariance matrix voice-র variability ধরে।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.mixture import GaussianMixture\nimport numpy as np\n\n# ঢাকার ২টা area-র বাসার data (price vs area)\nnp.random.seed(42)\n\n# Cluster 1: গুলশান (expensive, big)\ngulshan = np.random.multivariate_normal(\n    mean=[80, 1800], cov=[[100, 200], [200, 10000]], size=50\n)\n# Cluster 2: মিরপুর (cheaper, smaller)\nmirpur = np.random.multivariate_normal(\n    mean=[30, 900], cov=[[50, 100], [100, 8000]], size=50\n)\n\nX = np.vstack([gulshan, mirpur])\n\n# GMM clustering — covariance matrix শিখে!\ngmm = GaussianMixture(n_components=2, covariance_type='full')\ngmm.fit(X)\n\nfor i in range(2):\n    print(f'Cluster {i+1}:')\n    print(f'  Mean: {gmm.means_[i].round(1)}')\n    print(f'  Covariance:\\n{gmm.covariances_[i].round(1)}')"
+      }
+    }
+  ],
+  "memoryTrick": "Covariance মনে রাখ: Co = Together, Variance = ছড়ানো। দুইটা variable একসাথে কিভাবে ছড়ায়? Positive Cov = দুই বন্ধু একসাথে চলে (পড়া বাড়লে মার্কস বাড়ে)। Negative Cov = তারা বিপরীত (AC চালালে বিদ্যুৎ বিল বাড়ে, টাকা কমে)। Correlation = Covariance-র report card — -1 থেকে +1 scale-এ grade দেয়। আর মনে রাখ: Correlation ≠ Causation — আইসক্রিম বিক্রি বাড়লেই drowning বাড়ে না!",
+  "tags": ["covariance", "correlation", "pearson", "multicollinearity", "pca", "covariance-matrix", "feature-selection"],
+  "prev": "variance-std",
+  "next": "normal-distribution"
+}

@@ -1,0 +1,141 @@
+{
+  "slug": "mle",
+  "title": "MLE — Maximum Likelihood Estimation",
+  "titleEn": "MLE — Maximum Likelihood Estimation",
+  "category": "probability-stats",
+  "order": 12,
+  "readTime": 18,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🔍",
+    "title": "পুরান ঢাকার গোয়েন্দা আর সবচেয়ে সম্ভাব্য সন্দেহভাজনের গল্প",
+    "content": "গুরু ভাই একদিন detective সাজলো — পুরান ঢাকার বিখ্যাত মিষ্টির দোকান থেইকা রসগোল্লা চুরি হইছে! তিনজন সন্দেহভাজন — রহিম (মিষ্টি-পাগল, দোকানের পাশেই থাকে), করিম (diabetes আছে, মিষ্টি খায় না), আর সেলিম (দোকানের বিপরীত পাশে থাকে)। গুরু evidence দেখলো: দোকানে মিষ্টির টুকরা পড়ে আছে, আঙুলের ছাপ, রাত ২টায় ঘটনা। গুরু কয়, 'এখন আমি MLE করবো! প্রতিটা সন্দেহভাজনের জন্য এই evidence পাওয়ার likelihood কত সেইটা হিসাব করবো।' রহিম হইলে evidence এর probability সবচেয়ে বেশি — কাছে থাকে, মিষ্টি-পাগল, রাতে জাইগা থাকে। করিম হইলে probability কম — diabetes, মিষ্টি খায় না। সেলিম হইলে medium — দূরে থাকে। গুরু ঘোষণা করলো, 'MLE অনুযায়ী, রহিম ই সবচেয়ে likely চোর! কারণ রহিম ধরলে এই evidence গুলা পাওয়ার probability maximize হয়!'",
+    "reveal": "Maximum Likelihood Estimation (MLE) হইলো statistical parameter estimation এর সবচেয়ে fundamental method। Idea টা simple — যেই parameter value তে observed data পাওয়ার probability (likelihood) সবচেয়ে বেশি, সেই parameter value ই best estimate! Detective story তে 'parameter' হইলো কে চোর, আর 'data' হইলো evidence — যেই সন্দেহভাজন ধরলে evidence সবচেয়ে likely, সেই ই MLE estimate!"
+  },
+  "definition": {
+    "content": "Maximum Likelihood Estimation (MLE) হইলো এমন একটা method যেটা parameter theta এর এমন value খুঁজে বাইর করে যেটাতে observed data D পাওয়ার probability (likelihood function) maximize হয়। গাণিতিকভাবে, theta_MLE = argmax L(theta|D) যেখানে L হইলো likelihood function।",
+    "formula": "\\hat{\\theta}_{\\text{MLE}} = \\arg\\max_{\\theta} \\; L(\\theta | D) = \\arg\\max_{\\theta} \\; P(D | \\theta) \\\\ = \\arg\\max_{\\theta} \\; \\sum_{i=1}^{n} \\log P(x_i | \\theta)",
+    "formulaLabel": "MLE Formula (Log-Likelihood)"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Likelihood Function কী?",
+        "content": "Likelihood function L(theta|D) হইলো parameter theta given থাকলে data D observe করার probability। গুরুত্বপূর্ণ কথা: probability আর likelihood same formula, কিন্তু perspective আলাদা। Probability তে theta fixed, data varies। Likelihood তে data fixed, theta varies।",
+        "formula": "L(\\theta | x_1, ..., x_n) = P(x_1, ..., x_n | \\theta) = \\prod_{i=1}^{n} P(x_i | \\theta)"
+      },
+      {
+        "title": "কেন Log-Likelihood ব্যবহার করি?",
+        "content": "Product of probabilities খুব ছোটো number হয়ে যায় (underflow problem)। Log নিলে product sum হয়ে যায়, computation সহজ হয়। আর log monotonic function, তাই log-likelihood maximize করলে likelihood ও maximize হয়।",
+        "formula": "\\ell(\\theta) = \\log L(\\theta) = \\sum_{i=1}^{n} \\log P(x_i | \\theta)"
+      },
+      {
+        "title": "MLE কেমনে বাইর করে?",
+        "content": "Step 1: Likelihood function লেখো। Step 2: Log-likelihood নাও। Step 3: theta এর respect এ derivative নাও। Step 4: Derivative = 0 করো আর theta solve করো। কিছু complex model এ analytical solution নাই, তখন gradient descent use করতে হয়।",
+        "formula": "\\frac{\\partial \\ell(\\theta)}{\\partial \\theta} = 0 \\implies \\hat{\\theta}_{\\text{MLE}}"
+      },
+      {
+        "title": "Bernoulli MLE উদাহরণ",
+        "content": "Coin toss এ n বার টস করে k বার Head পাইলে, p এর MLE = k/n। মানে observed frequency ই MLE estimate! ১০০ বার টসে ৬০ বার Head আসলে p_MLE = 0.6।",
+        "formula": "\\hat{p}_{\\text{MLE}} = \\frac{k}{n} = \\frac{\\text{number of heads}}{\\text{total tosses}}"
+      },
+      {
+        "title": "MLE এর Properties",
+        "content": "MLE এর চারটা গুরুত্বপূর্ণ property: (১) Consistent — data বাড়লে true value এর কাছে যায়, (২) Asymptotically Normal — বড় sample এ normal distribution follow করে, (৩) Asymptotically Efficient — সবচেয়ে কম variance, (৪) Invariant — g(theta) এর MLE = g(theta_MLE)।"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "কয়েন এর Bias MLE",
+    "problem": "একটা কয়েন ২০ বার টস করে ১৪ বার Head পাইলে। (a) p (Head probability) এর MLE কত? (b) Log-likelihood কত?",
+    "steps": [
+      {
+        "label": "Likelihood function লেখো",
+        "content": "Data: n=20, k=14 (heads)। প্রতিটা toss independent Bernoulli(p)।",
+        "formula": "L(p) = \\binom{20}{14} p^{14} (1-p)^{6}"
+      },
+      {
+        "label": "Log-likelihood নাও",
+        "content": "Log নিলে product sum হয়ে যায়। Constant term C = log C(20,14) optimization এ ignore করা যায়।",
+        "formula": "\\ell(p) = C + 14 \\log(p) + 6 \\log(1-p)"
+      },
+      {
+        "label": "Derivative = 0 করো",
+        "content": "p এর respect এ differentiate করে zero set করো।",
+        "formula": "\\frac{d\\ell}{dp} = \\frac{14}{p} - \\frac{6}{1-p} = 0"
+      },
+      {
+        "label": "Solve করো",
+        "content": "14(1-p) = 6p => 14 - 14p = 6p => 14 = 20p => p = 14/20 = 0.70",
+        "formula": "\\hat{p}_{\\text{MLE}} = \\frac{14}{20} = 0.70"
+      },
+      {
+        "label": "Log-likelihood হিসাব করো",
+        "content": "p = 0.70 বসাই: log-likelihood = 14*log(0.7) + 6*log(0.3) + log(C(20,14))",
+        "formula": "\\ell(0.70) = 14 \\ln(0.7) + 6 \\ln(0.3) + \\ln\\binom{20}{14} \\approx -12.25"
+      }
+    ],
+    "answer": "p এর MLE = 0.70, মানে কয়েন টা Head এর দিকে biased। Log-likelihood = -12.25। এইটা intuitive — ২০ বারে ১৪ বার Head মানে observed proportion 70% ই MLE estimate!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Logistic Regression Training",
+      "icon": "📈",
+      "explanation": "Logistic regression এর parameter (weights) MLE দিয়া estimate করা হয়। Binary cross-entropy loss minimize করা = negative log-likelihood minimize করা = likelihood maximize করা। মানে logistic regression training = MLE!",
+      "realExample": "Credit scoring, disease prediction, churn prediction — সব logistic regression model MLE দিয়া train হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef sigmoid(z):\n    return 1 / (1 + np.exp(-z))\n\ndef log_likelihood(X, y, weights):\n    \"\"\"Log-likelihood for logistic regression\"\"\"\n    z = X @ weights\n    p = sigmoid(z)\n    ll = np.sum(y * np.log(p + 1e-10) + (1 - y) * np.log(1 - p + 1e-10))\n    return ll\n\ndef mle_gradient(X, y, weights):\n    \"\"\"Gradient of log-likelihood\"\"\"\n    p = sigmoid(X @ weights)\n    return X.T @ (y - p)\n\n# Simple example: 2 features\nnp.random.seed(42)\nX = np.column_stack([np.ones(100), np.random.randn(100, 2)])\ntrue_w = np.array([0.5, 1.5, -1.0])\ny = (sigmoid(X @ true_w) > 0.5).astype(float)\n\n# MLE via gradient ascent\nweights = np.zeros(3)\nlr = 0.01\nfor i in range(1000):\n    grad = mle_gradient(X, y, weights)\n    weights += lr * grad\n\nprint(f\"True weights:     {true_w}\")\nprint(f\"MLE weights:      {weights.round(3)}\")\nprint(f\"Log-likelihood:   {log_likelihood(X, y, weights):.2f}\")"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Gaussian Distribution Parameter Estimation",
+      "icon": "📊",
+      "explanation": "Data যদি Normal distribution follow করে, MLE দিয়া mean (mu) আর variance (sigma^2) estimate করা যায়। MLE estimate: mu = sample mean, sigma^2 = sample variance (n দিয়া ভাগ, n-1 না)।",
+      "realExample": "Anomaly detection এ data এর mean/variance MLE দিয়া estimate কইরা, নতুন data point কত sigma দূরে সেইটা দেখে anomaly detect করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import norm\nfrom scipy.optimize import minimize_scalar\n\n# Generate data from unknown Gaussian\nnp.random.seed(42)\ntrue_mu, true_sigma = 5.0, 2.0\ndata = np.random.normal(true_mu, true_sigma, size=100)\n\n# MLE estimates (analytical)\nmu_mle = np.mean(data)\nsigma2_mle = np.mean((data - mu_mle)**2)  # MLE uses n, not n-1\nsigma_mle = np.sqrt(sigma2_mle)\n\nprint(f\"True parameters:  mu={true_mu}, sigma={true_sigma}\")\nprint(f\"MLE estimates:    mu={mu_mle:.3f}, sigma={sigma_mle:.3f}\")\n\n# Log-likelihood at MLE vs other values\ndef neg_log_likelihood(mu, data=data):\n    return -np.sum(norm.logpdf(data, loc=mu, scale=sigma_mle))\n\nfor mu_test in [3.0, mu_mle, 7.0]:\n    ll = -neg_log_likelihood(mu_test)\n    print(f\"  mu={mu_test:.2f} => log-likelihood={ll:.2f}\")"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Naive Bayes Classifier",
+      "icon": "🏷️",
+      "explanation": "Naive Bayes classifier এ class prior P(C) আর feature likelihood P(x|C) — দুইটাই MLE দিয়া training data থেইকা estimate করা হয়। P(C) = class frequency, P(x|C) = feature frequency given class।",
+      "realExample": "Email spam filter (Naive Bayes), document classification, sentiment analysis — MLE based parameter estimation সব জায়গায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom collections import Counter\n\n# Naive Bayes: MLE for spam detection\n# Training data: (word_counts, label)\ntrain_data = [\n    ({'free': 2, 'money': 1, 'click': 1}, 'spam'),\n    ({'free': 1, 'winner': 1, 'prize': 1}, 'spam'),\n    ({'meeting': 1, 'project': 2, 'deadline': 1}, 'ham'),\n    ({'report': 1, 'meeting': 1, 'budget': 1}, 'ham'),\n    ({'free': 1, 'offer': 1, 'limited': 1}, 'spam'),\n]\n\n# MLE: P(class) = count(class) / total\nlabels = [d[1] for d in train_data]\np_spam_mle = labels.count('spam') / len(labels)\nprint(f\"P(spam) MLE = {p_spam_mle:.2f}\")\nprint(f\"P(ham) MLE  = {1-p_spam_mle:.2f}\")\n\n# MLE: P(word|class) with Laplace smoothing\nvocab = set()\nword_counts = {'spam': Counter(), 'ham': Counter()}\nfor words, label in train_data:\n    for word, count in words.items():\n        word_counts[label][word] += count\n        vocab.add(word)\n\nprint(f\"\\nTop spam words (MLE):\")\nfor word, count in word_counts['spam'].most_common(5):\n    total = sum(word_counts['spam'].values())\n    print(f\"  P({word}|spam) = {count}/{total} = {count/total:.3f}\")"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Neural Network Training = MLE",
+      "icon": "🧠",
+      "explanation": "Neural network training with cross-entropy loss হইলো essentially MLE! Network weights হইলো parameters, training data হইলো observed data, loss minimization হইলো negative log-likelihood minimization = MLE!",
+      "realExample": "PyTorch/TensorFlow এ model.fit() বা training loop — প্রতিটা gradient step MLE objective optimize করতেছে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Showing that Cross-Entropy Loss = Negative Log-Likelihood\n\ndef softmax(z):\n    exp_z = np.exp(z - np.max(z))\n    return exp_z / exp_z.sum(axis=1, keepdims=True)\n\ndef cross_entropy_loss(y_true, y_pred):\n    \"\"\"This IS negative log-likelihood!\"\"\"\n    n = len(y_true)\n    log_probs = np.log(y_pred[np.arange(n), y_true] + 1e-10)\n    return -np.mean(log_probs)\n\n# Mini-batch of predictions\nnp.random.seed(42)\nbatch_size = 4\nn_classes = 3\n\nlogits = np.random.randn(batch_size, n_classes)\ny_true = np.array([0, 2, 1, 0])  # true labels\n\nprobs = softmax(logits)\nloss = cross_entropy_loss(y_true, probs)\n\nprint(\"Predicted probabilities:\")\nfor i in range(batch_size):\n    print(f\"  Sample {i}: {probs[i].round(3)} (true={y_true[i]})\")\n\nprint(f\"\\nCross-Entropy Loss = {loss:.4f}\")\nprint(f\"This IS the negative log-likelihood!\")\nprint(f\"Minimizing this loss = Maximizing likelihood = MLE!\")"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Gaussian Mixture Model (GMM)",
+      "icon": "🎯",
+      "explanation": "GMM তে multiple Gaussian distribution এর mixture — MLE via Expectation-Maximization (EM) algorithm দিয়া parameters (means, variances, mixture weights) estimate করা হয়।",
+      "realExample": "Customer segmentation, speaker diarization, image segmentation — GMM with MLE via EM widely used।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Simple 1D GMM with 2 components — MLE via EM\nnp.random.seed(42)\n\n# Generate data from 2 Gaussians\ndata = np.concatenate([\n    np.random.normal(2, 0.5, 60),\n    np.random.normal(6, 1.0, 40)\n])\n\n# EM Algorithm for MLE\nmu = np.array([1.0, 5.0])     # initial guesses\nsigma = np.array([1.0, 1.0])\npi = np.array([0.5, 0.5])      # mixture weights\n\nfor iteration in range(20):\n    # E-step: compute responsibilities\n    resp = np.zeros((len(data), 2))\n    for k in range(2):\n        resp[:, k] = pi[k] * np.exp(-0.5*((data-mu[k])/sigma[k])**2) / sigma[k]\n    resp /= resp.sum(axis=1, keepdims=True)\n    \n    # M-step: MLE updates\n    Nk = resp.sum(axis=0)\n    pi = Nk / len(data)\n    mu = (resp * data[:, None]).sum(axis=0) / Nk\n    sigma = np.sqrt((resp * (data[:, None]-mu)**2).sum(axis=0) / Nk)\n\nprint(\"MLE via EM results:\")\nprint(f\"  Cluster 1: mu={mu[0]:.2f}, sigma={sigma[0]:.2f}, weight={pi[0]:.2f}\")\nprint(f\"  Cluster 2: mu={mu[1]:.2f}, sigma={sigma[1]:.2f}, weight={pi[1]:.2f}\")\nprint(f\"  True:      mu=[2.0, 6.0], sigma=[0.5, 1.0], weight=[0.6, 0.4]\")"
+      }
+    }
+  ],
+  "memoryTrick": "MLE = 'Most Likely Explanation'! গোয়েন্দা গুরু ভাইয়ের মতো ভাবো — evidence দেখো, সবচেয়ে likely suspect ধরো! MLE = data কে সবচেয়ে ভালো explain করে এমন parameter! পুরান ঢাকায় রসগোল্লা চুরি — MLE কইলো রহিম!",
+  "tags": ["mle", "maximum-likelihood", "parameter-estimation", "log-likelihood", "logistic-regression", "cross-entropy", "em-algorithm"],
+  "prev": "softmax-categorical",
+  "next": "map"
+}

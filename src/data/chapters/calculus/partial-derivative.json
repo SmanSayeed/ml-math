@@ -1,0 +1,116 @@
+{
+  "slug": "partial-derivative",
+  "title": "Partial Derivative — আংশিক পরিবর্তন",
+  "titleEn": "Partial Derivative",
+  "category": "calculus",
+  "order": 3,
+  "readTime": 13,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🍛",
+    "title": "বিরিয়ানি Recipe-তে একটাই জিনিস Change করো",
+    "content": "ধর গুরু, তুই পুরান ঢাকার হাজীর বিরিয়ানি রেসিপি নিয়া experiment করতেছস। বিরিয়ানির taste একটা function — f(চাল, মশলা, তেল, আঁচ)। এখন তুই জানতে চাস তেল বাড়ালে taste কেমন change হয়। তাইলে কী করবি? চাল, মশলা, আঁচ সব same রাখবি — শুধু তেল একটু বাড়াবি! ২ চামচ তেল দিলে taste ৭/১০, ২.৫ চামচে ৮/১০, ৩ চামচে ৭.৫/১০। দেখলি? তেলের respect-এ taste-এর partial derivative বের হইল! অন্য সব ingredient ধরে রাইখা শুধু একটা change কর — এইটাই partial derivative-এর মূল কথা।",
+    "reveal": "Partial derivative হইল multi-variable function-এ একটা variable-এর effect আলাদা কইরা দেখা — বাকি সব constant ধরে। ML-এ neural network-এর loss অনেকগুলা weight-এর function — partial derivative বলে দেয় কোন weight change করলে loss কতটুকু change হয়। এইটাই backpropagation-এর core!"
+  },
+  "definition": {
+    "content": "Partial derivative হইল multi-variable function-এর একটা specific variable-এর respect-এ derivative, বাকি সব variable constant ধরে। ∂f/∂x মানে — x change করলে f কতটুকু change হয়, y, z আর বাকি সব যা আছে সব fixed রাইখা।",
+    "formula": "\\frac{\\partial f}{\\partial x} = \\lim_{h \\to 0} \\frac{f(x+h, y) - f(x, y)}{h}",
+    "formulaLabel": "Partial Derivative — একটা variable change, বাকি সব fixed"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "∂ (partial) symbol-টা কী?",
+        "content": "d-এর বদলে ∂ (curly d) দেখলে বুঝবি এইটা partial derivative। d মানে total change, ∂ মানে partial change — শুধু একটা variable-এর respect-এ। f(x,y) = x² + 3xy + y² হইলে ∂f/∂x বের করতে y-কে constant ধরো, শুধু x-এর term differentiate কর!",
+        "formula": "f(x,y) = x^2 + 3xy + y^2 \\implies \\frac{\\partial f}{\\partial x} = 2x + 3y"
+      },
+      {
+        "title": "হিসাব করার Trick",
+        "content": "যেই variable-এর respect-এ partial derivative নিবি, বাকি সব variable-কে number-এর মতো treat কর। ∂f/∂x নিতে গেলে y-কে একটা constant number ভাব! f(x,y) = x²y + 3x + y³ হইলে ∂f/∂x = 2xy + 3 (y³ হইল constant, তাই derivative 0)।",
+        "formula": "\\frac{\\partial}{\\partial x}[x^2 y + 3x + y^3] = 2xy + 3"
+      },
+      {
+        "title": "দুইটা Variable, দুইটা Partial Derivative",
+        "content": "f(x,y) হইলে দুইটা partial derivative আছে — ∂f/∂x আর ∂f/∂y। প্রতিটা একটা direction-এ change বলে। ∂f/∂x বলে x-axis বরাবর ঢাল কত, ∂f/∂y বলে y-axis বরাবর ঢাল কত। দুইটা মিলায়া পুরা picture পাওয়া যায়!",
+        "formula": "\\frac{\\partial f}{\\partial y}[x^2 y + 3x + y^3] = x^2 + 3y^2"
+      },
+      {
+        "title": "ML Connection — Weight-এর Effect",
+        "content": "Neural network-এ loss L হইল সব weight w₁, w₂, ..., wₙ-এর function। ∂L/∂w₁ বলে w₁ change করলে loss কতটুকু change হয় — বাকি সব weight fixed রাইখা। এইভাবে প্রতিটা weight-এর contribution আলাদা কইরা বোঝা যায়!",
+        "formula": "\\frac{\\partial L}{\\partial w_i} = \\text{loss-এ } w_i\\text{-র contribution}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "বিরিয়ানি Taste Function",
+    "problem": "Taste function: T(m, t) = 2m² + mt - t² + 5 (m = মশলা, t = তেল)। m=3, t=2 point-এ ∂T/∂m আর ∂T/∂t বের কর।",
+    "steps": [
+      {
+        "label": "Step 1: ∂T/∂m বের কর (t constant)",
+        "content": "t-কে number ভেবে শুধু m-এর respect-এ differentiate কর।",
+        "formula": "\\frac{\\partial T}{\\partial m} = 4m + t"
+      },
+      {
+        "label": "Step 2: m=3, t=2 বসাও",
+        "content": "∂T/∂m at (3,2):",
+        "formula": "\\frac{\\partial T}{\\partial m}\\bigg|_{(3,2)} = 4(3) + 2 = 14"
+      },
+      {
+        "label": "Step 3: ∂T/∂t বের কর (m constant)",
+        "content": "m-কে number ভেবে শুধু t-এর respect-এ differentiate কর।",
+        "formula": "\\frac{\\partial T}{\\partial t} = m - 2t \\implies \\frac{\\partial T}{\\partial t}\\bigg|_{(3,2)} = 3 - 4 = -1"
+      }
+    ],
+    "answer": "∂T/∂m = ১৪ (মশলা বাড়ালে taste অনেক বাড়বে!), ∂T/∂t = -১ (তেল বাড়ালে taste একটু কমবে)। মানে — মশলা বাড়াও, তেল একটু কমাও! পুরান ঢাকার বিরিয়ানি মাস্টাররা এইটা হাতেকলমে জানে।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Backpropagation — Weight Gradients",
+      "icon": "🔄",
+      "explanation": "Backpropagation-এ প্রতিটা weight-এর জন্য loss-এর partial derivative বের করা হয়। ∂L/∂w বলে দেয় এই specific weight কোন দিকে change করলে loss কমবে। Million parameter-এর network-এ million partial derivative compute হয় প্রতি step-এ!",
+      "realExample": "BERT model-এ 110M parameter — training-এ প্রতি batch-এ 110M partial derivative compute হয় loss-এর respect-এ।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\n# Multi-variable function er partial derivatives\nx = torch.tensor(3.0, requires_grad=True)\ny = torch.tensor(2.0, requires_grad=True)\n\n# f(x, y) = 2x^2 + xy - y^2 + 5 (biryani taste function!)\nf = 2*x**2 + x*y - y**2 + 5\nf.backward()\n\nprint(f'f(3, 2) = {f.item()}')\nprint(f'df/dx at (3,2) = {x.grad.item()}')  # 4x + y = 14\nprint(f'df/dy at (3,2) = {y.grad.item()}')  # x - 2y = -1\n\n# Neural network e: partial derivatives of loss w.r.t. weights\nmodel = torch.nn.Linear(5, 3)\ninput_data = torch.randn(1, 5)\ntarget = torch.randn(1, 3)\n\noutput = model(input_data)\nloss = torch.nn.functional.mse_loss(output, target)\nloss.backward()\n\nprint(f'\\nWeight partial derivatives shape: {model.weight.grad.shape}')\nprint(f'Each weight has its own partial derivative!')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Feature Importance — কোন Input কতটা গুরুত্বপূর্ণ",
+      "icon": "🎯",
+      "explanation": "Model output-এর partial derivative input feature-এর respect-এ নিলে বোঝা যায় কোন feature কতটা important। ∂output/∂feature বড় মানে ওই feature-এর ছোট change-এও output অনেক change হয় — মানে important feature!",
+      "realExample": "Medical diagnosis model-এ ∂prediction/∂blood_pressure বড় হইলে বোঝা যায় blood pressure prediction-এ major role রাখতেছে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Simple model for feature importance\nmodel = nn.Sequential(\n    nn.Linear(4, 8),\n    nn.ReLU(),\n    nn.Linear(8, 1)\n)\n\n# Input features: [age, income, education, experience]\nfeatures = torch.tensor([[25.0, 50000.0, 16.0, 3.0]], requires_grad=True)\nfeature_names = ['Age', 'Income', 'Education', 'Experience']\n\n# Forward pass\noutput = model(features)\noutput.backward()\n\n# Partial derivatives = feature importance\nprint('Feature Importance (via partial derivatives):')\nfor name, grad in zip(feature_names, features.grad[0]):\n    print(f'  d(output)/d({name}) = {grad.item():.6f}')\n\n# Bigger absolute gradient = more important feature\nimportance = features.grad[0].abs()\nmost_important = feature_names[importance.argmax().item()]\nprint(f'\\nMost important feature: {most_important}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Jacobian Matrix — Multiple Output-এর Partial Derivatives",
+      "icon": "📊",
+      "explanation": "যদি function-এর multiple input আর multiple output থাকে, তাইলে সব partial derivative মিলায়া Jacobian matrix বানায়। J[i][j] = ∂yᵢ/∂xⱼ। Neural network-এর layer-এ এইটা compute হয় backpropagation-এ!",
+      "realExample": "Object detection model YOLO-তে output হইল (x, y, w, h, confidence) — প্রতিটা output-এর প্রতিটা input-এর respect-এ partial derivative Jacobian-এ organize হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nfrom torch.autograd.functional import jacobian\n\n# Multi-input, multi-output function\ndef f(x):\n    \"\"\"2 inputs -> 3 outputs\"\"\"\n    return torch.stack([\n        x[0]**2 + x[1],      # y1 = x1^2 + x2\n        x[0] * x[1],          # y2 = x1 * x2\n        torch.sin(x[0]) + x[1]**2  # y3 = sin(x1) + x2^2\n    ])\n\nx = torch.tensor([1.0, 2.0])\n\n# Jacobian matrix: all partial derivatives organized!\nJ = jacobian(f, x)\nprint('Jacobian Matrix (3x2):')\nprint(J)\nprint(f'\\nJ[0,0] = dy1/dx1 = 2*x1 = {J[0,0].item():.4f}')\nprint(f'J[0,1] = dy1/dx2 = 1    = {J[0,1].item():.4f}')\nprint(f'J[1,0] = dy2/dx1 = x2   = {J[1,0].item():.4f}')\nprint(f'J[1,1] = dy2/dx2 = x1   = {J[1,1].item():.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Adversarial Attack — Input-এর Partial Derivative দিয়ে ধোঁকা",
+      "icon": "😈",
+      "explanation": "FGSM (Fast Gradient Sign Method) attack-এ loss-এর partial derivative input image-এর respect-এ নেওয়া হয়। তারপর gradient-এর sign অনুযায়ী image-এ tiny perturbation add করলে model completely wrong prediction দেয়! Partial derivative-এর dark side!",
+      "realExample": "একটা panda-র image-তে invisible noise add কইরা model-কে gibbon ভাবানো যায় — FGSM attack ব্যবহার কইরা।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Simplified FGSM attack concept\nmodel = nn.Sequential(\n    nn.Linear(10, 5),\n    nn.ReLU(),\n    nn.Linear(5, 2)\n)\n\n# Original input (like an image flattened)\noriginal_input = torch.randn(1, 10, requires_grad=True)\ntrue_label = torch.tensor([0])\n\n# Forward pass\noutput = model(original_input)\nloss = nn.CrossEntropyLoss()(output, true_label)\nloss.backward()\n\n# FGSM: partial derivative of loss w.r.t. input\n# Gradient er sign niye input e add koro\nepsilon = 0.1\nperturbation = epsilon * original_input.grad.sign()\nadversarial_input = original_input + perturbation\n\n# Check predictions\nwith torch.no_grad():\n    orig_pred = model(original_input).argmax().item()\n    adv_pred = model(adversarial_input).argmax().item()\n\nprint(f'Original prediction: {orig_pred}')\nprint(f'Adversarial prediction: {adv_pred}')\nprint(f'Perturbation magnitude: {perturbation.abs().mean():.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Partial derivative = বিরিয়ানির recipe-তে একটাই ingredient change কর, বাকি সব same রাখ। মশলা বাড়ালে taste কেমন হয় (∂taste/∂মশলা) আর তেল বাড়ালে কেমন হয় (∂taste/∂তেল) — আলাদা আলাদা experiment!",
+  "tags": ["partial-derivative", "multivariable-calculus", "backpropagation", "jacobian", "gradient", "feature-importance"],
+  "prev": "derivative",
+  "next": "chain-rule"
+}

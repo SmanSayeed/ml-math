@@ -1,0 +1,121 @@
+{
+  "slug": "conditional-probability",
+  "title": "Conditional Probability — শর্তসাপেক্ষ সম্ভাবনা",
+  "titleEn": "Conditional Probability",
+  "category": "probability-stats",
+  "order": 2,
+  "readTime": 12,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🌧️",
+    "title": "বৃষ্টি আর জ্যামের গল্প",
+    "content": "ধর ভাই, তুই গুলশান থেকে মতিঝিলে অফিসে যাবি। সাধারণত জ্যাম লাগে ৬০% দিন। কিন্তু আজকে সকালে উঠে দেখলি মুষলধারে বৃষ্টি হচ্ছে! এখন তোর মনে প্রশ্ন — বৃষ্টি হচ্ছে জানার পরে জ্যাম লাগার chance কত? তোর বউ বলল 'আজকে বৃষ্টি, ১০০% জ্যাম!' তুই ভাবলি — actually বৃষ্টি দিলে জ্যাম লাগে ৯০% দিন! মানে নতুন information (বৃষ্টি) পাওয়ার পরে তোর probability update হইয়া গেল — ৬০% থেকে ৯০% হইয়া গেল!",
+    "reveal": "এইটাই Conditional Probability, মামা! নতুন information জানার পরে probability change হয়। P(জ্যাম) = 0.6 ছিল, কিন্তু P(জ্যাম | বৃষ্টি) = 0.9! ওই vertical bar '|' মানে 'given that' — 'যদি জানি যে'। ML-এ এইটা সবখানে — নতুন data পেলে prediction update হয়!"
+  },
+  "definition": {
+    "content": "Conditional Probability P(A|B) হইল — B ঘটছে জানার পরে A ঘটার সম্ভাবনা। এইটা A এবং B দুইটাই ঘটার probability কে B ঘটার probability দিয়া ভাগ করলে পাওয়া যায়।",
+    "formula": "P(A|B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) > 0",
+    "formulaLabel": "Conditional Probability Formula — শর্তসাপেক্ষ সম্ভাবনা"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Condition মানে কী?",
+        "content": "Condition মানে নতুন information। বৃষ্টি হচ্ছে — এইটা condition। এই information পাওয়ার পরে তোর sample space ছোট হইয়া যায়। আগে সব দিন consider করতি, এখন শুধু বৃষ্টির দিনগুলা consider করবি। Sample space shrink হওয়াই conditional probability-র মূল কথা।",
+        "formula": "P(A|B): \\text{ sample space S } \\rightarrow \\text{ reduced to B}"
+      },
+      {
+        "title": "Formula বুঝি ঢাকাইয়া স্টাইলে",
+        "content": "ধর ১০০ দিনের data আছে। ৩০ দিন বৃষ্টি হইছে (P(B)=0.3)। এর মধ্যে ২৭ দিন জ্যাম লাগছে (P(A∩B)=0.27)। তাইলে বৃষ্টি দিলে জ্যামের chance = ২৭/৩০ = ০.৯। Formula-তে: P(A|B) = 0.27/0.3 = 0.9!",
+        "formula": "P(\\text{জ্যাম}|\\text{বৃষ্টি}) = \\frac{P(\\text{জ্যাম} \\cap \\text{বৃষ্টি})}{P(\\text{বৃষ্টি})} = \\frac{0.27}{0.30} = 0.9"
+      },
+      {
+        "title": "Chain Rule (Product Rule)",
+        "content": "Conditional probability formula কে উল্টায়া লিখলে পাই: P(A ∩ B) = P(A|B) × P(B)। এইটাকে chain rule বলে। দুইটা event একসাথে ঘটার probability = একটা ঘটার probability × ওটা ঘটলে আরেকটা ঘটার conditional probability।",
+        "formula": "P(A \\cap B) = P(A|B) \\cdot P(B) = P(B|A) \\cdot P(A)"
+      },
+      {
+        "title": "Independence কী?",
+        "content": "যদি B জানার পরেও A-র probability change না হয়, তাইলে A আর B independent। মানে P(A|B) = P(A)। যেমন, ঢাকায় বৃষ্টি হওয়া আর তোর ফোনের battery শেষ হওয়া — দুইটা independent event। কিন্তু বৃষ্টি আর জ্যাম? dependent!",
+        "formula": "\\text{A, B independent} \\iff P(A|B) = P(A) \\iff P(A \\cap B) = P(A) \\cdot P(B)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ঢাকার বৃষ্টি-জ্যাম Problem",
+    "problem": "ঢাকায় যেকোনো দিনে বৃষ্টি হওয়ার probability 0.3, জ্যাম লাগার probability 0.6, এবং বৃষ্টি ও জ্যাম দুইটাই হওয়ার probability 0.27। (a) বৃষ্টি হইলে জ্যামের probability কত? (b) বৃষ্টি আর জ্যাম কি independent?",
+    "steps": [
+      {
+        "label": "Step 1: Given তথ্য সাজাও",
+        "content": "P(বৃষ্টি) = 0.3, P(জ্যাম) = 0.6, P(বৃষ্টি ∩ জ্যাম) = 0.27",
+        "formula": "P(R) = 0.3, \\quad P(J) = 0.6, \\quad P(R \\cap J) = 0.27"
+      },
+      {
+        "label": "Step 2: Conditional Probability বাইর কর",
+        "content": "বৃষ্টি দিলে জ্যামের probability = P(জ্যাম | বৃষ্টি)",
+        "formula": "P(J|R) = \\frac{P(J \\cap R)}{P(R)} = \\frac{0.27}{0.30} = 0.9"
+      },
+      {
+        "label": "Step 3: Independence Test",
+        "content": "P(J|R) = 0.9 কিন্তু P(J) = 0.6 — সমান না! তাই dependent।",
+        "formula": "P(J|R) = 0.9 \\neq P(J) = 0.6 \\implies \\text{NOT independent}"
+      },
+      {
+        "label": "Step 4: আরেকটা Independence Check",
+        "content": "Independent হইলে P(R∩J) = P(R)×P(J) হইত, কিন্তু 0.3×0.6 = 0.18 ≠ 0.27।",
+        "formula": "P(R) \\cdot P(J) = 0.3 \\times 0.6 = 0.18 \\neq 0.27 = P(R \\cap J)"
+      }
+    ],
+    "answer": "বৃষ্টি দিলে জ্যামের probability 0.9 (90%) — সাধারণ দিনের 0.6 থেকে অনেক বেশি! বৃষ্টি আর জ্যাম dependent — ঢাকাবাসী হিসাবে তুই এইটা ভালোই জানিস!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Naive Bayes Classifier",
+      "icon": "📧",
+      "explanation": "Naive Bayes classifier পুরাটাই conditional probability-র উপর দাঁড়ানো। P(spam | words) calculate করে — 'free', 'offer', 'click' এই word গুলা থাকলে spam হওয়ার conditional probability বাড়ে!",
+      "realExample": "Gmail-র spam filter Naive Bayes ব্যবহার করে। 'Win free iPhone' দেখলে P(spam | 'free', 'win', 'iPhone') অনেক high হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.naive_bayes import MultinomialNB\nfrom sklearn.feature_extraction.text import CountVectorizer\n\n# Email data\nemails = [\n    'free offer click now', 'meeting tomorrow office',\n    'win free prize', 'project deadline monday',\n    'cheap discount buy', 'quarterly report review'\n]\nlabels = [1, 0, 1, 0, 1, 0]  # 1=spam, 0=ham\n\nvectorizer = CountVectorizer()\nX = vectorizer.fit_transform(emails)\n\n# Naive Bayes — conditional probability ব্যবহার করে\nmodel = MultinomialNB()\nmodel.fit(X, labels)\n\n# নতুন email test\nnew = vectorizer.transform(['free discount offer'])\nprob = model.predict_proba(new)\nprint(f'P(spam | words) = {prob[0][1]:.2f}')\nprint(f'P(ham | words) = {prob[0][0]:.2f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Markov Chain ও Language Model",
+      "icon": "💬",
+      "explanation": "Language model-এ পরের word predict করা হয় আগের word-এর উপর ভিত্তি করে — এইটা conditional probability! P(next_word | previous_words)। 'আমি ভাত' এর পরে 'খাই' আসার conditional probability বেশি।",
+      "realExample": "তোর ফোনের keyboard suggestion কাজ করে conditional probability দিয়া। 'Good' লেখার পরে 'morning' suggest করে কারণ P('morning' | 'Good') high!",
+      "code": {
+        "language": "python",
+        "snippet": "from collections import defaultdict\nimport random\n\n# Simple bigram language model\ntext = \"আমি ভাত খাই আমি চা খাই আমি ঢাকায় থাকি\"\nwords = text.split()\n\n# Conditional probability table বানাই\nbigrams = defaultdict(list)\nfor i in range(len(words)-1):\n    bigrams[words[i]].append(words[i+1])\n\n# P(next | current) calculate\nword = 'আমি'\nnext_words = bigrams[word]\nfor w in set(next_words):\n    prob = next_words.count(w) / len(next_words)\n    print(f'P({w} | {word}) = {prob:.2f}')\n\n# Output: P(ভাত|আমি)=0.33, P(চা|আমি)=0.33, P(ঢাকায়|আমি)=0.33"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Feature Dependency Check",
+      "icon": "🔗",
+      "explanation": "ML-এ feature selection-এ দেখতে হয় দুইটা feature independent কিনা। Height আর weight dependent — লম্বা মানুষ ভারী হওয়ার conditional probability বেশি। Dependent feature redundant হতে পারে।",
+      "realExample": "Credit scoring-এ income আর loan_amount dependent। P(default | low_income, high_loan) calculate করে risk assessment হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import chi2_contingency\n\n# ঢাকার student data: study_hours vs pass/fail\n# Contingency table\nobserved = np.array([\n    [10, 40],  # কম পড়াশোনা: [fail, pass]\n    [5, 45],   # বেশি পড়াশোনা: [fail, pass]\n])\n\nchi2, p_value, dof, expected = chi2_contingency(observed)\n\nprint(f'Chi-squared: {chi2:.2f}')\nprint(f'P-value: {p_value:.4f}')\n\nif p_value < 0.05:\n    print('Dependent! পড়াশোনা আর result related।')\nelse:\n    print('Independent — কোনো সম্পর্ক নাই।')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Conditional GAN (cGAN)",
+      "icon": "🎨",
+      "explanation": "Conditional GAN-এ image generate করা হয় condition দিয়া। 'বিড়ালের ছবি বানাও' — এইখানে 'বিড়াল' হইল condition। P(image | label) — label given থাকলে কোন ধরনের image generate হবে সেইটার probability!",
+      "realExample": "Pix2Pix model conditional GAN ব্যবহার করে — sketch দিলে realistic photo generate করে। P(photo | sketch) model শিখে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Simple Conditional Generator concept\nclass ConditionalGenerator(nn.Module):\n    def __init__(self, noise_dim=100, n_classes=10, img_dim=784):\n        super().__init__()\n        # Noise + condition (label) input নেয়\n        self.model = nn.Sequential(\n            nn.Linear(noise_dim + n_classes, 256),\n            nn.ReLU(),\n            nn.Linear(256, img_dim),\n            nn.Tanh()\n        )\n\n    def forward(self, noise, labels):\n        # Condition (label) কে noise-এর সাথে concat\n        x = torch.cat([noise, labels], dim=1)\n        return self.model(x)\n\ngen = ConditionalGenerator()\nprint('cGAN: P(image | label) শিখে!')\nprint(f'Input: noise(100) + label(10) = 110 dims')"
+      }
+    }
+  ],
+  "memoryTrick": "P(A|B) মনে রাখতে ভাবো: '|' চিহ্নটা হইল ঢাকার রাস্তার divider — ডান পাশে condition (B), বাম পাশে যেইটা জানতে চাও (A)। 'জ্যাম | বৃষ্টি' = বৃষ্টির road-এ জ্যাম! আর formula-টা? উপরে intersection (দুইটাই ঘটা), নিচে condition (যেইটা জানি) — মানে 'যেইটা জানি তার মধ্যে দুইটাই ঘটছে কতবার!'",
+  "tags": ["conditional-probability", "independence", "chain-rule", "bayes", "naive-bayes", "markov-chain"],
+  "prev": "probability-basics",
+  "next": "bayes-theorem"
+}

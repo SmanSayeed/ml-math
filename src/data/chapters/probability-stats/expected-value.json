@@ -1,0 +1,120 @@
+{
+  "slug": "expected-value",
+  "title": "Expected Value — প্রত্যাশিত মান",
+  "titleEn": "Expected Value",
+  "category": "probability-stats",
+  "order": 5,
+  "readTime": 11,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "💰",
+    "title": "চায়ের দোকানের দৈনিক আয়",
+    "content": "ধর ভাই, পুরান ঢাকার হাসান মিয়ার চায়ের দোকান। কোনোদিন বিক্রি ভালো হয়, কোনোদিন মন্দা। হাসান মিয়া হিসাব করে দেখল — ৩০% দিন আয় ৫০০ টাকা (মন্দা), ৫০% দিন আয় ১০০০ টাকা (মোটামুটি), ২০% দিন আয় ২০০০ টাকা (বাম্পার!)। তার বউ জিজ্ঞেস করল 'প্রতিদিন গড়ে কত আয় করো?' হাসান মিয়া মাথা চুলকায় — কোনোদিন ৫০০, কোনোদিন ২০০০, গড় কত বলবো? তার ছেলে (যে ML পড়ে) বলল 'আব্বা, expected value calculate করো!'",
+    "reveal": "Expected Value হইল probability-weighted average, মামা! শুধু values যোগ করে ভাগ করা না — প্রতিটা value-কে তার probability দিয়া গুণ করে যোগ করতে হবে। E[X] = 500×0.3 + 1000×0.5 + 2000×0.2 = 150 + 500 + 400 = ১০৫০ টাকা। হাসান মিয়ার দৈনিক expected income ১০৫০ টাকা — যদিও কোনোদিনই exactly ১০৫০ টাকা আয় হয় না!"
+  },
+  "definition": {
+    "content": "Expected Value E[X] হইল random variable X-এর probability-weighted average। এইটা long-run average — অনেকবার experiment চালালে গড়ে যে value পাবে সেইটা। Discrete-তে সব value × probability যোগ, continuous-তে integral।",
+    "formula": "E[X] = \\sum_{i} x_i \\cdot P(X = x_i) \\quad \\text{or} \\quad E[X] = \\int_{-\\infty}^{\\infty} x \\cdot f_X(x) \\, dx",
+    "formulaLabel": "Expected Value — Probability-weighted গড়"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Normal Average vs Expected Value",
+        "content": "Normal average: সব value যোগ করে count দিয়া ভাগ। Expected value: প্রতিটা value-কে তার probability (weight) দিয়া গুণ করে যোগ। ঢাকায় যদি ৫ দিনে ভাড়া 20,20,20,30,15 টাকা হয়, average = ২১ টাকা। কিন্তু probability জানা থাকলে directly E[X] বাইর করতে পারি — data collect না করেই!",
+        "formula": "\\bar{x} = \\frac{1}{n}\\sum x_i \\quad vs \\quad E[X] = \\sum x_i \\cdot P(x_i)"
+      },
+      {
+        "title": "Linearity of Expectation",
+        "content": "E[X]-এর সবচেয়ে powerful property — linearity! E[aX + b] = a×E[X] + b। আর E[X + Y] = E[X] + E[Y] — সবসময়, independent হোক বা না হোক! হাসান মিয়ার চা আর সিঙ্গারার মোট expected আয় = চায়ের expected আয় + সিঙ্গারার expected আয়।",
+        "formula": "E[aX + bY + c] = a \\cdot E[X] + b \\cdot E[Y] + c"
+      },
+      {
+        "title": "E[g(X)] — Function-এর Expectation",
+        "content": "যদি X-এর function-এর expected value লাগে? ধর হাসান মিয়া আয়ের উপর ১০% tax দেয়। Tax = 0.1×X। E[Tax] = E[0.1X] = 0.1×E[X] = 0.1×1050 = ১০৫ টাকা। কিন্তু non-linear function-এ সাবধান: E[X²] ≠ (E[X])²!",
+        "formula": "E[g(X)] = \\sum g(x_i) \\cdot P(X = x_i), \\quad E[X^2] \\neq (E[X])^2"
+      },
+      {
+        "title": "ML-এ Expected Value = Loss Function",
+        "content": "ML-এ model train মানে expected loss minimize করা! Loss function L(y, ŷ) হইল একটা random variable (কারণ data random)। Model optimize করে E[L] minimize করতে চায়। Gradient descent আসলে expected loss-এর gradient বাইর করে!",
+        "formula": "\\min_\\theta E_{(x,y) \\sim \\text{Data}}[L(y, f_\\theta(x))]"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "হাসান মিয়ার দোকানের Expected Profit",
+    "problem": "হাসান মিয়ার দৈনিক আয় X-এর distribution: P(X=500)=0.3, P(X=1000)=0.5, P(X=2000)=0.2। দোকানের daily খরচ ৮০০ টাকা। (a) Expected daily income কত? (b) Expected daily profit কত? (c) মাসে (৩০ দিনে) expected মোট profit কত?",
+    "steps": [
+      {
+        "label": "Step 1: E[X] Calculate কর",
+        "content": "প্রতিটা value × probability যোগ করি",
+        "formula": "E[X] = 500(0.3) + 1000(0.5) + 2000(0.2) = 150 + 500 + 400 = 1050"
+      },
+      {
+        "label": "Step 2: Expected Profit",
+        "content": "Profit = Income - Cost = X - 800। Linearity of expectation ব্যবহার করি।",
+        "formula": "E[\\text{Profit}] = E[X - 800] = E[X] - 800 = 1050 - 800 = 250 \\text{ টাকা}"
+      },
+      {
+        "label": "Step 3: মাসিক Expected Profit",
+        "content": "৩০ দিনের মোট = ৩০ × daily expected profit (linearity!)",
+        "formula": "E[\\text{Monthly}] = 30 \\times E[\\text{Daily Profit}] = 30 \\times 250 = 7500 \\text{ টাকা}"
+      },
+      {
+        "label": "Step 4: Insight",
+        "content": "লক্ষ্য কর — কোনোদিনই exactly ২৫০ টাকা profit হয় না (৫০০-৮০০=-৩০০, ১০০০-৮০০=২০০, ২০০০-৮০০=১২০০)। কিন্তু long-run-এ average ২৫০ টাকা/দিন!"
+      }
+    ],
+    "answer": "Expected daily income = ১০৫০ টাকা, expected daily profit = ২৫০ টাকা, monthly expected profit = ৭,৫০০ টাকা। মন্দা দিনে লস হলেও long-run-এ profitable!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Cross-Entropy Loss Function",
+      "icon": "📉",
+      "explanation": "Classification-এ cross-entropy loss আসলে expected log-likelihood-র negative। Model-এর output probability distribution আর actual label-এর মধ্যে expected difference measure করে। E[-log(p)] minimize করাই training-এর goal!",
+      "realExample": "ImageNet classification-এ ResNet cross-entropy loss ব্যবহার করে। Expected loss কমলে model accuracy বাড়ে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Cross-entropy = Expected negative log probability\ndef cross_entropy(y_true, y_pred):\n    \"\"\"E[-log(p)] = -sum(y * log(p))\"\"\"\n    y_pred = np.clip(y_pred, 1e-15, 1 - 1e-15)\n    return -np.sum(y_true * np.log(y_pred))\n\n# True label: cat (class 0)\ny_true = np.array([1, 0, 0])  # one-hot\n\n# Good model prediction\ny_good = np.array([0.9, 0.05, 0.05])\nprint(f'Good model loss: {cross_entropy(y_true, y_good):.4f}')\n\n# Bad model prediction\ny_bad = np.array([0.2, 0.5, 0.3])\nprint(f'Bad model loss: {cross_entropy(y_true, y_bad):.4f}')\n\n# Expected loss কম = ভালো model!"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Reinforcement Learning — Expected Reward",
+      "icon": "🎮",
+      "explanation": "RL-এ agent-এর goal হইল expected cumulative reward maximize করা। প্রতিটা action-এর expected reward (Q-value) calculate করে agent best action বাছাই করে। E[R] = expected return!",
+      "realExample": "AlphaGo প্রতিটা move-এর expected reward calculate করে। E[win | move] সবচেয়ে বেশি যেই move-এ সেইটা choose করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Q-Learning: Expected reward per action\n# ঢাকার রাস্তায় route বাছাই\nroutes = ['মিরপুর রোড', 'মহাখালী', 'বিমানবন্দর রোড']\n\n# Reward distribution per route (time saved in minutes)\n# Each route has different outcomes with probabilities\nrewards = {\n    'মিরপুর রোড': {'values': [-10, 5, 15], 'probs': [0.4, 0.4, 0.2]},\n    'মহাখালী': {'values': [-5, 10, 10], 'probs': [0.3, 0.5, 0.2]},\n    'বিমানবন্দর রোড': {'values': [0, 8, 8], 'probs': [0.2, 0.5, 0.3]},\n}\n\nfor route, data in rewards.items():\n    ev = sum(v*p for v, p in zip(data['values'], data['probs']))\n    print(f'E[reward | {route}] = {ev:.1f} min')\n\n# Best route = highest expected reward"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Bias-Variance Tradeoff (Expected Error)",
+      "icon": "🎯",
+      "explanation": "ML-এর famous bias-variance decomposition: E[error] = Bias² + Variance + Noise। Model-র expected error তিনটা part-এ ভাগ হয়। Bias = expected prediction আর true value-র gap। Expected value ছাড়া এই decomposition বুঝা impossible!",
+      "realExample": "Scikit-learn-এ model selection-এ cross-validation-এর average score = expected test performance-র estimate।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.model_selection import cross_val_score\nfrom sklearn.tree import DecisionTreeRegressor\n\n# Bias-Variance: Expected error decomposition\nnp.random.seed(42)\n\n# True function + noise\nX = np.linspace(0, 10, 100).reshape(-1, 1)\ny_true = np.sin(X).ravel()\ny = y_true + np.random.normal(0, 0.2, 100)\n\n# Different model complexities\nfor depth in [1, 3, 10, None]:\n    model = DecisionTreeRegressor(max_depth=depth)\n    scores = cross_val_score(model, X, y, cv=5,\n                              scoring='neg_mean_squared_error')\n    expected_error = -scores.mean()\n    print(f'Depth={str(depth):>4}: E[MSE] = {expected_error:.4f}')\n\nprint('\\nSweet spot-এ E[error] minimum!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Expected Gradient (SGD)",
+      "icon": "⬇️",
+      "explanation": "Stochastic Gradient Descent (SGD) আসলে expected gradient-র unbiased estimate ব্যবহার করে। Full dataset-এর gradient = E[mini-batch gradient]। তাই mini-batch দিয়া train করলেও long-run-এ convergence হয় কারণ expected value same!",
+      "realExample": "GPT-4 training-এ millions of examples আছে। Full gradient impossible, তাই SGD mini-batch ব্যবহার করে — E[mini-batch gradient] = true gradient।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# SGD: E[mini-batch gradient] = full gradient\nnp.random.seed(42)\n\n# Dummy dataset\nX = np.random.randn(1000, 2)\ny = X @ np.array([3, -2]) + np.random.randn(1000) * 0.1\nw = np.zeros(2)\n\n# Full gradient\nfull_grad = -2/len(X) * X.T @ (y - X @ w)\nprint(f'Full gradient: {full_grad.round(3)}')\n\n# Mini-batch gradients (E[these] ≈ full gradient)\nbatch_grads = []\nfor _ in range(100):\n    idx = np.random.choice(1000, 32)\n    grad = -2/32 * X[idx].T @ (y[idx] - X[idx] @ w)\n    batch_grads.append(grad)\n\nexpected_grad = np.mean(batch_grads, axis=0)\nprint(f'E[batch grad]: {expected_grad.round(3)}')\nprint('প্রায় same! SGD কাজ করে কারণ E[batch] = full!')"
+      }
+    }
+  ],
+  "memoryTrick": "Expected Value মনে রাখ হাসান মিয়ার চায়ের দোকান দিয়া: প্রতিদিনের আয় randomly ওঠানামা করে, কিন্তু E[আয়] = weighted average। 'Expected' মানে 'আশা করা যায়' — অনেকদিন চালালে গড়ে এইটুকুই পাবে। আর মনে রাখ E[X+Y] = E[X] + E[Y] — চায়ের income + সিঙ্গারার income = মোট expected income, কোনো ঝামেলা নাই!",
+  "tags": ["expected-value", "mean", "linearity", "loss-function", "cross-entropy", "reinforcement-learning", "sgd"],
+  "prev": "random-variables",
+  "next": "variance-std"
+}

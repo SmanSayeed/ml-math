@@ -1,0 +1,127 @@
+{
+  "slug": "chain-rule",
+  "title": "Chain Rule — চেইন রুল",
+  "titleEn": "Chain Rule",
+  "category": "calculus",
+  "order": 4,
+  "readTime": 14,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🔌",
+    "title": "ফোন চার্জের Chain — Adapter থেকে Phone পর্যন্ত",
+    "content": "ধর গুরু, তোর ফোন dead — চার্জ দিতে হইব। কিন্তু চার্জিং system-টা একটা chain! প্রথমে wall socket থেইকা adapter-এ 220V AC ঢুকে, adapter সেইটা convert করে 5V DC-তে, তারপর cable দিয়া phone-এ যায়, phone সেইটা battery-তে store করে। প্রতিটা step-এ voltage change হয়। তুই জানতে চাস — wall-এর voltage 1V বাড়ালে battery-তে কতটুকু extra charge যাইব? সোজা হিসাব করা যাইব না — কারণ মাঝখানে adapter আর cable-এর conversion আছে। তোরে chain ধইরা ধইরা হিসাব করতে হইব: wall → adapter → cable → battery। প্রতি step-এর change গুণ করলেই total change পাইবি!",
+    "reveal": "এইটাই Chain Rule! যখন function-এর ভিতরে function থাকে (composite function), তখন বাইরের function-এর derivative আর ভিতরের function-এর derivative গুণ কর। Neural network-এ প্রতিটা layer একটা function — input → layer1 → layer2 → ... → output। Backpropagation হইল chain rule বারবার apply করা — output থেইকা input পর্যন্ত derivative-র chain!"
+  },
+  "definition": {
+    "content": "Chain Rule বলে — composite function f(g(x))-এর derivative হইল বাইরের function-এর derivative গুণ ভিতরের function-এর derivative। মানে df/dx = df/du × du/dx, যেইখানে u = g(x)। প্রতিটা 'link' এর change গুণ কইরা total change পাওয়া যায়।",
+    "formula": "\\frac{df}{dx} = \\frac{df}{du} \\cdot \\frac{du}{dx}",
+    "formulaLabel": "Chain Rule — বাইরের derivative × ভিতরের derivative"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Composite Function কী?",
+        "content": "Function-এর ভিতরে function — এইটা composite function। যেমন f(x) = sin(x²)। এইখানে ভিতরে g(x) = x², বাইরে f(u) = sin(u)। প্রথমে x² হিসাব হয়, তারপর সেইটার sin নেওয়া হয়। Charging chain-এর মতো — প্রথমে adapter convert করে, তারপর cable pass করে।",
+        "formula": "f(x) = \\sin(x^2) = \\underbrace{\\sin}_{\\text{বাইরে}}(\\underbrace{x^2}_{\\text{ভিতরে}})"
+      },
+      {
+        "title": "Chain Rule Apply করা",
+        "content": "f(x) = sin(x²)-এর derivative: বাইরের function sin(u)-এর derivative cos(u), ভিতরের function x²-এর derivative 2x। গুণ কর: cos(x²) × 2x = 2x·cos(x²)। Always ভিতরেরটা আগে differentiate করো না — বাইরে থেকে শুরু কইরা ভিতরে যাও!",
+        "formula": "\\frac{d}{dx}[\\sin(x^2)] = \\cos(x^2) \\cdot 2x = 2x\\cos(x^2)"
+      },
+      {
+        "title": "Multiple Layers-এর Chain",
+        "content": "তিনটা function chained থাকলে? f(g(h(x)))-এর derivative = f'(g(h(x))) × g'(h(x)) × h'(x)। চেইনের প্রতিটা link-এর derivative গুণ! Neural network-এ 100 layer থাকলে 100টা derivative গুণ হয় — এইটাই backpropagation!",
+        "formula": "\\frac{d}{dx}[f(g(h(x)))] = f'(g(h(x))) \\cdot g'(h(x)) \\cdot h'(x)"
+      },
+      {
+        "title": "Leibniz Notation-এ Chain Rule",
+        "content": "df/dx = df/du × du/dx — দেখলে মনে হয় du 'cancel' হইতেছে, কিন্তু আসলে cancel হইতেছে না। এইটা শুধু মনে রাখার shortcut। তিনটা variable হইলে: df/dx = df/du × du/dv × dv/dx। Charging chain: dBattery/dWall = dBattery/dCable × dCable/dAdapter × dAdapter/dWall!",
+        "formula": "\\frac{df}{dx} = \\frac{df}{du} \\cdot \\frac{du}{dv} \\cdot \\frac{dv}{dx}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Phone Charging Chain Derivative",
+    "problem": "Wall voltage → Adapter output: a(w) = 0.023w (220V → 5V)। Adapter → Cable delivery: c(a) = 0.9a (10% loss)। Cable → Battery charge: b(c) = c² / 10। Wall voltage 220V-তে dBattery/dWall কত?",
+    "steps": [
+      {
+        "label": "Step 1: প্রতিটা step-এর derivative বের কর",
+        "content": "তিনটা function chain করা আছে: b(c(a(w)))",
+        "formula": "\\frac{da}{dw} = 0.023, \\quad \\frac{dc}{da} = 0.9, \\quad \\frac{db}{dc} = \\frac{2c}{10} = \\frac{c}{5}"
+      },
+      {
+        "label": "Step 2: Chain Rule apply কর",
+        "content": "w=220-এ: a = 0.023×220 = 5.06, c = 0.9×5.06 = 4.554",
+        "formula": "\\frac{db}{dw} = \\frac{db}{dc} \\cdot \\frac{dc}{da} \\cdot \\frac{da}{dw} = \\frac{4.554}{5} \\times 0.9 \\times 0.023"
+      },
+      {
+        "label": "Step 3: Calculate",
+        "content": "সব গুণ কর!",
+        "formula": "\\frac{db}{dw} = 0.9108 \\times 0.9 \\times 0.023 = 0.01885"
+      }
+    ],
+    "answer": "dBattery/dWall ≈ 0.019। মানে wall voltage 1V বাড়ালে battery charge 0.019 unit বাড়বে। Chain-এর প্রতি step-এ কিছু loss হয় — adapter-এ conversion, cable-এ resistance। Neural network-এও তাই — deep network-এ gradient ছোট হইতে হইতে vanish হইয়া যায়!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Backpropagation — Chain Rule in Action",
+      "icon": "🔗",
+      "explanation": "Backpropagation literally chain rule! Output layer থেইকা শুরু কইরা input layer পর্যন্ত — প্রতি layer-এ chain rule apply হয়। dLoss/dWeight = dLoss/dOutput × dOutput/dHidden × dHidden/dWeight। Layer যত বেশি, chain তত লম্বা!",
+      "realExample": "GPT-3-তে 96 transformer layer — backpropagation-এ chain rule 96 বার apply হয় gradient input পর্যন্ত propagate করতে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# 3-layer network = chain of functions\nclass ThreeLayerNet(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.layer1 = nn.Linear(4, 8)   # f1\n        self.layer2 = nn.Linear(8, 4)   # f2  \n        self.layer3 = nn.Linear(4, 1)   # f3\n    \n    def forward(self, x):\n        # Chain: f3(relu(f2(relu(f1(x)))))\n        x = torch.relu(self.layer1(x))\n        x = torch.relu(self.layer2(x))\n        x = self.layer3(x)\n        return x\n\nmodel = ThreeLayerNet()\nx = torch.randn(1, 4)\ntarget = torch.tensor([[1.0]])\n\n# Forward pass (chain of functions)\noutput = model(x)\nloss = (output - target)**2\n\n# Backward pass (chain rule!)\nloss.backward()\n\nprint('Chain Rule in backpropagation:')\nfor name, param in model.named_parameters():\n    if param.grad is not None:\n        print(f'  {name}: grad shape={param.grad.shape}, '\n              f'grad norm={param.grad.norm():.4f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Vanishing/Exploding Gradient Problem",
+      "icon": "💀",
+      "explanation": "Chain rule-এ বারবার derivative গুণ হয়। যদি প্রতি layer-এ derivative < 1 হয়, তাইলে গুণ করতে করতে gradient 0-তে চইলা যায় (vanishing)! আবার > 1 হইলে infinity-তে যায় (exploding)! Sigmoid-এর max derivative 0.25, তাই 0.25^50 = practically 0!",
+      "realExample": "RNN-এ 100 timestep-এর sequence-এ chain rule 100 বার apply হয় — sigmoid activation-এ gradient vanish হইয়া যায়, তাই LSTM/GRU invent হইছিল।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef sigmoid_derivative(x):\n    s = 1 / (1 + np.exp(-x))\n    return s * (1 - s)  # max 0.25!\n\ndef relu_derivative(x):\n    return (x > 0).astype(float)  # 0 or 1\n\n# Chain rule: multiply derivatives of each layer\nnp.random.seed(42)\n\n# Simulate 50-layer network\nnum_layers = 50\n\n# With Sigmoid: vanishing gradient!\nsigmoid_grads = [sigmoid_derivative(np.random.randn()) for _ in range(num_layers)]\ntotal_sigmoid = np.prod(sigmoid_grads)\n\n# With ReLU: much better!\nrelu_grads = [relu_derivative(np.random.randn()) for _ in range(num_layers)]\ntotal_relu = np.prod(relu_grads)\n\nprint(f'Sigmoid chain ({num_layers} layers):')\nprint(f'  Individual grads: ~0.20 each')\nprint(f'  Total gradient: {total_sigmoid:.2e}')  # vanishingly small!\n\nprint(f'\\nReLU chain ({num_layers} layers):')\nprint(f'  Individual grads: 0 or 1')\nprint(f'  Total gradient: {total_relu:.4f}')  # survives!\n\nprint(f'\\nRatio: ReLU/Sigmoid = {total_relu/(total_sigmoid+1e-30):.2e}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Automatic Differentiation (Autograd)",
+      "icon": "🤖",
+      "explanation": "PyTorch/TensorFlow-এর autograd system automatically chain rule apply করে! Computation graph build কইরা রাখে (কোন operation কোন variable-এর উপর depend করে), তারপর backward pass-এ chain rule দিয়া gradient compute করে। তোরে manually chain rule calculate করতে হয় না!",
+      "realExample": "PyTorch-এর autograd engine C++ এ implemented — প্রতি tensor operation-এ backward function register থাকে যেইটা chain rule-এর একটা link।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\n# Chain Rule automatic! PyTorch tracks the chain\nx = torch.tensor(2.0, requires_grad=True)\n\n# Composite function: f(g(h(x))) = sin(exp(x^2))\n# h(x) = x^2, g(u) = exp(u), f(v) = sin(v)\nu = x**2          # h(x)\nv = torch.exp(u)  # g(h(x))\ny = torch.sin(v)  # f(g(h(x)))\n\ny.backward()\n\n# PyTorch applied chain rule automatically!\n# dy/dx = cos(exp(x^2)) * exp(x^2) * 2x\nmanual = torch.cos(torch.exp(x**2)) * torch.exp(x**2) * 2*x\nprint(f'Autograd result: {x.grad.item():.6f}')\nprint(f'Manual chain rule: {manual.item():.6f}')\nprint(f'Match: {torch.allclose(x.grad, manual)}')\n\n# Computation graph visualization concept\nprint(f'\\nChain: x -> x^2 -> exp(x^2) -> sin(exp(x^2))')\nprint(f'Grads: 2x * exp(x^2) * cos(exp(x^2))')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Transfer Learning — Chain of Pre-trained Features",
+      "icon": "🔄",
+      "explanation": "Transfer learning-এ pre-trained model-এর উপর নতুন layer বসানো হয়। Fine-tuning-এ chain rule পুরানো layer-এর ভিতর দিয়া gradient propagate করে। Frozen layer-এ chain break হয় (gradient 0 set করা হয়), trainable layer-এ chain rule normally কাজ করে।",
+      "realExample": "ImageNet pre-trained ResNet-50-এর উপর medical imaging classifier — last 2 layer trainable, বাকি frozen। Chain rule শুধু trainable part-এ gradient দেয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Transfer learning: chain rule with frozen layers\nclass PreTrainedFeatures(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.features = nn.Linear(10, 8)  # \"pre-trained\"\n    def forward(self, x):\n        return torch.relu(self.features(x))\n\nclass NewHead(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.classifier = nn.Linear(8, 2)\n    def forward(self, x):\n        return self.classifier(x)\n\n# Build chain\npretrained = PreTrainedFeatures()\nnew_head = NewHead()\n\n# Freeze pretrained (break chain!)\nfor param in pretrained.parameters():\n    param.requires_grad = False  # chain rule stops here\n\n# Forward: chain of functions\nx = torch.randn(1, 10)\nfeatures = pretrained(x)  # frozen\noutput = new_head(features)  # trainable\nloss = nn.CrossEntropyLoss()(output, torch.tensor([1]))\nloss.backward()\n\nprint('Frozen layers (no gradient - chain broken):')\nfor name, p in pretrained.named_parameters():\n    print(f'  {name}: grad = {p.grad}')\n\nprint('\\nTrainable layers (gradient flows via chain rule):')\nfor name, p in new_head.named_parameters():\n    print(f'  {name}: grad norm = {p.grad.norm():.4f}')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Residual Connection — Chain Rule Shortcut",
+      "icon": "⚡",
+      "explanation": "ResNet-এর skip connection chain rule-এর ভিতরে একটা shortcut path তৈরি করে। y = f(x) + x হইলে dy/dx = f'(x) + 1। ওই '+1' মানে gradient সরাসরি skip কইরা পিছনে যাইতে পারে — vanishing gradient solve!",
+      "realExample": "ResNet-152 (152 layer!) successfully train হয় residual connection-এর জন্য — ছাড়া chain rule-এ gradient vanish হইত।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nclass ResidualBlock(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.layer = nn.Sequential(\n            nn.Linear(dim, dim),\n            nn.ReLU(),\n            nn.Linear(dim, dim)\n        )\n    \n    def forward(self, x):\n        # y = f(x) + x <-- skip connection!\n        # dy/dx = f'(x) + 1 <-- gradient always >= 1\n        return self.layer(x) + x  # residual!\n\n# Stack 50 residual blocks\nblocks = nn.Sequential(*[ResidualBlock(8) for _ in range(50)])\nx = torch.randn(1, 8, requires_grad=True)\n\noutput = blocks(x)\nloss = output.sum()\nloss.backward()\n\nprint(f'Input gradient after 50 layers:')\nprint(f'  Gradient norm: {x.grad.norm():.4f}')\nprint(f'  Gradient NOT vanished! Skip connections save the chain.')\n\n# Without residual (plain network)\nplain = nn.Sequential(*[\n    nn.Sequential(nn.Linear(8, 8), nn.Sigmoid())\n    for _ in range(50)\n])\nx2 = torch.randn(1, 8, requires_grad=True)\nout2 = plain(x2)\nout2.sum().backward()\nprint(f'\\nPlain network gradient norm: {x2.grad.norm():.8f}')  # tiny!"
+      }
+    }
+  ],
+  "memoryTrick": "Chain Rule = ফোন চার্জের chain। Wall → Adapter → Cable → Phone — প্রতি step-এর conversion rate গুণ কর total effect পাইতে। Neural network-এও — Layer1 → Layer2 → Layer3 → Loss — প্রতি layer-এর derivative গুণ = backpropagation!",
+  "tags": ["chain-rule", "composite-function", "backpropagation", "vanishing-gradient", "autograd", "residual-connection"],
+  "prev": "partial-derivative",
+  "next": "gradient"
+}

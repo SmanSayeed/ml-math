@@ -1,0 +1,125 @@
+{
+  "slug": "hessian",
+  "title": "Hessian — দ্বিতীয় পর্যায়ের তথ্য",
+  "titleEn": "Hessian Matrix",
+  "category": "calculus",
+  "order": 10,
+  "readTime": 12,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🛣️",
+    "title": "রিকশায় ঢাকার রাস্তা",
+    "content": "ধর তুই রিকশায় চইড়া মিরপুর থেকে মতিঝিলে যাচ্ছিস। প্রথম রাস্তা একদম flat — রিকশাওয়ালা সুন্দর করে চালাইতেছে, কোনো ঝাঁকুনি নাই। দ্বিতীয় রাস্তায় ছোট ছোট গর্ত আছে — মাঝে মাঝে ঝাঁকুনি লাগে। তৃতীয় রাস্তা পুরা ভাঙা — এত ঝাঁকুনি যে তোর মোবাইল হাত থেকে পড়ে গেল! প্রথম derivative (gradient) বলে রাস্তা উপরে না নিচে। কিন্তু রাস্তা কতটা bumpy বা smooth, সেইটা কে বলবে?",
+    "reveal": "এইটাই Hessian, গুরু! Second derivative-র matrix — রাস্তার curvature বলে দেয়। Flat মানে Hessian ≈ 0, smooth valley মানে positive Hessian, bumpy মানে mixed Hessian। Optimizer-রা Hessian দেখে বুঝে কোন দিকে confident-এ যাইতে পারে!"
+  },
+  "definition": {
+    "content": "Hessian হইল একটা square matrix যেখানে scalar-valued function f: ℝⁿ → ℝ এর সব second-order partial derivatives organized থাকে। Jacobian-এর Jacobian বলতে পারো। এইটা function-এর curvature (বক্রতা) describe করে।",
+    "formula": "\\mathbf{H} = \\begin{bmatrix} \\frac{\\partial^2 f}{\\partial x_1^2} & \\frac{\\partial^2 f}{\\partial x_1 \\partial x_2} & \\cdots \\\\ \\frac{\\partial^2 f}{\\partial x_2 \\partial x_1} & \\frac{\\partial^2 f}{\\partial x_2^2} & \\cdots \\\\ \\vdots & \\vdots & \\ddots \\end{bmatrix}_{n \\times n}",
+    "formulaLabel": "Hessian Matrix — n×n symmetric matrix (Schwarz's theorem অনুযায়ী)"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Hessian কী বলে",
+        "content": "Gradient বলে কোন direction-এ function বাড়ে/কমে (slope)। Hessian বলে সেই slope কত দ্রুত বদলাচ্ছে (curvature)। একটা valley-তে gradient ০ — কিন্তু valley টা wide নাকি narrow? Hessian বলে দেয়। Wide valley মানে small Hessian eigenvalues, narrow valley মানে large eigenvalues।",
+        "formula": "f(x + \\Delta x) \\approx f(x) + \\nabla f^T \\Delta x + \\frac{1}{2} \\Delta x^T \\mathbf{H} \\Delta x"
+      },
+      {
+        "title": "Hessian-এর Eigenvalues দিয়া Classification",
+        "content": "Critical point-এ (gradient = 0) Hessian-এর eigenvalues বলে সেইটা minimum, maximum, না saddle point। সব eigenvalue positive → minimum (bowl), সব negative → maximum (dome), mixed → saddle point (horse saddle)।",
+        "formula": "\\lambda_i > 0 \\; \\forall i \\implies \\text{local minimum}, \\quad \\lambda_i < 0 \\; \\forall i \\implies \\text{local maximum}"
+      },
+      {
+        "title": "Condition Number — Hessian-এর Shape",
+        "content": "Hessian-এর সবচেয়ে বড় আর সবচেয়ে ছোট eigenvalue-র ratio হইল condition number। বড় condition number মানে elongated valley — gradient descent zigzag করে, slow converge করে। ছোট condition number মানে nice round bowl — fast converge।",
+        "formula": "\\kappa(\\mathbf{H}) = \\frac{\\lambda_{\\max}}{\\lambda_{\\min}} \\quad (\\text{ছোট হইলে ভালো})"
+      },
+      {
+        "title": "Newton's Method — Hessian ব্যবহার করা",
+        "content": "Gradient descent শুধু first derivative use করে। Newton's method Hessian (second derivative)-ও use করে — curvature information দিয়া better step size আর direction বের করে। অনেক faster converge করে কিন্তু Hessian compute করা expensive (n² elements)।",
+        "formula": "\\theta_{t+1} = \\theta_t - \\mathbf{H}^{-1} \\nabla f(\\theta_t)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "2D Function-এর Hessian Analysis",
+    "problem": "f(x, y) = x² + 4y² - 2xy function-এর (0, 0) point-এ Hessian বের করো। এইটা minimum, maximum, নাকি saddle?",
+    "steps": [
+      {
+        "label": "Step 1: First derivatives",
+        "content": "Gradient বের করি",
+        "formula": "\\frac{\\partial f}{\\partial x} = 2x - 2y, \\quad \\frac{\\partial f}{\\partial y} = 8y - 2x"
+      },
+      {
+        "label": "Step 2: Second derivatives",
+        "content": "চারটা second derivative বের করি",
+        "formula": "\\frac{\\partial^2 f}{\\partial x^2} = 2, \\; \\frac{\\partial^2 f}{\\partial y^2} = 8, \\; \\frac{\\partial^2 f}{\\partial x \\partial y} = -2"
+      },
+      {
+        "label": "Step 3: Hessian Matrix",
+        "content": "Matrix form-এ সাজাই",
+        "formula": "\\mathbf{H} = \\begin{bmatrix} 2 & -2 \\\\ -2 & 8 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 4: Eigenvalues",
+        "content": "det(H - λI) = 0 solve করি",
+        "formula": "(2-\\lambda)(8-\\lambda) - 4 = 0 \\implies \\lambda^2 - 10\\lambda + 12 = 0 \\implies \\lambda \\approx 1.35, \\; 8.65"
+      },
+      {
+        "label": "Step 5: Conclusion",
+        "content": "দুইটা eigenvalue-ই positive — তাই minimum! Condition number = 8.65/1.35 ≈ 6.4, মানে valley একটু elongated।"
+      }
+    ],
+    "answer": "(0, 0) point-এ local minimum — দুইটা positive eigenvalue confirm করে। কিন্তু condition number 6.4, তাই gradient descent একটু zigzag করবে। গুরু বলে — 'রাস্তা সোজা না হইলে GPS (Hessian) লাগে!'"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Second-Order Optimization (L-BFGS)",
+      "icon": "🚀",
+      "explanation": "L-BFGS হইল Newton's method-এর practical version। Full Hessian store না কইরা approximate Hessian use করে। Small dataset আর traditional ML-এ (logistic regression, SVM) gradient descent-এর চেয়ে অনেক faster converge করে।",
+      "realExample": "scikit-learn-এর LogisticRegression default solver 'lbfgs' — Hessian approximation use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\ndef rosenbrock(x):\n    \"\"\"Classic optimization test function\"\"\"\n    return (1 - x[0])**2 + 100*(x[1] - x[0]**2)**2\n\nx = torch.tensor([0.0, 0.0], requires_grad=True)\noptimizer = torch.optim.LBFGS(\n    [x],\n    lr=1.0,\n    max_iter=20,\n    history_size=10  # approximate Hessian from last 10 steps\n)\n\ndef closure():\n    optimizer.zero_grad()\n    loss = rosenbrock(x)\n    loss.backward()\n    return loss\n\nfor i in range(50):\n    loss = optimizer.step(closure)\n    if i % 10 == 0:\n        print(f'Step {i}: x={x.data.numpy()}, loss={loss.item():.6f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Hessian দিয়ে Loss Landscape Analysis",
+      "icon": "🏔️",
+      "explanation": "Trained model-এর Hessian eigenvalues বলে loss landscape কেমন দেখতে। Sharp minimum (large eigenvalues) poorly generalize করে, flat minimum (small eigenvalues) better generalize করে। SAM (Sharpness-Aware Minimization) explicitly flat minima খোঁজে।",
+      "realExample": "Google Brain-এর SAM paper দেখাইছে flat minima-তে converge করলে test accuracy 2-3% বাড়ে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nfrom torch.autograd.functional import hessian\n\ndef compute_top_hessian_eigenvalue(model, loss_fn, data, target):\n    \"\"\"Power iteration দিয়া top eigenvalue estimate\"\"\"\n    params = [p for p in model.parameters() if p.requires_grad]\n    v = [torch.randn_like(p) for p in params]  # random vector\n    \n    for _ in range(20):  # power iteration\n        # Hessian-vector product (Hv)\n        loss = loss_fn(model(data), target)\n        grads = torch.autograd.grad(loss, params, create_graph=True)\n        Hv = torch.autograd.grad(\n            grads, params, grad_outputs=v, retain_graph=True\n        )\n        # Normalize\n        eigenvalue = sum((hv * vi).sum() for hv, vi in zip(Hv, v))\n        norm = sum((hv**2).sum() for hv in Hv).sqrt()\n        v = [hv / norm for hv in Hv]\n    \n    print(f'Top Hessian eigenvalue: {eigenvalue.item():.4f}')\n    # বড় eigenvalue = sharp minimum = poor generalization risk"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Natural Gradient Descent",
+      "icon": "🧭",
+      "explanation": "Fisher Information Matrix হইল expected Hessian of log-likelihood। Natural gradient descent Fisher matrix use কইরা parameter space-এর geometry respect করে update করে — Euclidean distance-র বদলে KL divergence minimize করে। তাই probability distribution-এর parameter update-এ অনেক efficient।",
+      "realExample": "TRPO আর PPO (reinforcement learning-এ state-of-the-art) natural gradient-এর approximation use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\ndef compute_fisher_matrix(model, data_loader, num_samples=100):\n    \"\"\"Empirical Fisher Information Matrix (diagonal approx)\"\"\"\n    fisher = {n: torch.zeros_like(p) \n              for n, p in model.named_parameters()}\n    \n    model.eval()\n    for i, (x, _) in enumerate(data_loader):\n        if i >= num_samples:\n            break\n        log_probs = torch.log_softmax(model(x), dim=-1)\n        # Sample from model's own distribution\n        labels = torch.multinomial(log_probs.exp(), 1).squeeze()\n        loss = nn.functional.cross_entropy(model(x), labels)\n        model.zero_grad()\n        loss.backward()\n        \n        for n, p in model.named_parameters():\n            fisher[n] += p.grad.data ** 2 / num_samples\n    \n    return fisher\n# Fisher diagonal ≈ Hessian diagonal — cheap but effective!"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Hessian-Free Optimization",
+      "icon": "⚡",
+      "explanation": "Full Hessian store করা O(n²) memory লাগে — billion parameter model-এ impossible। Hessian-Free method শুধু Hessian-vector product compute করে (O(n) time), full Hessian ছাড়াই Newton-like update করে। Conjugate gradient দিয়ে implicit Hessian solve করে।",
+      "realExample": "James Martens-এর 'Deep Learning via Hessian-free Optimization' paper RNN training-এ breakthrough ছিল।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\ndef hessian_vector_product(loss, params, vector):\n    \"\"\"Compute H @ v without forming H explicitly!\n    R-operator trick: d/dt [grad(f)(x + t*v)] at t=0\n    \"\"\"\n    grads = torch.autograd.grad(\n        loss, params, create_graph=True\n    )\n    # grad^T @ vector\n    grad_vector = sum(\n        (g * v).sum() for g, v in zip(grads, vector)\n    )\n    # d(grad^T @ vector)/d(params) = H @ vector\n    hvp = torch.autograd.grad(\n        grad_vector, params, retain_graph=True\n    )\n    return hvp\n\n# Full Hessian compute না কইরা শুধু H@v — \n# O(n) vs O(n²), billion params-এও চলে!"
+      }
+    }
+  ],
+  "memoryTrick": "Hessian = রাস্তার GPS Map। Gradient বলে 'নিচে যাও' (direction), Hessian বলে 'রাস্তা smooth না bumpy' (curvature)। Positive eigenvalues = bowl (minimum), Negative = dome (maximum), Mixed = horse saddle। মনে রাখ — গুরু বলেছে 'ঢাকার রাস্তায় GPS ছাড়া গাড়ি চালাও না, ML-এ Hessian ছাড়া optimize করো না!'",
+  "tags": ["hessian", "second-derivative", "curvature", "newtons-method", "l-bfgs", "loss-landscape", "fisher-information"],
+  "prev": "jacobian",
+  "next": "taylor-series"
+}

@@ -1,0 +1,105 @@
+{
+  "slug": "convex-optimization",
+  "title": "Convex Optimization — উত্তল অপ্টিমাইজেশন",
+  "titleEn": "Convex Optimization",
+  "category": "optimization",
+  "order": 2,
+  "readTime": 9,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🥣",
+    "title": "মুরাদের বাটি আর গর্তের গল্প",
+    "content": "ধর তোর বন্ধু মুরাদ একটা মার্বেল নিয়া খেলতেছে। সে একটা বাটি (bowl) তে মার্বেল ফেলল — মার্বেল গড়ায়া গড়ায়া সবচেয়ে নিচে (minimum) চলে গেল। এইটা convex surface — যেদিক থেকেই ছাড়ো, মার্বেল always তলানিতে যাইব। কিন্তু যদি ডিমের ট্রে-তে মার্বেল ফেলে? তাইলে একটা খোপে (local minimum) আটকায়া যাইতে পারে — তলানি (global minimum) না পায়া!",
+    "reveal": "বাটি = Convex function — একটাই minimum, সবসময় পাবি। ডিমের ট্রে = Non-convex function — অনেক local minimum, global minimum পাওয়া কঠিন! গুরু বলে — 'ML-এ যদি loss function convex হইত, সব সমস্যা সহজ হইত। কিন্তু neural network non-convex — তাই SGD, Adam লাগে!'"
+  },
+  "definition": {
+    "content": "একটা function f convex হয় যদি যেকোনো দুইটা point-এর মধ্যে straight line function-এর curve-এর উপরে বা তাতে থাকে। Convex function-এর যেকোনো local minimum-ই global minimum। Optimization guarantee পাওয়া যায়।",
+    "formula": "f(\\lambda x + (1-\\lambda)y) \\leq \\lambda f(x) + (1-\\lambda) f(y), \\quad \\forall \\lambda \\in [0,1]",
+    "formulaLabel": "Convexity condition — দুই point-এর মাঝে function value line-এর নিচে থাকে"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Convex vs Non-Convex",
+        "content": "Convex: MSE loss, logistic regression loss — একটাই valley, gradient descent always global minimum পায়। Non-convex: Neural network loss — অনেক valley, পাহাড়, saddle point। তাই training tricky।",
+        "formula": "\\text{MSE} = \\frac{1}{N}\\sum(y - w^Tx)^2 \\quad \\text{(convex in } w\\text{)}"
+      },
+      {
+        "title": "Gradient কেন কাজ করে Convex-এ",
+        "content": "Convex function-এ gradient সবসময় global minimum-এর দিকে point করে। মুরাদের বাটিতে মার্বেল যেদিকে ঢালু সেদিকে গড়ায় — সেইটাই gradient direction। Non-convex-এ ভুল valley-তে আটকায়া যাইতে পারে।",
+        "formula": "\\nabla f(x^*) = 0 \\implies x^* \\text{ is global minimum (for convex } f\\text{)}"
+      },
+      {
+        "title": "Convexity Check",
+        "content": "Second derivative (Hessian) দিয়া check করা যায়। যদি Hessian matrix positive semi-definite হয় (সব eigenvalue ≥ 0) তাইলে function convex।",
+        "formula": "\\nabla^2 f(x) \\succeq 0 \\quad \\forall x \\implies f \\text{ is convex}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Linear Regression-এর Convex Loss",
+    "problem": "1D data: x=[1,2,3], y=[2,4,5]। Model: ŷ = wx। MSE loss L(w)-এর minimum কোথায়? দেখাও L(w) convex।",
+    "steps": [
+      {
+        "label": "Step 1: Loss function লেখ",
+        "content": "MSE = (1/3)[(2-w)² + (4-2w)² + (5-3w)²]",
+        "formula": "L(w) = \\frac{1}{3}[(2-w)^2 + (4-2w)^2 + (5-3w)^2]"
+      },
+      {
+        "label": "Step 2: Expand করো",
+        "content": "ভিতরে expand করলে w²-এর coefficient positive — মানে convex!",
+        "formula": "L(w) = \\frac{1}{3}[w^2 + 4w^2 + 9w^2 - 4w - 16w - 30w + 4 + 16 + 25] = \\frac{14w^2 - 50w + 45}{3}"
+      },
+      {
+        "label": "Step 3: Derivative = 0",
+        "content": "dL/dw = 0 solve করো",
+        "formula": "\\frac{dL}{dw} = \\frac{28w - 50}{3} = 0 \\implies w = \\frac{50}{28} \\approx 1.786"
+      },
+      {
+        "label": "Step 4: Second derivative check",
+        "content": "d²L/dw² = 28/3 > 0 — positive মানে convex! Global minimum confirmed।",
+        "formula": "\\frac{d^2L}{dw^2} = \\frac{28}{3} > 0 \\quad \\checkmark \\text{ convex!}"
+      }
+    ],
+    "answer": "w ≈ 1.786 তে global minimum। L(w) convex কারণ d²L/dw² > 0 everywhere। বাটির তলানি পাওয়া গেল! Linear regression-এর closed-form solution এই কারণেই possible।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Linear/Logistic Regression",
+      "icon": "📊",
+      "explanation": "Linear regression-এর MSE loss আর logistic regression-এর log loss দুইটাই convex। তাই gradient descent guaranteed converge করে global minimum-এ। Closed-form solution-ও available (normal equation)।",
+      "realExample": "Scikit-learn-এর LogisticRegression সবসময় global optimum পায় কারণ loss convex।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.linear_model import LinearRegression\n\n# Data\nX = np.array([[1], [2], [3], [4], [5]])\ny = np.array([2.1, 4.0, 5.2, 7.8, 10.1])\n\n# Linear Regression — convex loss, global minimum guarantee\nmodel = LinearRegression()\nmodel.fit(X, y)\n\nprint(f'w = {model.coef_[0]:.4f}, b = {model.intercept_:.4f}')\n# Normal equation: w = (X^T X)^{-1} X^T y — closed form solution!\nw_closed = np.linalg.inv(X.T @ X) @ X.T @ y\nprint(f'Closed-form w: {w_closed[0]:.4f}')  # same answer!"
+      }
+    },
+    {
+      "id": 2,
+      "title": "SVM (Support Vector Machine)",
+      "icon": "✂️",
+      "explanation": "SVM-এর optimization problem convex (quadratic programming)। Hinge loss + L2 regularization convex function — তাই global optimum guaranteed। Kernel SVM-ও dual form-এ convex।",
+      "realExample": "Text classification-এ SVM অনেক reliable কারণ global optimum guaranteed। Medical diagnosis-এও SVM popular convexity guarantee-র জন্য।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.svm import SVC\nfrom sklearn.datasets import make_classification\nfrom sklearn.model_selection import train_test_split\n\n# Data generate করো\nX, y = make_classification(n_samples=200, n_features=4, random_state=42)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)\n\n# SVM — convex optimization, global optimum guaranteed\nsvm = SVC(kernel='rbf', C=1.0)\nsvm.fit(X_train, y_train)\n\nacc = svm.score(X_test, y_test)\nprint(f'SVM Accuracy: {acc:.2%}')\nprint(f'Support vectors: {len(svm.support_vectors_)}')\n# Global optimum — same data, same answer every time"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Convex Relaxation for Neural Nets",
+      "icon": "🧠",
+      "explanation": "Neural network loss non-convex কিন্তু researchers convex relaxation technique use করে bounds বের করে। Adversarial robustness verify করতে convex optimization use হয়।",
+      "realExample": "Self-driving car-এর neural network-এ adversarial attack-এ কত robust সেইটা convex relaxation দিয়া certify করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Neural network loss landscape visualize করো\ndef compute_loss_surface(model, X, y, w_range=(-3, 3), n_points=50):\n    \"\"\"2D loss surface for visualization\"\"\"\n    losses = []\n    original_w = model.fc.weight.data.clone()\n    \n    for w1 in torch.linspace(*w_range, n_points):\n        row = []\n        for w2 in torch.linspace(*w_range, n_points):\n            model.fc.weight.data = torch.tensor([[w1, w2]])\n            with torch.no_grad():\n                pred = model(X)\n                loss = nn.MSELoss()(pred.squeeze(), y)\n            row.append(loss.item())\n        losses.append(row)\n    \n    model.fc.weight.data = original_w\n    return losses\n\nprint('Linear model → convex bowl shape (1 minimum)')\nprint('Neural net → complex landscape (many minima)')"
+      }
+    }
+  ],
+  "memoryTrick": "Convex = মুরাদের বাটি — মার্বেল ছাড়ো, তলানিতে যাইব guaranteed। Non-convex = ডিমের ট্রে — ভুল গর্তে আটকায়া যাইতে পারে! Linear regression = বাটি, Neural network = ডিমের ট্রে!",
+  "tags": ["convex", "optimization", "gradient-descent", "hessian", "global-minimum", "loss-landscape"],
+  "prev": "loss-functions",
+  "next": "optimizers"
+}

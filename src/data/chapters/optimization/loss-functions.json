@@ -1,0 +1,110 @@
+{
+  "slug": "loss-functions",
+  "title": "Loss Functions — ভুলের হিসাব",
+  "titleEn": "Loss Functions",
+  "category": "optimization",
+  "order": 1,
+  "readTime": 8,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🎯",
+    "title": "জামালের ডার্ট খেলা",
+    "content": "ধর তোর বন্ধু জামাল গুলশান ক্লাবে ডার্ট খেলতেছে। সে ১০ বার ছুঁড়লো। কতটা ভুল করলো সেইটা measure করতে হইব। একটা উপায় — প্রতিটা ছোঁড়া bullseye থেকে কত দূরে গেছে সেইটা মাপো, তারপর average করো। কিন্তু কিভাবে মাপবি? শুধু দূরত্ব নাও (L1)? নাকি দূরত্বের বর্গ নাও (L2) — যাতে বড় ভুলের penalty বেশি হয়? নাকি 'লাগছে কি লাগে নাই' হ্যাঁ/না করবি (classification)?",
+    "reveal": "এই 'কতটা ভুল' measure করার function-ই হইল Loss Function! গুরু বলে — 'Loss function ছাড়া ML model শিখবে কিভাবে? এইটা model-কে বলে তুমি কত ভুল করতেছো, আর gradient descent ওই ভুল কমায়!'"
+  },
+  "definition": {
+    "content": "Loss function (বা cost function) measure করে model-এর prediction আর actual value-এর মধ্যে কতটুকু পার্থক্য। Training-এ এই loss minimize করাই main goal। Different problem-এ different loss function লাগে।",
+    "formula": "\\mathcal{L}(\\theta) = \\frac{1}{N} \\sum_{i=1}^{N} \\ell(y_i, \\hat{y}_i)",
+    "formulaLabel": "Average Loss — সব data point-এর loss-এর গড়"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Regression Loss Functions",
+        "content": "Continuous value predict করতে — বাড়ির দাম, temperature, stock price। MSE (Mean Squared Error) সবচেয়ে common — বড় ভুলে penalty বেশি। MAE (Mean Absolute Error) outlier-এ robust।",
+        "formula": "\\text{MSE} = \\frac{1}{N}\\sum(y - \\hat{y})^2, \\quad \\text{MAE} = \\frac{1}{N}\\sum|y - \\hat{y}|"
+      },
+      {
+        "title": "Classification Loss Functions",
+        "content": "Category predict করতে — spam/not-spam, বিড়াল/কুকুর। Cross-Entropy loss সবচেয়ে popular। Binary-তে BCE, multi-class-এ Categorical CE। Wrong prediction-এ logarithmic penalty।",
+        "formula": "\\text{BCE} = -\\frac{1}{N}\\sum[y\\log(\\hat{y}) + (1-y)\\log(1-\\hat{y})]"
+      },
+      {
+        "title": "Loss Function কেন এত Important?",
+        "content": "Loss function ভুল choose করলে model ভুল জিনিস optimize করবে। জামাল যদি ডার্ট-এ শুধু 'লাগছে কি লাগে নাই' দেখে (0/1 loss), সে কখনো precise aim শিখবে না। MSE দেখলে কত দূরে লাগছে সেইটাও শিখবে।"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "জামালের ডার্ট-এর MSE",
+    "problem": "জামাল ৪ বার ডার্ট ছুঁড়লো। Target ছিল bullseye (0 cm)। ডার্ট পড়লো: 3cm, -1cm, 5cm, -2cm দূরে। MSE আর MAE কত?",
+    "steps": [
+      {
+        "label": "Step 1: Errors লেখ",
+        "content": "Errors: 3, -1, 5, -2 (positive/negative = দিক)",
+        "formula": "e_i = y_i - \\hat{y}_i = [3, -1, 5, -2]"
+      },
+      {
+        "label": "Step 2: MSE Calculate",
+        "content": "Error-এর বর্গ করো, তারপর গড়",
+        "formula": "\\text{MSE} = \\frac{3^2 + (-1)^2 + 5^2 + (-2)^2}{4} = \\frac{9+1+25+4}{4} = 9.75"
+      },
+      {
+        "label": "Step 3: MAE Calculate",
+        "content": "Error-এর absolute value নাও, তারপর গড়",
+        "formula": "\\text{MAE} = \\frac{|3| + |-1| + |5| + |-2|}{4} = \\frac{3+1+5+2}{4} = 2.75"
+      }
+    ],
+    "answer": "MSE = 9.75, MAE = 2.75। MSE-তে 5cm ভুলটা (outlier) penalty বেশি পাইছে (25)। MAE-তে সব ভুলকে সমান treat করে। তাই outlier-sensitive problem-এ MAE ভালো!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "MSE — Regression",
+      "icon": "📈",
+      "explanation": "House price, temperature, stock price prediction — continuous value predict করতে MSE সবচেয়ে common loss। Squared error-এর কারণে gradient smooth থাকে আর বড় ভুলে penalty বেশি হয়।",
+      "realExample": "Zillow-এর house price prediction model MSE minimize করে — predicted price আর actual price-এর squared difference average।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# House prices (lakh BDT)\npredictions = torch.tensor([45.0, 62.0, 38.0, 71.0])\nactual = torch.tensor([50.0, 60.0, 35.0, 75.0])\n\n# MSE Loss\nmse = nn.MSELoss()\nloss = mse(predictions, actual)\nprint(f'MSE Loss: {loss.item():.2f}')\n\n# MAE Loss\nmae = nn.L1Loss()\nloss_mae = mae(predictions, actual)\nprint(f'MAE Loss: {loss_mae.item():.2f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Cross-Entropy — Classification",
+      "icon": "🏷️",
+      "explanation": "Image classification, spam detection, sentiment analysis — category predict করতে Cross-Entropy loss। Model-এর softmax probability আর actual label-এর CE minimize করে model শেখে।",
+      "realExample": "Google Photos image classification-এ 1000 class-এর জন্য Cross-Entropy loss use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\n# Model output (logits) — 4 classes\nlogits = torch.tensor([[2.5, 0.3, 0.1, -1.0],\n                       [0.2, 3.0, 0.5, 0.1]])\n# Actual class labels\nlabels = torch.tensor([0, 1])\n\nloss = F.cross_entropy(logits, labels)\nprint(f'Cross-Entropy Loss: {loss.item():.4f}')\n\n# ভুল prediction test করো\nwrong_logits = torch.tensor([[0.1, 3.0, 0.1, -1.0]])  # class 0 হওয়া উচিত কিন্তু 1 predict করতেছে\nwrong_labels = torch.tensor([0])\nwrong_loss = F.cross_entropy(wrong_logits, wrong_labels)\nprint(f'Wrong pred loss: {wrong_loss.item():.4f}')  # বেশি হইব"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Huber Loss — Robust Regression",
+      "icon": "🛡️",
+      "explanation": "MSE আর MAE-এর মাঝামাঝি — ছোট error-এ MSE-র মতো (smooth gradient), বড় error-এ MAE-র মতো (outlier-resistant)। Delta parameter দিয়া threshold control করা যায়।",
+      "realExample": "Self-driving car-এর steering angle prediction-এ Huber loss use হয় — occasional sensor noise (outlier) কে ignore করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\npred = torch.tensor([1.0, 2.0, 10.0, 3.0])  # 10.0 outlier\ntarget = torch.tensor([1.5, 2.5, 3.0, 3.5])\n\n# Compare all three\nmse = nn.MSELoss()(pred, target)\nmae = nn.L1Loss()(pred, target)\nhuber = nn.SmoothL1Loss()(pred, target)  # Huber with delta=1\n\nprint(f'MSE: {mse.item():.4f}')    # outlier-এ খুব বেশি\nprint(f'MAE: {mae.item():.4f}')    # outlier-resistant\nprint(f'Huber: {huber.item():.4f}')  # মাঝামাঝি — best of both!"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Focal Loss — Imbalanced Data",
+      "icon": "⚖️",
+      "explanation": "যখন data imbalanced — ৯৫% normal আর ৫% fraud — তখন Focal Loss use করি। Easy examples-এর loss down-weight করে আর hard examples-এ focus করে।",
+      "realExample": "Credit card fraud detection-এ 99.8% transaction normal। Focal Loss rare fraud cases-এ focus করে — RetinaNet (object detection)-ও এইটা use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\ndef focal_loss(logits, targets, gamma=2.0, alpha=0.25):\n    \"\"\"Focal Loss — hard examples-এ focus করে\"\"\"\n    bce = F.binary_cross_entropy_with_logits(logits, targets, reduction='none')\n    probs = torch.sigmoid(logits)\n    p_t = probs * targets + (1 - probs) * (1 - targets)\n    # Easy example-এ (1-p_t)^gamma ছোট → loss কম\n    focal_weight = (1 - p_t) ** gamma\n    loss = alpha * focal_weight * bce\n    return loss.mean()\n\n# Imbalanced: বেশিরভাগ class 0, কম class 1\nlogits = torch.tensor([0.9, 0.1, 0.8, -2.0, -1.5])\nlabels = torch.tensor([0.0, 0.0, 0.0, 1.0, 1.0])\n\nprint(f'BCE: {F.binary_cross_entropy_with_logits(logits, labels).item():.4f}')\nprint(f'Focal: {focal_loss(logits, labels).item():.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Loss Function = জামালের ডার্ট কত ভুল গেল সেইটার হিসাব। MSE = বড় ভুলে বেশি শাস্তি, MAE = সবাইকে সমান শাস্তি, Cross-Entropy = হ্যাঁ/না answer-এ কত confident ভুল করলি!",
+  "tags": ["loss-function", "mse", "mae", "cross-entropy", "huber", "focal-loss"],
+  "prev": "mutual-information",
+  "next": "convex-optimization"
+}

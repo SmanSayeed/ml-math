@@ -1,0 +1,115 @@
+{
+  "slug": "information-gain",
+  "title": "Information Gain — তথ্য লাভ",
+  "titleEn": "Information Gain",
+  "category": "information-theory",
+  "order": 4,
+  "readTime": 8,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "❓",
+    "title": "নাহিদের ২০ প্রশ্ন গেম",
+    "content": "ধর তুই আর তোর বন্ধু নাহিদ ধানমন্ডি লেকের পাশে বইসা '20 Questions' গেম খেলতেছিস। নাহিদ একটা প্রাণী ভাবছে। তুই জিজ্ঞেস করলি 'এইটা কি পানিতে থাকে?' নাহিদ বলল 'হ্যাঁ!' — একটা প্রশ্নেই তুই অর্ধেকেরও বেশি প্রাণী বাদ দিলি! এইটা ভালো প্রশ্ন। কিন্তু যদি জিজ্ঞেস করতি 'এইটার নাম কি ক দিয়া শুরু?' — এইটা বাজে প্রশ্ন, কারণ অল্প কিছু বাদ যায়।",
+    "reveal": "একটা প্রশ্ন জিজ্ঞেস করার পর uncertainty কতটুকু কমলো — এইটাই Information Gain! গুরু বলে — 'ভালো প্রশ্ন = বেশি information gain = বেশি uncertainty কমানো!'"
+  },
+  "definition": {
+    "content": "Information Gain হইল কোনো feature বা attribute জানার আগে আর পরে entropy-র পার্থক্য। যেই feature-এ information gain বেশি, সেইটা সবচেয়ে informative — decision tree-তে সেইটাই আগে split হয়।",
+    "formula": "IG(S, A) = H(S) - \\sum_{v \\in \\text{Values}(A)} \\frac{|S_v|}{|S|} H(S_v)",
+    "formulaLabel": "Information Gain — split-এর আগে আর পরে entropy-র পার্থক্য"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "আগে Entropy, পরে Entropy",
+        "content": "Information Gain = Parent node-এর entropy - Children nodes-এর weighted average entropy। প্রশ্ন করার আগে uncertainty ছিল বেশি, প্রশ্নের পরে কমলো — এই difference-ই IG।",
+        "formula": "IG = H(\\text{before}) - H(\\text{after})"
+      },
+      {
+        "title": "Decision Tree-তে Best Split",
+        "content": "Decision tree algorithm সব feature-এর information gain calculate করে। সবচেয়ে বেশি IG যেই feature-এর, সেইটা root node বা current split-এ use হয়। নাহিদের গেমে 'পানিতে থাকে?' এর IG > 'নাম ক দিয়া শুরু?' এর IG।"
+      },
+      {
+        "title": "IG আর KL Divergence-র সম্পর্ক",
+        "content": "Information Gain আসলে joint distribution আর marginal distributions-এর product-এর মধ্যে KL Divergence-ই! Mutual Information-ও basically সব features-এর average Information Gain।",
+        "formula": "IG(S, A) = D_{KL}(P(S,A) \\| P(S) \\cdot P(A))"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ঢাকার ট্রাফিক জ্যাম Prediction",
+    "problem": "১০টা দিনের data: ৬ দিন জ্যাম আছে, ৪ দিন নাই। Feature 'বৃষ্টি হইছে?' — বৃষ্টির ৪ দিনে ৩ জ্যাম + ১ নো-জ্যাম, শুকনা ৬ দিনে ৩ জ্যাম + ৩ নো-জ্যাম। 'বৃষ্টি' feature-এর IG কত?",
+    "steps": [
+      {
+        "label": "Step 1: Parent entropy",
+        "content": "পুরা dataset-এ 6/10 জ্যাম, 4/10 নো-জ্যাম",
+        "formula": "H(S) = -\\frac{6}{10}\\log_2\\frac{6}{10} - \\frac{4}{10}\\log_2\\frac{4}{10} = 0.971"
+      },
+      {
+        "label": "Step 2: Children entropy",
+        "content": "বৃষ্টি (4 দিন): 3/4 জ্যাম, 1/4 নো-জ্যাম। শুকনা (6 দিন): 3/6 জ্যাম, 3/6 নো-জ্যাম।",
+        "formula": "H(\\text{rain}) = -\\frac{3}{4}\\log_2\\frac{3}{4} - \\frac{1}{4}\\log_2\\frac{1}{4} = 0.811"
+      },
+      {
+        "label": "Step 3: Weighted average",
+        "content": "শুকনা দিনের entropy = 1.0 (50-50 split), weighted average বের করো",
+        "formula": "H_{\\text{after}} = \\frac{4}{10}(0.811) + \\frac{6}{10}(1.0) = 0.924"
+      },
+      {
+        "label": "Step 4: Information Gain",
+        "content": "IG = আগে - পরে",
+        "formula": "IG = 0.971 - 0.924 = 0.047 \\text{ bits}"
+      }
+    ],
+    "answer": "বৃষ্টি feature-এর IG = 0.047 bits। এইটা কম — মানে বৃষ্টি alone জ্যাম predict করতে খুব helpful না ঢাকায়। কারণ বৃষ্টি ছাড়াও জ্যাম থাকে! 😅"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Decision Tree (ID3/C4.5)",
+      "icon": "🌳",
+      "explanation": "ID3 আর C4.5 algorithm-এ প্রতিটা node-এ কোন feature দিয়া split করব সেইটা Information Gain দিয়া decide হয়। সবচেয়ে বেশি IG = best split feature।",
+      "realExample": "Bank loan approval system-এ decision tree IG দিয়া বের করে — income, credit score, employment — কোনটা সবচেয়ে important factor।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.tree import DecisionTreeClassifier, export_text\nfrom sklearn.datasets import load_iris\n\n# Decision tree with entropy (IG internally use করে)\niris = load_iris()\ntree = DecisionTreeClassifier(\n    criterion='entropy',  # Information Gain use করবে\n    max_depth=3\n)\ntree.fit(iris.data, iris.target)\n\n# Tree structure দেখো — IG-based splits\nprint(export_text(tree, feature_names=iris.feature_names))\nprint('\\nFeature Importances (IG-based):')\nfor name, imp in zip(iris.feature_names, tree.feature_importances_):\n    print(f'  {name}: {imp:.4f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Feature Selection",
+      "icon": "🔍",
+      "explanation": "অনেকগুলা feature থাকলে IG-based ranking করে top features select করা হয়। যেই feature target-এর entropy সবচেয়ে বেশি কমায়, সেইটা রাখো — বাকি বাদ দাও।",
+      "realExample": "Medical diagnosis-এ 500+ symptoms আছে। IG-based selection বলে — fever, cough, oxygen level top 3 important feature COVID detection-এ।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.feature_selection import mutual_info_classif\nfrom sklearn.datasets import load_breast_cancer\nimport numpy as np\n\n# Breast cancer dataset\ndata = load_breast_cancer()\nX, y = data.data, data.target\n\n# Mutual information (IG-based) feature ranking\nmi_scores = mutual_info_classif(X, y, random_state=42)\n\n# Top 5 features\ntop_idx = np.argsort(mi_scores)[::-1][:5]\nprint('Top 5 features by Information Gain:')\nfor i in top_idx:\n    print(f'  {data.feature_names[i]}: {mi_scores[i]:.4f}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Random Forest Feature Importance",
+      "icon": "🌲",
+      "explanation": "Random Forest-এ প্রতিটা tree IG-based split করে। Feature importance হইল সেই feature-এর average IG across all trees। Ensemble-এ IG আরো robust হয়।",
+      "realExample": "Netflix recommendation-এ Random Forest দিয়া user behavior features rank করে — watch_time, genre_preference, time_of_day কোনটা কত important বের করে।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.ensemble import RandomForestClassifier\nfrom sklearn.datasets import load_wine\nimport numpy as np\n\nwine = load_wine()\nrf = RandomForestClassifier(\n    n_estimators=100,\n    criterion='entropy',  # IG-based\n    random_state=42\n)\nrf.fit(wine.data, wine.target)\n\n# Feature importance (average IG across trees)\nidx = np.argsort(rf.feature_importances_)[::-1]\nprint('Feature Importance Ranking:')\nfor i in idx[:5]:\n    print(f'  {wine.feature_names[i]}: {rf.feature_importances_[i]:.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Text Classification — Word Importance",
+      "icon": "📰",
+      "explanation": "NLP-তে কোন word কোন class-এর জন্য সবচেয়ে informative সেইটা IG দিয়া বের করা যায়। Spam detection-এ 'lottery', 'winner' শব্দগুলার IG বেশি।",
+      "realExample": "Gmail spam filter-এ IG-based feature selection করে — 'congratulations', 'click here', 'free' শব্দগুলার IG highest।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.feature_extraction.text import CountVectorizer\nfrom sklearn.feature_selection import mutual_info_classif\nimport numpy as np\n\n# Simple spam dataset\nemails = [\n    'win free lottery prize', 'meeting tomorrow office',\n    'claim your free gift now', 'project deadline friday',\n    'congratulations you won', 'lunch plan for today'\n]\nlabels = [1, 0, 1, 0, 1, 0]  # 1=spam\n\nvec = CountVectorizer()\nX = vec.fit_transform(emails).toarray()\n\n# Information Gain per word\nig = mutual_info_classif(X, labels, discrete_features=True, random_state=42)\nwords = vec.get_feature_names_out()\n\nfor w, score in sorted(zip(words, ig), key=lambda x: -x[1])[:5]:\n    print(f'  {w}: IG={score:.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Information Gain = নাহিদের 20 Questions গেমে ভালো প্রশ্ন করলে কত uncertainty কমলো। 'পানিতে থাকে?' = বেশি IG, 'নাম ক দিয়া শুরু?' = কম IG!",
+  "tags": ["information-gain", "decision-tree", "feature-selection", "entropy", "id3", "c45"],
+  "prev": "kl-divergence",
+  "next": "mutual-information"
+}

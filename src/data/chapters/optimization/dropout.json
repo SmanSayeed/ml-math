@@ -1,0 +1,110 @@
+{
+  "slug": "dropout",
+  "title": "Dropout — র‍্যান্ডম ছুটি",
+  "titleEn": "Dropout",
+  "category": "optimization",
+  "order": 5,
+  "readTime": 8,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🏢",
+    "title": "অফিসে র‍্যান্ডম ছুটি",
+    "content": "ধর তোর অফিস মতিঝিলে। ১০ জন employee আছে। Boss একটা নিয়ম করল — প্রতিদিন random ৩ জন ছুটি পাইব। আজকে রহিম, করিম, জামাল ছুটিতে। কাল হয়তো সালমা, নাহিদ, ফারুক। এইটা শুনে সবাই panic করল — 'আমি ছুটিতে থাকলে আমার কাজ কে করবে?' তাই প্রত্যেকে নিজের কাজ ছাড়াও পাশের জনের কাজও শিখে রাখল। ফলে কেউ absent থাকলেও অফিস চলে!",
+    "reveal": "Neural network-এও same জিনিস! Training-এর সময় random neurons off করে দেওয়াই Dropout। গুরু বলে — 'Dropout হইল neurons-দের র‍্যান্ডম ছুটি — এইতে কেউ একজনের উপর depend করে না, সবাই নিজে নিজে শিখে। ফলে overfitting কমে!'"
+  },
+  "definition": {
+    "content": "Dropout হইল একটা regularization technique যেখানে training-এর সময় প্রতিটা step-এ randomly কিছু neurons-কে zero করে দেওয়া হয় (deactivate)। এইতে network কোনো particular neuron-এর উপর over-rely করে না, ফলে overfitting কমে।",
+    "formula": "h_i^{\\text{drop}} = h_i \\cdot m_i, \\quad m_i \\sim \\text{Bernoulli}(1-p)",
+    "formulaLabel": "Dropout — probability p-তে neuron off হয়, mask m দিয়া multiply"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Training vs Inference",
+        "content": "Training-এ neurons randomly drop হয়। কিন্তু inference/test-এ সব neuron active থাকে — output-কে (1-p) দিয়া scale করা হয় যাতে expected value same থাকে। PyTorch-এ model.eval() দিলে auto handle করে।",
+        "formula": "\\text{Test: } h_i^{\\text{test}} = h_i \\cdot (1-p)"
+      },
+      {
+        "title": "কেন কাজ করে?",
+        "content": "Dropout তিনটা কাজ করে: (1) Co-adaptation ভাঙে — neurons একা একা useful feature শেখে। (2) Ensemble effect — প্রতিটা mini-batch-এ different sub-network train হয়, test-এ সব combine হয়। (3) Noise injection — implicit data augmentation।"
+      },
+      {
+        "title": "Dropout Rate কত হওয়া উচিত?",
+        "content": "Hidden layers-এ p=0.5 common (50% drop)। Input layer-এ p=0.2 (20% drop)। Convolutional layers-এ Spatial Dropout use হয় — পুরা channel drop হয়। খুব বেশি dropout = underfitting, খুব কম = overfitting।",
+        "formula": "p = 0.5 \\text{ (hidden)}, \\quad p = 0.2 \\text{ (input)}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Dropout-এর Numerical Example",
+    "problem": "Hidden layer output: h = [0.5, 1.2, -0.3, 0.8, -1.0]। Dropout rate p = 0.4। একটা possible dropout mask আর output দেখাও।",
+    "steps": [
+      {
+        "label": "Step 1: Random mask generate",
+        "content": "p=0.4 মানে 40% neuron drop হইব। Bernoulli(0.6) mask: m = [1, 0, 1, 1, 0]",
+        "formula": "m = [1, 0, 1, 1, 0] \\quad \\text{(2টা dropped)}"
+      },
+      {
+        "label": "Step 2: Mask apply করো",
+        "content": "h × m = element-wise multiply",
+        "formula": "h^{\\text{drop}} = [0.5, 0, -0.3, 0.8, 0]"
+      },
+      {
+        "label": "Step 3: Scale করো (inverted dropout)",
+        "content": "Training-এই 1/(1-p) দিয়া scale করো যাতে test-এ কিছু করতে না হয়",
+        "formula": "h^{\\text{scaled}} = \\frac{h^{\\text{drop}}}{1-p} = \\frac{[0.5, 0, -0.3, 0.8, 0]}{0.6} = [0.833, 0, -0.5, 1.333, 0]"
+      }
+    ],
+    "answer": "Dropout-এর পরে neuron 2 আর 5 off আছে (output = 0)। বাকিগুলা scaled up হইছে 1/0.6 = 1.667× দিয়া। প্রতিটা forward pass-এ different neurons off হইব — network different patterns শিখে।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Fully Connected Layers",
+      "icon": "🔗",
+      "explanation": "Dense/FC layers-এ standard dropout সবচেয়ে effective। Classification head-এ বা large FC layers-এ dropout overfitting dramatically কমায়।",
+      "realExample": "AlexNet (2012) dropout=0.5 use করে ImageNet-এ 16.4% error rate পাইছিল — dropout ছাড়া error অনেক বেশি ছিল।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nclass ClassifierWithDropout(nn.Module):\n    def __init__(self, input_dim, hidden_dim, num_classes):\n        super().__init__()\n        self.net = nn.Sequential(\n            nn.Linear(input_dim, hidden_dim),\n            nn.ReLU(),\n            nn.Dropout(p=0.5),  # 50% neurons drop\n            nn.Linear(hidden_dim, hidden_dim),\n            nn.ReLU(),\n            nn.Dropout(p=0.5),\n            nn.Linear(hidden_dim, num_classes)\n        )\n    \n    def forward(self, x):\n        return self.net(x)\n\nmodel = ClassifierWithDropout(784, 256, 10)\nmodel.train()   # dropout ON\nmodel.eval()    # dropout OFF — inference-এ সব neuron active\nprint('train() → dropout ON, eval() → dropout OFF')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Transformer/BERT-এ Dropout",
+      "icon": "📝",
+      "explanation": "Transformer architecture-এ তিন জায়গায় dropout আছে: attention weights, feed-forward layers, আর residual connections-এর পরে। BERT-এ default dropout = 0.1।",
+      "realExample": "BERT-base training-এ dropout=0.1 সব layer-এ। Finetuning-এ dropout=0.1-0.3 use হয় task difficulty অনুযায়ী।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nclass TransformerBlock(nn.Module):\n    def __init__(self, d_model=512, nhead=8, dropout=0.1):\n        super().__init__()\n        self.attention = nn.MultiheadAttention(d_model, nhead, dropout=dropout)\n        self.ffn = nn.Sequential(\n            nn.Linear(d_model, d_model * 4),\n            nn.GELU(),\n            nn.Dropout(dropout),  # FFN dropout\n            nn.Linear(d_model * 4, d_model)\n        )\n        self.norm1 = nn.LayerNorm(d_model)\n        self.norm2 = nn.LayerNorm(d_model)\n        self.dropout = nn.Dropout(dropout)  # Residual dropout\n    \n    def forward(self, x):\n        attn_out, _ = self.attention(x, x, x)\n        x = self.norm1(x + self.dropout(attn_out))  # Residual + dropout\n        ffn_out = self.ffn(x)\n        x = self.norm2(x + self.dropout(ffn_out))\n        return x\n\nprint('Transformer-এ 3 জায়গায় dropout: attention, FFN, residual')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "MC Dropout — Uncertainty Estimation",
+      "icon": "🎲",
+      "explanation": "Test time-এও dropout ON রাখলে multiple forward pass-এ different predictions পাওয়া যায়। এদের variance = model uncertainty! Medical AI-তে খুব useful — model কতটা sure সেইটা জানা যায়।",
+      "realExample": "Medical image diagnosis-এ MC Dropout দিয়া uncertainty estimate করা হয় — uncertain prediction-এ human doctor review করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\nimport numpy as np\n\ndef mc_dropout_predict(model, x, n_samples=100):\n    \"\"\"MC Dropout — uncertainty estimation\"\"\"\n    model.train()  # Dropout ON রাখো test-এও!\n    predictions = []\n    \n    with torch.no_grad():\n        for _ in range(n_samples):\n            pred = torch.softmax(model(x), dim=1)\n            predictions.append(pred.numpy())\n    \n    predictions = np.array(predictions)\n    mean_pred = predictions.mean(axis=0)  # Average prediction\n    uncertainty = predictions.std(axis=0)  # Uncertainty!\n    \n    return mean_pred, uncertainty\n\n# model, x = ... (pretrained model আর input)\n# mean, unc = mc_dropout_predict(model, x)\n# print(f'Prediction: {mean.argmax()}')\n# print(f'Uncertainty: {unc.max():.4f}')\nprint('High uncertainty → model unsure → human review needed!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "DropConnect ও Variants",
+      "icon": "🔌",
+      "explanation": "Dropout neurons drop করে, DropConnect weights drop করে। Spatial Dropout CNN-এ পুরা feature map drop করে। DropBlock CNN-এ contiguous region drop করে। সব same principle — random deactivation।",
+      "realExample": "EfficientNet Spatial Dropout use করে — individual pixel না, পুরা channel drop হয়। এইতে spatial features-এর co-adaptation ভাঙে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Standard Dropout — individual neurons\ndropout = nn.Dropout(p=0.5)\n\n# Spatial Dropout (1D) — NLP-তে পুরা embedding dimension drop\nspatial_1d = nn.Dropout1d(p=0.3)\n\n# Spatial Dropout (2D) — CNN-এ পুরা channel drop\nspatial_2d = nn.Dropout2d(p=0.3)\n\n# Example with CNN\nx = torch.randn(1, 64, 32, 32)  # batch, channels, h, w\n\n# Standard: random pixels drop\nout1 = nn.Dropout(0.5)(x)\nprint(f'Standard dropout zeros: {(out1 == 0).sum().item()}')\n\n# Spatial: পুরা channel drop\nout2 = nn.Dropout2d(0.5)(x)\ndropped_channels = (out2.sum(dim=[2,3]) == 0).sum().item()\nprint(f'Spatial dropout channels: {dropped_channels} channels fully dropped')"
+      }
+    }
+  ],
+  "memoryTrick": "Dropout = অফিসে র‍্যান্ডম ছুটি — কেউ absent থাকলেও কাজ চলে কারণ সবাই সব শিখে রাখছে। Training-এ random neurons off, test-এ সবাই active!",
+  "tags": ["dropout", "regularization", "overfitting", "mc-dropout", "spatial-dropout", "dropconnect"],
+  "prev": "l1-l2-regularization",
+  "next": "overfitting-underfitting"
+}

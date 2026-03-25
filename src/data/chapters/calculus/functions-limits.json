@@ -1,0 +1,114 @@
+{
+  "slug": "functions-limits",
+  "title": "Functions ও Limits — ফাংশন আর সীমানা",
+  "titleEn": "Functions and Limits",
+  "category": "calculus",
+  "order": 1,
+  "readTime": 12,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🛺",
+    "title": "CNG মিটার আর ভাড়ার হিসাব",
+    "content": "ধর গুরু, তুই ফার্মগেট থেইকা গুলশান যাবি CNG-তে। CNG-র মিটারে একটা ফাংশন চলে — দূরত্ব ঢোকাও, ভাড়া বাইর হয়। f(দূরত্ব) = ভাড়া। ১ কিমি গেলে ৩০ টাকা, ২ কিমি গেলে ৫০ টাকা, ৫ কিমি গেলে ১১০ টাকা। এইটা একটা function — প্রতিটা input-এর জন্য exactly একটা output! এখন মজার কথা — তুই গুলশান ১-এর মোড়ে যাইতে যাইতে meter-এ দেখতেছস ভাড়া ৯৮, ৯৯, ৯৯.৫, ৯৯.৮ টাকা হইতেছে... কিন্তু ঠিক গুলশান ১ পৌঁছানোর আগেই CNG আটকে গেল ট্রাফিকে! ভাড়া ১০০ টাকার কাছে যাইতেছে কিন্তু ঠিক ১০০ ছুঁইতে পারতেছে না। এইটাই limit-এর concept!",
+    "reveal": "Function হইল একটা machine — input দাও, output পাও। আর Limit হইল কোনো point-এর কাছে যাইতে থাকলে function-এর value কোথায় যাইতেছে সেইটা। ML-এ loss function, activation function — সব function! আর limit দিয়াই derivative define করা হয়, যেইটা ছাড়া gradient descent অসম্ভব।"
+  },
+  "definition": {
+    "content": "Function হইল এমন একটা relation যেইখানে প্রতিটা input (domain)-এর জন্য exactly একটা output (range) আছে। Limit হইল x কোনো value c-এর কাছে approach করলে f(x) কোন value-র কাছে approach করে — even যদি x কখনো c-তে না পৌঁছায়।",
+    "formula": "\\lim_{x \\to c} f(x) = L",
+    "formulaLabel": "Limit — x যখন c-র কাছে যায়, f(x) যায় L-এর কাছে"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Function কী জিনিস?",
+        "content": "Function হইল input-output machine। তুই একটা number দিবি (input/domain), সে তোরে একটা number ফেরত দিবে (output/range)। f(x) = 2x + 3 মানে — যেকোনো x দাও, সে 2 দিয়া গুণ কইরা 3 যোগ কইরা দিব। f(5) = 2×5+3 = 13। CNG মিটারও এমনই — দূরত্ব দাও, ভাড়া পাও!",
+        "formula": "f: X \\to Y, \\quad f(x) = 2x + 3"
+      },
+      {
+        "title": "Limit বুঝ — কাছে যাওয়ার খেলা",
+        "content": "Limit মানে আসলে পৌঁছানো না, কাছে যাওয়া। x = 2-এর limit দেখতে চাইলে x = 1.9, 1.99, 1.999 দিয়া দেখ f(x) কোথায় যাইতেছে। যদি f(x) = x², তাইলে 3.61, 3.9601, 3.996001 — মানে 4-এর দিকে যাইতেছে! তাই lim(x→2) x² = 4।",
+        "formula": "\\lim_{x \\to 2} x^2 = 4"
+      },
+      {
+        "title": "Limit কেন ML-এ দরকার?",
+        "content": "Derivative-র definition-ই হইল limit দিয়া! f'(x) = lim(h→0) [f(x+h) - f(x)] / h। এই limit ছাড়া derivative নাই, derivative ছাড়া gradient নাই, gradient ছাড়া backpropagation নাই — মানে ML-ই নাই! আর activation function like sigmoid, ReLU — সব function।",
+        "formula": "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}"
+      },
+      {
+        "title": "Continuous Function — বিরতিহীন ফাংশন",
+        "content": "যদি limit আর actual value same হয়, মানে lim(x→c) f(x) = f(c), তাইলে function continuous। মানে graph-এ কোনো ফাটল নাই — পেন না তুইলা আঁকা যায়। ML-এর বেশিরভাগ activation function continuous — তাই gradient smoothly বের করা যায়!"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "CNG ভাড়া Function আর Limit",
+    "problem": "CNG ভাড়া function: f(x) = 20x + 10 (x = কিমি)। x = 3 কিমি-তে ভাড়া কত? আর lim(x→5) f(x) কত?",
+    "steps": [
+      {
+        "label": "Step 1: Function evaluate করি",
+        "content": "x = 3 বসাই f(x)-এ",
+        "formula": "f(3) = 20 \\times 3 + 10 = 60 + 10 = 70"
+      },
+      {
+        "label": "Step 2: Limit হিসাব করি",
+        "content": "x = 4.9 দিলে f(4.9) = 108, x = 4.99 দিলে f(4.99) = 109.8, x = 5.01 দিলে f(5.01) = 110.2 — সব 110-এর কাছে যাইতেছে!",
+        "formula": "\\lim_{x \\to 5} f(x) = 20 \\times 5 + 10 = 110"
+      },
+      {
+        "label": "Step 3: Continuity check",
+        "content": "f(5) = 110 আর lim(x→5) f(x) = 110 — same! তাই function continuous at x=5। CNG মিটার smoothly চলতেছে, কোনো jump নাই।"
+      }
+    ],
+    "answer": "f(3) = ৭০ টাকা, lim(x→5) f(x) = ১১০ টাকা। Function continuous — CNG মিটার ঠিকমতো চলতেছে!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Activation Functions (Sigmoid, ReLU)",
+      "icon": "⚡",
+      "explanation": "Neural network-এর প্রতিটা neuron-এ activation function বসে — input নেয়, non-linear output দেয়। Sigmoid function f(x) = 1/(1+e^(-x)) input যত বড়ই হোক output 0 থেকে 1-এর মধ্যে রাখে। ReLU f(x) = max(0,x) আরও সোজা — negative হইলে 0, positive হইলে সেইটাই!",
+      "realExample": "GPT model-এ GELU activation function ব্যবহার হয় — এইটা ReLU-র smooth version, limit ব্যবহার কইরা define করা।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Activation functions are just... functions!\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\ndef relu(x):\n    return np.maximum(0, x)\n\nx = np.linspace(-5, 5, 100)\n\nplt.figure(figsize=(10, 4))\nplt.subplot(1, 2, 1)\nplt.plot(x, sigmoid(x), 'b-', linewidth=2)\nplt.title('Sigmoid Function')\nplt.grid(True)\n\nplt.subplot(1, 2, 2)\nplt.plot(x, relu(x), 'r-', linewidth=2)\nplt.title('ReLU Function')\nplt.grid(True)\nplt.tight_layout()\nplt.show()\n\n# Function evaluation\nprint(f'sigmoid(0) = {sigmoid(0):.4f}')   # 0.5\nprint(f'sigmoid(10) = {sigmoid(10):.4f}') # ~1.0 (limit!)\nprint(f'relu(-3) = {relu(-3)}')           # 0\nprint(f'relu(3) = {relu(3)}')             # 3"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Loss Function — Error মাপার Machine",
+      "icon": "📉",
+      "explanation": "Loss function হইল ML-এর সবচেয়ে important function — model কতটা ভুল করতেছে সেইটা মাপে। MSE loss function input নেয় (prediction আর actual value), output দেয় error। Training-এ এই function-এর value কমানোই goal!",
+      "realExample": "Image classification-এ Cross-Entropy loss ব্যবহার হয় — model-এর predicted probability আর actual label-এর মধ্যে difference মাপে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Loss function = a function that measures error\ndef mse_loss(y_true, y_pred):\n    \"\"\"Mean Squared Error — prediction error er square er average\"\"\"\n    return np.mean((y_true - y_pred) ** 2)\n\ndef cross_entropy_loss(y_true, y_pred):\n    \"\"\"Cross Entropy — classification er jonno\"\"\"\n    epsilon = 1e-15  # limit concept! 0-te log undefined\n    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)\n    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))\n\n# Example\ny_true = np.array([1.0, 0.0, 1.0, 1.0])\ny_pred = np.array([0.9, 0.1, 0.8, 0.7])\n\nprint(f'MSE Loss: {mse_loss(y_true, y_pred):.4f}')\nprint(f'Cross Entropy Loss: {cross_entropy_loss(y_true, y_pred):.4f}')\n\n# Limit er use: log(0) undefined, tai epsilon use kori\nprint(f'log(0.0001) = {np.log(0.0001):.2f}')  # very negative\nprint(f'log(epsilon) = {np.log(1e-15):.2f}')   # limit approach"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Softmax Function — Probability বানানো",
+      "icon": "🎯",
+      "explanation": "Softmax function raw score (logit) নিয়া probability-তে convert করে — সব output 0-1 range-এ আনে আর total 1 করে। Classification model-এর last layer-এ এইটা থাকে। Limit concept এইখানে — বড় logit-এ e^x → ∞ যায়, তাই numerically stable version-এ max বাদ দেওয়া হয়।",
+      "realExample": "BERT model যখন sentiment classify করে (positive/negative/neutral), last layer-এ softmax 3টা probability দেয় — যেইটা সবচেয়ে বেশি সেইটাই prediction।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef softmax(logits):\n    \"\"\"Softmax function — logits ke probability te convert kore\"\"\"\n    # Numerically stable: limit concept use kori\n    # e^(big number) = infinity, tai max bad dei\n    shifted = logits - np.max(logits)\n    exp_vals = np.exp(shifted)\n    return exp_vals / np.sum(exp_vals)\n\n# Model er raw output (logits)\nlogits = np.array([2.0, 1.0, 0.1])\nprobs = softmax(logits)\n\nprint('Logits:', logits)\nprint('Probabilities:', np.round(probs, 4))\nprint('Sum:', np.sum(probs))  # always 1.0!\n\n# Limit demonstration: very large logit\nbig_logits = np.array([1000, 1, 0.1])\nprint(f'\\nBig logits softmax: {softmax(big_logits)}')\n# Without stability trick: overflow!\n# print(np.exp(1000))  # inf! limit er problem"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Learning Rate Schedule — Function of Time",
+      "icon": "📅",
+      "explanation": "Learning rate schedule হইল epoch number-এর function — training চলার সাথে সাথে learning rate পরিবর্তন হয়। Cosine annealing-এ lr slowly কমে, warm-up-এ lr আস্তে আস্তে বাড়ে। এইগুলা সব function — input হইল step/epoch, output হইল learning rate!",
+      "realExample": "GPT training-এ cosine decay schedule use হয় — শুরুতে lr বাড়ে (warm-up), তারপর cosine curve follow কইরা কমতে থাকে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef cosine_schedule(step, total_steps, lr_max=0.001, lr_min=1e-6):\n    \"\"\"Cosine annealing — lr er function of step\"\"\"\n    return lr_min + 0.5 * (lr_max - lr_min) * (1 + np.cos(np.pi * step / total_steps))\n\ndef warmup_schedule(step, warmup_steps, lr_max=0.001):\n    \"\"\"Linear warmup — lr linearly increase hoy\"\"\"\n    return lr_max * min(1.0, step / warmup_steps)\n\ntotal_steps = 1000\nsteps = np.arange(total_steps)\n\n# Cosine schedule\ncosine_lrs = [cosine_schedule(s, total_steps) for s in steps]\n\n# Warmup + cosine\nwarmup_steps = 100\ncombined_lrs = [warmup_schedule(s, warmup_steps) if s < warmup_steps \n                else cosine_schedule(s, total_steps) for s in steps]\n\nprint(f'LR at step 0: {combined_lrs[0]:.6f}')\nprint(f'LR at step 100: {combined_lrs[100]:.6f}')\nprint(f'LR at step 500: {combined_lrs[500]:.6f}')\nprint(f'LR at step 999: {combined_lrs[999]:.6f}')\n# Limit: step -> total_steps hole lr -> lr_min"
+      }
+    }
+  ],
+  "memoryTrick": "Function = CNG মিটার (দূরত্ব দাও → ভাড়া পাও), Limit = গন্তব্যের কাছে যাইতেছ কিন্তু এখনও পৌঁছাও নাই — ভাড়া কত হইব সেইটা আন্দাজ করতেছ!",
+  "tags": ["function", "limit", "continuity", "activation-function", "loss-function", "calculus-basics"],
+  "prev": "tensor",
+  "next": "derivative"
+}

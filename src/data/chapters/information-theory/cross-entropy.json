@@ -1,0 +1,110 @@
+{
+  "slug": "cross-entropy",
+  "title": "Cross-Entropy — দুই বণ্টনের তুলনা",
+  "titleEn": "Cross-Entropy",
+  "category": "information-theory",
+  "order": 2,
+  "readTime": 9,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🌧️",
+    "title": "সাকিবের ভুল আবহাওয়া ভবিষ্যদ্বাণী",
+    "content": "ধর তোর বন্ধু সাকিব মতিঝিলে বইসা আবহাওয়ার app বানাইছে। সে predict করলো — 'আগামীকাল ৯০% রোদ, ৫% বৃষ্টি, ৫% মেঘলা।' কিন্তু বাস্তবে হইল — ৩০% রোদ, ৬০% বৃষ্টি, ১০% মেঘলা। মানে সাকিবের prediction আর reality-র মধ্যে গণ্ডগোল আছে! বৃষ্টির দিন সাকিবের app বলতেছে রোদ — ছাতা ছাড়া লোকজন ভিজতেছে।",
+    "reveal": "এই prediction আর reality-র মধ্যে mismatch-টা measure করাই হইল Cross-Entropy! গুরু বলে — 'যত ভুল predict করবি, cross-entropy তত বেশি। পারফেক্ট predict করলে cross-entropy = entropy!'"
+  },
+  "definition": {
+    "content": "Cross-entropy measure করে — যদি actual distribution p হয় কিন্তু তুই ভাবিস distribution q, তাইলে average কত bit লাগব encode করতে। p আর q যত কাছাকাছি, cross-entropy তত কম।",
+    "formula": "H(p, q) = -\\sum_{i=1}^{n} p(x_i) \\log q(x_i)",
+    "formulaLabel": "Cross-Entropy — actual (p) দিয়া predicted (q) evaluate করা"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Entropy vs Cross-Entropy",
+        "content": "Entropy শুধু একটা distribution-এর uncertainty মাপে। কিন্তু cross-entropy দুইটা distribution-এর মধ্যে comparison করে — actual (p) আর predicted (q)। Cross-entropy সবসময় entropy-র চেয়ে বড় বা সমান।",
+        "formula": "H(p, q) \\geq H(p)"
+      },
+      {
+        "title": "Classification-এ Cross-Entropy",
+        "content": "Binary classification-এ (হ্যাঁ/না) cross-entropy loss হইল সবচেয়ে popular loss function। Actual label 1 হইলে model-এর predicted probability যত বেশি, loss তত কম।",
+        "formula": "H(p, q) = -[y \\log(\\hat{y}) + (1-y) \\log(1-\\hat{y})]"
+      },
+      {
+        "title": "কেন Cross-Entropy Use করি?",
+        "content": "MSE (Mean Squared Error)-এর চেয়ে cross-entropy classification-এ ভালো কাজ করে। কারণ cross-entropy-র gradient বড় থাকে যখন model বেশি ভুল করে — মানে faster learning হয়। সাকিবের মতো ভুল predict করলে penalty বেশি!"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "সাকিবের Weather App-এর Cross-Entropy",
+    "problem": "Actual distribution: p = [0.3, 0.6, 0.1] (রোদ, বৃষ্টি, মেঘলা)। সাকিবের prediction: q = [0.9, 0.05, 0.05]। Cross-entropy কত?",
+    "steps": [
+      {
+        "label": "Step 1: Formula সাজাও",
+        "content": "H(p,q) = -Σ p(xᵢ) log q(xᵢ) — প্রতিটা actual probability দিয়া predicted-এর log কে multiply করো",
+        "formula": "H(p,q) = -[p_1 \\log q_1 + p_2 \\log q_2 + p_3 \\log q_3]"
+      },
+      {
+        "label": "Step 2: Values বসাও",
+        "content": "Natural log (ln) use করি",
+        "formula": "H(p,q) = -[0.3 \\ln(0.9) + 0.6 \\ln(0.05) + 0.1 \\ln(0.05)]"
+      },
+      {
+        "label": "Step 3: Calculate করো",
+        "content": "প্রতিটা term আলাদা করে",
+        "formula": "= -[0.3(-0.105) + 0.6(-2.996) + 0.1(-2.996)] = -[-0.032 - 1.798 - 0.300] = 2.13"
+      }
+    ],
+    "answer": "Cross-entropy ≈ 2.13 nats। এইটা অনেক বেশি! কারণ সাকিব বৃষ্টির দিন রোদ predict করছে। যদি সাকিব actual distribution predict করতো, cross-entropy শুধু entropy = 0.90 nats হইত।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Binary Classification Loss",
+      "icon": "✅",
+      "explanation": "Spam detection, disease diagnosis — যেকোনো হ্যাঁ/না classification-এ Binary Cross-Entropy (BCE) loss use হয়। Model-এর predicted probability আর actual label-এর মধ্যে cross-entropy minimize করলেই model শেখে।",
+      "realExample": "Gmail-এর spam filter: email spam কি না সেইটা predict করতে BCE loss use করে। 99.9% spam সঠিকভাবে ধরে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\n# Model predicted probabilities\npredictions = torch.tensor([0.9, 0.1, 0.8, 0.3])\n# Actual labels (1 = spam, 0 = not spam)\nlabels = torch.tensor([1.0, 0.0, 1.0, 0.0])\n\n# Binary Cross-Entropy\nloss = F.binary_cross_entropy(predictions, labels)\nprint(f'BCE Loss: {loss.item():.4f}')\n# ভালো prediction → low loss"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Multi-class Classification",
+      "icon": "🏷️",
+      "explanation": "ImageNet-এ 1000 class, CIFAR-10-এ 10 class — multi-class problem-এ Categorical Cross-Entropy use হয়। Softmax output-এর সাথে actual one-hot label-এর cross-entropy minimize করা হয়।",
+      "realExample": "Google Photos-এ image classify করতে cross-entropy loss use হয় — বিড়াল, কুকুর, গাড়ি সব আলাদা করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\n# Model output (logits) — 3 classes\nlogits = torch.tensor([[2.0, 0.5, 0.1],\n                       [0.1, 2.5, 0.3]])\n# Actual labels\nlabels = torch.tensor([0, 1])\n\n# Cross-Entropy Loss (softmax + NLL internally)\nloss = F.cross_entropy(logits, labels)\nprint(f'CE Loss: {loss.item():.4f}')\n\n# Probabilities দেখো\nprobs = F.softmax(logits, dim=1)\nprint(f'Predictions: {probs}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Language Model Training",
+      "icon": "📝",
+      "explanation": "GPT, BERT সব language model cross-entropy loss দিয়া train হয়। Next token predict করতে model-এর vocabulary distribution আর actual next token-এর cross-entropy minimize করা হয়।",
+      "realExample": "ChatGPT training-এ প্রতিটা token-এর জন্য 50,000+ word vocabulary-র উপর cross-entropy loss calculate হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\n# Vocabulary size = 5 (ছোট example)\nvocab_size = 5\nseq_len = 3\n\n# Model predicted logits\nlogits = torch.randn(seq_len, vocab_size)\n# Actual next tokens\ntargets = torch.tensor([2, 4, 1])\n\n# Language model loss\nloss = F.cross_entropy(logits, targets)\nprint(f'LM Loss: {loss.item():.4f}')\n\n# Perplexity (e^loss) — low is better\nperplexity = torch.exp(loss)\nprint(f'Perplexity: {perplexity.item():.2f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Knowledge Distillation",
+      "icon": "🎓",
+      "explanation": "বড় teacher model-এর soft predictions ছোট student model-এ transfer করতে cross-entropy use হয়। Teacher-এর output distribution আর student-এর output-এর cross-entropy minimize করে student শেখে।",
+      "realExample": "BERT-large (340M params) থেকে DistilBERT (66M params) বানানো হইছে knowledge distillation দিয়া — cross-entropy-র মাধ্যমে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\ndef distillation_loss(student_logits, teacher_logits, labels, T=4.0, alpha=0.7):\n    \"\"\"Knowledge Distillation loss\"\"\"\n    # Soft targets — teacher-এর distribution\n    soft_loss = F.kl_div(\n        F.log_softmax(student_logits / T, dim=1),\n        F.softmax(teacher_logits / T, dim=1),\n        reduction='batchmean'\n    ) * (T * T)\n    \n    # Hard targets — actual labels\n    hard_loss = F.cross_entropy(student_logits, labels)\n    \n    return alpha * soft_loss + (1 - alpha) * hard_loss\n\n# Example\nstudent_out = torch.randn(4, 10)\nteacher_out = torch.randn(4, 10)\nlabels = torch.tensor([3, 7, 1, 9])\nloss = distillation_loss(student_out, teacher_out, labels)\nprint(f'Distillation loss: {loss.item():.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Cross-Entropy = সাকিবের ভুল আবহাওয়া predict-এর penalty। prediction যত ভুল, penalty তত বেশি। পারফেক্ট predict করলে cross-entropy = entropy!",
+  "tags": ["cross-entropy", "loss-function", "classification", "bce", "categorical"],
+  "prev": "entropy",
+  "next": "kl-divergence"
+}

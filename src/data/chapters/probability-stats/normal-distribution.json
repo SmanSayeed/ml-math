@@ -1,0 +1,131 @@
+{
+  "slug": "normal-distribution",
+  "title": "Normal Distribution — স্বাভাবিক বণ্টন",
+  "titleEn": "Normal Distribution",
+  "category": "probability-stats",
+  "order": 8,
+  "readTime": 14,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "📏",
+    "title": "ছাত্রদের উচ্চতার Bell Curve",
+    "content": "ধর ভাই, ঢাকা বিশ্ববিদ্যালয়ের CSE department-এ ২০০ জন ছাত্র আছে। তাদের সবার height measure করলি। কী দেখলি? বেশিরভাগ ছাত্র ৫'৭\"-৫'৯\" এর মধ্যে — average-এর কাছাকাছি। খুব লম্বা (৬'৩\"+) বা খুব বেঁটে (৫'২\"-) খুব কম। যদি height-এর histogram আঁকিস, দেখবি একটা সুন্দর bell-shaped curve! মাঝখানে সবচেয়ে উঁচু, দুই পাশে সমানভাবে নামতেছে। তোর বন্ধু বলল 'এইটা দেখতে মসজিদের গম্বুজের মতো!' তুই বললি 'না ভাই, এইটার নাম Bell Curve — আর এইটাই Normal Distribution!'",
+    "reveal": "Normal Distribution (Gaussian Distribution) হইল প্রকৃতির সবচেয়ে common distribution, মামা! Height, weight, IQ, exam marks, temperature — সব কিছুই almost normal distribution follow করে। এইটা দুইটা parameter দিয়া define: μ (mean — bell-এর center) আর σ (standard deviation — bell কতটা চওড়া)। ML-এর প্রায় সব algorithm-র পিছনে এই bell curve কাজ করে!"
+  },
+  "definition": {
+    "content": "Normal Distribution (Gaussian Distribution) হইল continuous probability distribution যার PDF bell-shaped। Mean μ center-এ থাকে, আর σ spread control করে। 68-95-99.7 rule: ≈68% data μ±σ-তে, ≈95% data μ±2σ-তে, ≈99.7% data μ±3σ-তে থাকে।",
+    "formula": "f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} \\exp\\left(-\\frac{(x - \\mu)^2}{2\\sigma^2}\\right), \\quad X \\sim \\mathcal{N}(\\mu, \\sigma^2)",
+    "formulaLabel": "Normal Distribution PDF — The Bell Curve"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Bell Curve-র Anatomy",
+        "content": "Normal distribution symmetric — mean-র দুই পাশে exactly same shape। Mean = Median = Mode — তিনটাই এক জায়গায়! ঢাকার ছাত্রদের average height 5'8\" হইলে, সবচেয়ে বেশি ছাত্রও 5'8\" এর আশেপাশে, আর এইটাই median-ও।",
+        "formula": "\\text{Mean} = \\text{Median} = \\text{Mode} = \\mu"
+      },
+      {
+        "title": "68-95-99.7 Rule (Empirical Rule)",
+        "content": "এইটা মনে রাখলেই normal distribution-র ৯০% কাজ হইয়া যায়! μ থেকে ±1σ-র মধ্যে 68% data, ±2σ-তে 95%, ±3σ-তে 99.7%। মানে 3σ-র বাইরে data পড়ার chance মাত্র 0.3%! তাই 3σ-র বাইরের data-কে anomaly/outlier বলি।",
+        "formula": "P(\\mu - k\\sigma \\leq X \\leq \\mu + k\\sigma) \\approx \\begin{cases} 68.3\\% & k=1 \\\\ 95.4\\% & k=2 \\\\ 99.7\\% & k=3 \\end{cases}"
+      },
+      {
+        "title": "Standard Normal Distribution (Z)",
+        "content": "যেকোনো normal distribution-কে standardize করা যায়: Z = (X - μ)/σ। Result: Z ~ N(0, 1) — mean 0, σ 1। এইটা Standard Normal। Z-table বা calculator দিয়া যেকোনো probability বাইর করা যায়। ঢাকার যেকোনো height-কে z-score-এ convert করলে compare করা easy!",
+        "formula": "Z = \\frac{X - \\mu}{\\sigma} \\sim \\mathcal{N}(0, 1)"
+      },
+      {
+        "title": "Central Limit Theorem (CLT)",
+        "content": "ML-এর সবচেয়ে powerful theorem! যেকোনো distribution-র data থেকে বারবার sample নিয়া mean calculate করলে, সেই mean-গুলার distribution normal হবে — original distribution যাই হোক! নূন্যতম n≥30 হইলেই কাজ করে। এই জন্যই normal distribution এত important!",
+        "formula": "\\bar{X}_n = \\frac{1}{n}\\sum_{i=1}^n X_i \\xrightarrow{d} \\mathcal{N}\\left(\\mu, \\frac{\\sigma^2}{n}\\right) \\text{ as } n \\to \\infty"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ঢাকা বিশ্ববিদ্যালয়ের Height Analysis",
+    "problem": "DU CSE department-এ ছাত্রদের height ~ N(170 cm, 25 cm²) — mean 170 cm, σ = 5 cm। (a) 165-175 cm এর মধ্যে কত % ছাত্র? (b) 180 cm-র বেশি লম্বা ছাত্র কত %? (c) কোন height-র নিচে 90% ছাত্র?",
+    "steps": [
+      {
+        "label": "Step 1: 68% Rule Apply কর",
+        "content": "165-175 = μ ± 1σ (170 ± 5)। 68-95-99.7 rule অনুযায়ী ≈68% ছাত্র।",
+        "formula": "P(165 \\leq X \\leq 175) = P(\\mu - \\sigma \\leq X \\leq \\mu + \\sigma) \\approx 68.3\\%"
+      },
+      {
+        "label": "Step 2: Z-score for 180 cm",
+        "content": "Z = (180 - 170)/5 = 2। মানে mean থেকে 2σ দূরে।",
+        "formula": "Z = \\frac{180 - 170}{5} = 2.0, \\quad P(X > 180) = P(Z > 2) \\approx 2.28\\%"
+      },
+      {
+        "label": "Step 3: 90th Percentile",
+        "content": "Z-table থেকে 90th percentile-এর z = 1.28। তাই X = μ + zσ।",
+        "formula": "X_{90} = 170 + 1.28 \\times 5 = 170 + 6.4 = 176.4 \\text{ cm}"
+      },
+      {
+        "label": "Step 4: সারসংক্ষেপ",
+        "content": "বেশিরভাগ ছাত্র (68%) 165-175 cm। মাত্র 2.3% 180-র বেশি। 90% ছাত্র 176.4 cm-র নিচে। Normal distribution সুন্দরভাবে height-র pattern ধরে!"
+      }
+    ],
+    "answer": "(a) ≈68% ছাত্র 165-175 cm-এ, (b) ≈2.3% ছাত্র 180 cm-র বেশি, (c) 90% ছাত্র 176.4 cm-র নিচে। Normal distribution আর z-score দিয়া যেকোনো প্রশ্নের উত্তর পাওয়া যায়!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Weight Initialization",
+      "icon": "🧠",
+      "explanation": "Neural network-এর weights শুরুতে random initialize করা হয় — normal distribution থেকে! Xavier initialization: W ~ N(0, 1/n)। He initialization: W ~ N(0, 2/n)। σ ঠিকমতো set না করলে gradient vanish বা explode করে!",
+      "realExample": "PyTorch-এর default initialization normal distribution ব্যবহার করে। GPT-4-এর billions of weights initially N(0, 0.02) থেকে sample করা।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Xavier Normal Initialization\nlayer = nn.Linear(512, 256)\nnn.init.xavier_normal_(layer.weight)\n\nprint(f'Weight shape: {layer.weight.shape}')\nprint(f'Weight mean: {layer.weight.mean():.4f} (≈0)')\nprint(f'Weight std: {layer.weight.std():.4f}')\n\n# He Normal Initialization (ReLU-র জন্য)\nnn.init.kaiming_normal_(layer.weight, mode='fan_in')\nprint(f'\\nHe init std: {layer.weight.std():.4f}')\nprint(f'Expected std: {(2/512)**0.5:.4f}')\n\n# ভুল initialization-এ কী হয়?\nnn.init.normal_(layer.weight, mean=0, std=10)  # Too large!\nprint(f'\\nBad init std: {layer.weight.std():.2f} → Gradient explosion!')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Gaussian Naive Bayes",
+      "icon": "📊",
+      "explanation": "Gaussian Naive Bayes assume করে প্রতিটা feature normal distribution follow করে। P(xᵢ | class) = Normal PDF। Simple অথচ surprisingly effective! Continuous feature-র জন্য ideal — শুধু μ আর σ estimate করলেই হয়।",
+      "realExample": "Spam detection-এ email length, word count — continuous features Gaussian distribution assume করে classify করে।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.naive_bayes import GaussianNB\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import train_test_split\nimport numpy as np\n\n# Iris dataset — features assumed Gaussian\niris = load_iris()\nX_train, X_test, y_train, y_test = train_test_split(\n    iris.data, iris.target, test_size=0.3, random_state=42\n)\n\n# Gaussian NB: P(feature|class) = Normal(μ, σ²)\ngnb = GaussianNB()\ngnb.fit(X_train, y_train)\n\n# প্রতিটা class-এর μ আর σ দেখি\nfor i, name in enumerate(iris.target_names):\n    print(f'{name}:')\n    print(f'  μ = {gnb.theta_[i].round(2)}')\n    print(f'  σ² = {gnb.var_[i].round(2)}')\n\nprint(f'\\nAccuracy: {gnb.score(X_test, y_test):.2%}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Variational Autoencoder (VAE)",
+      "icon": "🎨",
+      "explanation": "VAE-তে latent space-কে standard normal distribution-এ force করা হয়। Encoder output: μ আর σ (normal distribution-র parameter)। Decoder এই distribution থেকে sample করে image reconstruct করে। KL divergence measure করে latent distribution N(0,1) থেকে কতটা দূরে।",
+      "realExample": "DALL-E আর Stable Diffusion-এর latent space Gaussian। নতুন image generate করতে N(0,1) থেকে sample করে decoder-এ pass করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nclass VAE_Encoder(nn.Module):\n    def __init__(self, input_dim=784, latent_dim=20):\n        super().__init__()\n        self.fc = nn.Linear(input_dim, 256)\n        self.fc_mu = nn.Linear(256, latent_dim)     # μ\n        self.fc_sigma = nn.Linear(256, latent_dim)  # log(σ²)\n    \n    def forward(self, x):\n        h = torch.relu(self.fc(x))\n        mu = self.fc_mu(h)\n        log_var = self.fc_sigma(h)\n        \n        # Reparameterization: z = μ + σ * ε, ε ~ N(0,1)\n        std = torch.exp(0.5 * log_var)\n        eps = torch.randn_like(std)  # Standard Normal!\n        z = mu + std * eps\n        return z, mu, log_var\n\nencoder = VAE_Encoder()\nprint('VAE: Latent space → N(μ, σ²)')\nprint('Sample z ~ N(0,1) → Generate new images!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Confidence Intervals ও A/B Testing",
+      "icon": "📈",
+      "explanation": "CLT-র কারণে sample mean approximately normal। তাই confidence interval বানানো যায়: x̄ ± z*σ/√n। A/B testing-এ দুইটা group-র mean difference normal assume করে p-value calculate করা হয়। 95% CI মানে μ±1.96σ।",
+      "realExample": "Google Optimize A/B test-এ conversion rate difference-র 95% confidence interval দেখায়। CLT ব্যবহার করে — sample size বড় হইলে difference normal distribution follow করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy import stats\n\n# CLT in action: sample mean is Normal!\nnp.random.seed(42)\n\n# Original: exponential distribution (NOT normal!)\npopulation = np.random.exponential(scale=50, size=100000)\nprint(f'Population mean: {population.mean():.1f}')\nprint(f'Population is NOT normal (exponential)')\n\n# Take many sample means → becomes Normal!\nsample_means = []\nfor _ in range(1000):\n    sample = np.random.choice(population, size=30)\n    sample_means.append(sample.mean())\n\nsample_means = np.array(sample_means)\n\nprint(f'\\nSample means: mean={sample_means.mean():.1f}, std={sample_means.std():.1f}')\n\n# Normality test\n_, p_value = stats.normaltest(sample_means)\nprint(f'Normality test p-value: {p_value:.4f}')\nprint(f'Normal? {\"Yes! CLT works!\" if p_value > 0.05 else \"No\"}')\n\n# 95% Confidence Interval\nci = stats.norm.interval(0.95, loc=sample_means.mean(), \n                          scale=sample_means.std())\nprint(f'\\n95% CI: ({ci[0]:.1f}, {ci[1]:.1f})')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Gaussian Process Regression",
+      "icon": "📉",
+      "explanation": "Gaussian Process হইল function-এর উপর normal distribution — infinite-dimensional Gaussian! প্রতিটা point-এ prediction একটা normal distribution: N(μ(x), σ²(x))। Mean = prediction, σ = uncertainty। Data থেকে দূরে গেলে σ বাড়ে — model uncertain!",
+      "realExample": "Bayesian optimization (hyperparameter tuning)-এ Gaussian Process surrogate model হিসাবে কাজ করে। Prediction + uncertainty একসাথে দেয়।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.gaussian_process import GaussianProcessRegressor\nfrom sklearn.gaussian_process.kernels import RBF\nimport numpy as np\n\n# Gaussian Process: f(x) ~ N(μ(x), σ²(x))\nnp.random.seed(42)\n\n# Training data\nX_train = np.array([1, 3, 5, 6, 8]).reshape(-1, 1)\ny_train = np.sin(X_train).ravel() + 0.1 * np.random.randn(5)\n\n# GP model\ngp = GaussianProcessRegressor(kernel=RBF(length_scale=1.0))\ngp.fit(X_train, y_train)\n\n# Prediction with uncertainty (Normal distribution!)\nX_test = np.array([2, 4, 7, 10]).reshape(-1, 1)\ny_pred, y_std = gp.predict(X_test, return_std=True)\n\nfor x, mu, sigma in zip(X_test.ravel(), y_pred, y_std):\n    print(f'x={x}: prediction ~ N({mu:.3f}, {sigma:.3f}²)')\n    print(f'  95% CI: ({mu-1.96*sigma:.3f}, {mu+1.96*sigma:.3f})')\n\nprint('\\nData থেকে দূরে (x=10) → σ বেশি → uncertain!')"
+      }
+    }
+  ],
+  "memoryTrick": "Normal Distribution মনে রাখ মসজিদের গম্বুজ দিয়া: মাঝখানে সবচেয়ে উঁচু (mean), দুইপাশে সমানভাবে নামে (symmetric)। 68-95-99.7 মনে রাখ: ১ হাত দূরে 68% মানুষ দাঁড়ানো, ২ হাত দূরে 95%, ৩ হাত দূরে 99.7%। ৩ হাতের বাইরে? সেইটা outlier — ঢাকায় শীতে শার্ট পরা মানুষের মতো rare! আর CLT মনে রাখ: বাজারে ১০০ জন মানুষের average height নাও ১০০ বার — সেই average-গুলা always bell curve বানাবে!",
+  "tags": ["normal-distribution", "gaussian", "bell-curve", "z-score", "central-limit-theorem", "weight-initialization", "vae", "gaussian-process"],
+  "prev": "covariance-correlation",
+  "next": "bernoulli-binomial"
+}

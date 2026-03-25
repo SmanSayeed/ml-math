@@ -1,0 +1,110 @@
+{
+  "slug": "random-variables",
+  "title": "Random Variables — র‍্যান্ডম ভেরিয়েবল",
+  "titleEn": "Random Variables",
+  "category": "probability-stats",
+  "order": 4,
+  "readTime": 11,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🛺",
+    "title": "রিকশা ভাড়ার গল্প",
+    "content": "ধর ভাই, তুই প্রতিদিন ফার্মগেট থেকে নিউমার্কেট রিকশায় যাস। কিন্তু প্রতিদিন ভাড়া একরকম না! সোমবার ২০ টাকা, মঙ্গলবার ৩০ টাকা (জ্যামের জন্য বেশি চাইল), বুধবার ২৫ টাকা, বৃহস্পতিবার ২০ টাকা, শুক্রবার ১৫ টাকা (ছুটির দিন, রাস্তা ফাঁকা)। তোর বন্ধু রহিম জিজ্ঞেস করল 'রিকশা ভাড়া কত?' তুই কী বলবি? Fixed কোনো answer দিতে পারবি না — কারণ ভাড়াটা random! কিন্তু তুই বলতে পারিস কোন ভাড়া কত chance-এ আসে।",
+    "reveal": "এইটাই Random Variable, মামা! X = রিকশা ভাড়া — এইটা একটা variable যার value randomly change হয়, কিন্তু প্রতিটা value-র একটা probability আছে। X fixed কোনো number না, X হইল একটা function যেইটা random outcome-কে number-এ map করে। ML-এ data নিজেই random variable — প্রতিটা observation একটা realization!"
+  },
+  "definition": {
+    "content": "Random Variable হইল একটা function যেইটা sample space-র প্রতিটা outcome-কে একটা real number-এ map করে। Discrete random variable-র value গণনাযোগ্য (countable), আর continuous random variable-র value যেকোনো real number হতে পারে।",
+    "formula": "X: S \\rightarrow \\mathbb{R}, \\quad P(X = x) \\text{ or } f_X(x)",
+    "formulaLabel": "Random Variable — Outcome থেকে Number-এ Mapping"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Discrete vs Continuous",
+        "content": "Discrete: গোনা যায়। রিকশা ভাড়া ১৫, ২০, ২৫, ৩০ টাকা — নির্দিষ্ট কয়েকটা value। ডাইসের ফল ১-৬। Continuous: গোনা যায় না। তোর ঢাকায় অফিসে পৌঁছানোর exact সময় — ৪৫.৩২১ মিনিট, ৪৫.৩২২ মিনিট... অসীম possibilities!",
+        "formula": "\\text{Discrete: } P(X = x_i), \\quad \\text{Continuous: } f_X(x)dx"
+      },
+      {
+        "title": "PMF — Probability Mass Function",
+        "content": "Discrete random variable-র জন্য PMF বলে প্রতিটা value-র probability কত। রিকশা ভাড়ার PMF: P(X=15)=0.2, P(X=20)=0.4, P(X=25)=0.2, P(X=30)=0.2। সব probability যোগ করলে ১ হয় — মামা, কিছু না কিছু তো হবেই!",
+        "formula": "\\sum_{i} P(X = x_i) = 1, \\quad P(X = x_i) \\geq 0"
+      },
+      {
+        "title": "PDF — Probability Density Function",
+        "content": "Continuous random variable-র জন্য exact value-র probability = ০! কারণ অসীম possibilities। তাই density function ব্যবহার হয়। P(a ≤ X ≤ b) = curve-র নিচের area। মানে exact ৪৫ মিনিট লাগার probability ০, কিন্তু ৪৪-৪৬ মিনিটের মধ্যে লাগার probability calculate করা যায়!",
+        "formula": "P(a \\leq X \\leq b) = \\int_a^b f_X(x) \\, dx, \\quad \\int_{-\\infty}^{\\infty} f_X(x) \\, dx = 1"
+      },
+      {
+        "title": "CDF — Cumulative Distribution Function",
+        "content": "CDF বলে X এর value কোনো number-র চেয়ে ছোট বা সমান হওয়ার probability কত। F(x) = P(X ≤ x)। রিকশা ভাড়া ২৫ বা তার কম হওয়ার chance? F(25) = P(X≤25) = P(15)+P(20)+P(25) = 0.8!",
+        "formula": "F_X(x) = P(X \\leq x) = \\begin{cases} \\sum_{x_i \\leq x} P(X = x_i) & \\text{discrete} \\\\ \\int_{-\\infty}^{x} f_X(t) \\, dt & \\text{continuous} \\end{cases}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "রিকশা ভাড়ার Distribution",
+    "problem": "ফার্মগেট-নিউমার্কেট রিকশা ভাড়া X এর distribution: P(X=15)=0.2, P(X=20)=0.4, P(X=25)=0.2, P(X=30)=0.2। (a) এইটা valid PMF কিনা check কর। (b) ভাড়া ২০ টাকার বেশি হওয়ার probability কত? (c) CDF বানাও।",
+    "steps": [
+      {
+        "label": "Step 1: Valid PMF Check",
+        "content": "সব probability non-negative আর যোগফল = 1 কিনা দেখি",
+        "formula": "0.2 + 0.4 + 0.2 + 0.2 = 1.0 \\quad \\checkmark"
+      },
+      {
+        "label": "Step 2: P(X > 20)",
+        "content": "২০-এর বেশি মানে ২৫ বা ৩০",
+        "formula": "P(X > 20) = P(X=25) + P(X=30) = 0.2 + 0.2 = 0.4"
+      },
+      {
+        "label": "Step 3: CDF বানাও",
+        "content": "F(x) = P(X ≤ x) — ধাপে ধাপে যোগ করি",
+        "formula": "F(15) = 0.2, \\quad F(20) = 0.6, \\quad F(25) = 0.8, \\quad F(30) = 1.0"
+      },
+      {
+        "label": "Step 4: CDF থেকে Verify",
+        "content": "P(X > 20) = 1 - F(20) = 1 - 0.6 = 0.4 — আগের answer match করে!",
+        "formula": "P(X > 20) = 1 - F(20) = 1 - 0.6 = 0.4 \\quad \\checkmark"
+      }
+    ],
+    "answer": "Valid PMF (যোগফল ১, সব non-negative)। ভাড়া ২০-র বেশি হওয়ার chance 40%। CDF: F(15)=0.2, F(20)=0.6, F(25)=0.8, F(30)=1.0।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Feature Distribution Analysis",
+      "icon": "📊",
+      "explanation": "ML-এ প্রতিটা feature একটা random variable। Age, income, height — সব random variable। Model train করার আগে তাদের distribution বুঝতে হয় — normal কিনা, skewed কিনা, outlier আছে কিনা।",
+      "realExample": "Netflix user-দের watch time একটা continuous random variable। Distribution দেখে Netflix recommend করে — বেশিরভাগ user ২-৩ ঘণ্টা দেখে, কেউ কেউ ১০+ ঘণ্টা!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy import stats\n\n# ঢাকার রিকশা ভাড়া — discrete random variable\nfares = [15, 20, 25, 30]\nprobs = [0.2, 0.4, 0.2, 0.2]\n\n# Custom discrete distribution\nfare_rv = stats.rv_discrete(\n    values=(fares, probs)\n)\n\n# Random samples generate করি\nsamples = fare_rv.rvs(size=1000)\n\nprint(f'Mean fare: {fare_rv.mean():.1f} টাকা')\nprint(f'PMF at 20: P(X=20) = {fare_rv.pmf(20):.1f}')\nprint(f'CDF at 25: P(X<=25) = {fare_rv.cdf(25):.1f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Generative Models ও Sampling",
+      "icon": "🎨",
+      "explanation": "Generative AI (GPT, DALL-E) random variable থেকে sample করে output generate করে। GPT-তে পরের token একটা discrete random variable — প্রতিটা word-এর একটা probability আছে, সেই distribution থেকে sample করে next word বাছাই করে!",
+      "realExample": "ChatGPT-র temperature parameter distribution কে control করে। Temperature=0 মানে highest probability token always নেয়, temperature=1 মানে distribution থেকে random sample করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Language Model-এর next token prediction\n# Vocabulary: ['আমি', 'ভাত', 'খাই', 'যাই', 'ঢাকা']\nvocab = ['আমি', 'ভাত', 'খাই', 'যাই', 'ঢাকা']\nlogits = np.array([1.0, 2.5, 3.0, 0.5, 0.2])\n\ndef softmax(x, temperature=1.0):\n    e_x = np.exp(x / temperature)\n    return e_x / e_x.sum()\n\n# Temperature = 1 (normal sampling)\nprobs_normal = softmax(logits, temperature=1.0)\nprint('Temperature=1.0:')\nfor w, p in zip(vocab, probs_normal):\n    print(f'  P({w}) = {p:.3f}')\n\n# Temperature = 0.5 (more focused)\nprobs_cold = softmax(logits, temperature=0.5)\nprint('\\nTemperature=0.5 (focused):')\nfor w, p in zip(vocab, probs_cold):\n    print(f'  P({w}) = {p:.3f}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Data Augmentation",
+      "icon": "🔄",
+      "explanation": "Training data বাড়াতে random transformation apply করা হয়। Rotation angle একটা continuous random variable (Uniform distribution থেকে sample), brightness change আরেকটা। এইভাবে original data থেকে নতুন random variations তৈরি করা হয়।",
+      "realExample": "Google-র image classification model-এ random crop, rotation, flip ব্যবহার করে training data 10x বাড়ায়। প্রতিটা augmentation parameter একটা random variable।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Image augmentation-এ random variables\nnp.random.seed(42)\n\n# Rotation angle: Uniform(-30, 30) continuous RV\nrotation = np.random.uniform(-30, 30, size=5)\nprint(f'Random rotations: {rotation.round(1)}')\n\n# Brightness factor: Normal(1.0, 0.2) continuous RV\nbrightness = np.random.normal(1.0, 0.2, size=5)\nprint(f'Brightness factors: {brightness.round(2)}')\n\n# Horizontal flip: Bernoulli(0.5) discrete RV\nflip = np.random.binomial(1, 0.5, size=5)\nprint(f'Flip (1=yes): {flip}')\n\nprint('\\nপ্রতিটা augmentation parameter একটা RV!')"
+      }
+    }
+  ],
+  "memoryTrick": "Random Variable মনে রাখ রিকশা দিয়া: রিকশা ভাড়া = Random Variable (X)। তুই জানিস না exact কত নিবে, কিন্তু জানিস ১৫-৩০ এর মধ্যে হবে। Discrete = রিকশা ভাড়া (গোনা যায়: ১৫, ২০, ২৫, ৩০)। Continuous = রিকশায় কত সময় লাগবে (exact বলা impossible)। PMF = প্রতিটা ভাড়ার chance chart, CDF = 'এত টাকা বা কম' হওয়ার chance!",
+  "tags": ["random-variable", "discrete", "continuous", "pmf", "pdf", "cdf", "distribution", "sampling"],
+  "prev": "bayes-theorem",
+  "next": "expected-value"
+}

@@ -1,0 +1,111 @@
+{
+  "slug": "entropy",
+  "title": "Entropy — অনিশ্চয়তার পরিমাপ",
+  "titleEn": "Entropy",
+  "category": "information-theory",
+  "order": 1,
+  "readTime": 8,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🎲",
+    "title": "কামরুলের গেসিং গেম",
+    "content": "ধর তোর বন্ধু কামরুল গুলিস্তানে বইসা একটা গেম খেলতেছে। সে বলল 'মামা, আমি একটা জিনিস ভাবতেছি, গেস কর!' তুই জিজ্ঞেস করলি 'চা না কফি?' সে বলল 'সবসময় চা।' তাইলে surprise কই? কোনো surprise নাই! কিন্তু যদি বলে 'চা, কফি, লাচ্ছি, বোরহানি — যেকোনোটা হইতে পারে, সবগুলার chance সমান' — তাইলে? তুই গেস করতে করতে ঘামায়া যাবি! এই ঘামানোর পরিমাণই হইল uncertainty।",
+    "reveal": "এই uncertainty বা অনিশ্চয়তার পরিমাপটাই হইল Entropy! যত বেশি সম্ভাবনা সমানভাবে ছড়ানো, তত বেশি entropy। গুরু বলে — 'surprise বেশি মানে entropy বেশি!'"
+  },
+  "definition": {
+    "content": "Entropy হইল একটা probability distribution-এর average surprise বা uncertainty-এর পরিমাপ। Shannon entropy বলে একটা random variable-এর outcome জানতে গড়ে কত bit information লাগব।",
+    "formula": "H(X) = -\\sum_{i=1}^{n} p(x_i) \\log_2 p(x_i)",
+    "formulaLabel": "Shannon Entropy — প্রতিটা outcome-এর surprise-এর weighted average"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Surprise কী জিনিস?",
+        "content": "কোনো event-এর probability কম হইলে সেইটা ঘটলে surprise বেশি। রহিম রোজ বিরিয়ানি খায় — আজকেও খাইল, surprise নাই। কিন্তু রহিম আজকে সালাদ খাইল? মহা surprise! কম probable ঘটনায় বেশি information থাকে।",
+        "formula": "\\text{Surprise}(x) = -\\log_2 p(x)"
+      },
+      {
+        "title": "Entropy = Average Surprise",
+        "content": "এখন সব possible outcome-এর surprise-এর weighted average নিলে পাবি entropy। Fair coin-এ Head আর Tail সমান chance — entropy সবচেয়ে বেশি (1 bit)। Biased coin-এ একদিকে বেশি ঝুঁকলে entropy কমে।",
+        "formula": "H(\\text{fair coin}) = -\\frac{1}{2}\\log_2\\frac{1}{2} - \\frac{1}{2}\\log_2\\frac{1}{2} = 1 \\text{ bit}"
+      },
+      {
+        "title": "Maximum Entropy কখন?",
+        "content": "যখন সব outcome-এর probability সমান তখন entropy maximum। ঢাকায় ৪টা মৌসুম — যদি প্রতিটার chance সমান হইত (25%) তাইলে max entropy। কিন্তু গরমকাল বেশি থাকে, তাই entropy কম।",
+        "formula": "H_{max} = \\log_2(n) \\quad \\text{যখন সব } p_i = \\frac{1}{n}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ঢাকার আবহাওয়ার Entropy",
+    "problem": "ঢাকায় ৩টা আবহাওয়া: রোদ (50%), বৃষ্টি (30%), মেঘলা (20%)। এই distribution-এর entropy কত?",
+    "steps": [
+      {
+        "label": "Step 1: Probabilities লেখ",
+        "content": "p(রোদ) = 0.5, p(বৃষ্টি) = 0.3, p(মেঘলা) = 0.2",
+        "formula": "p_1 = 0.5, \\quad p_2 = 0.3, \\quad p_3 = 0.2"
+      },
+      {
+        "label": "Step 2: প্রতিটার surprise বের কর",
+        "content": "প্রতিটা outcome-এর -p·log₂(p) ক্যালকুলেট কর",
+        "formula": "-0.5 \\log_2(0.5) = 0.5, \\quad -0.3 \\log_2(0.3) \\approx 0.521, \\quad -0.2 \\log_2(0.2) \\approx 0.464"
+      },
+      {
+        "label": "Step 3: যোগ কর",
+        "content": "তিনটা যোগ করলেই entropy পাবি",
+        "formula": "H = 0.5 + 0.521 + 0.464 = 1.485 \\text{ bits}"
+      }
+    ],
+    "answer": "ঢাকার আবহাওয়ার entropy ≈ 1.485 bits। Max possible ছিল log₂(3) ≈ 1.585 bits। মানে distribution পুরা uniform না, কিন্তু বেশ spread out।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Decision Tree Splitting",
+      "icon": "🌳",
+      "explanation": "Decision tree বানানোর সময় কোন feature দিয়া split করব সেইটা ঠিক করতে entropy use হয়। যেই split-এ entropy সবচেয়ে বেশি কমে, সেইটা best split। ID3 আর C4.5 algorithm এইভাবেই কাজ করে।",
+      "realExample": "Email spam filter-এ 'lottery' শব্দ আছে কি নাই — এই split-এ entropy সবচেয়ে বেশি কমে, তাই এইটা root node-এ যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef entropy(probs):\n    \"\"\"Shannon entropy calculate করো\"\"\"\n    probs = probs[probs > 0]  # log(0) avoid\n    return -np.sum(probs * np.log2(probs))\n\n# ঢাকার আবহাওয়া distribution\nweather = np.array([0.5, 0.3, 0.2])\nprint(f'Entropy: {entropy(weather):.3f} bits')  # 1.485 bits\n\n# Fair coin — maximum entropy\nfair_coin = np.array([0.5, 0.5])\nprint(f'Fair coin: {entropy(fair_coin):.3f} bits')  # 1.0 bit"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Cross-Entropy Loss-এর ভিত্তি",
+      "icon": "📉",
+      "explanation": "Classification model train করার সময় cross-entropy loss use হয় — এইটা entropy-র extension। Model-এর predicted distribution আর actual distribution-এর মধ্যে difference measure করে।",
+      "realExample": "ImageNet classifier-এ 1000 class আছে। Model-এর prediction distribution-এর cross-entropy loss minimize করলেই model শেখে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\n# Model prediction (logits)\nlogits = torch.tensor([2.0, 1.0, 0.1])\n# Actual label (class 0)\ntarget = torch.tensor([0])\n\n# Cross-entropy loss (internally entropy concept use করে)\nloss = F.cross_entropy(logits, target)\nprint(f'Loss: {loss.item():.4f}')\n\n# Manual entropy check\nprobs = F.softmax(logits, dim=0)\nentropy_val = -torch.sum(probs * torch.log2(probs))\nprint(f'Prediction entropy: {entropy_val.item():.4f} bits')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Feature Selection",
+      "icon": "🔍",
+      "explanation": "অনেকগুলা feature থাকলে কোনটা important সেইটা বের করতে entropy-based method use হয়। যেই feature target variable-এর entropy সবচেয়ে বেশি কমায়, সেইটা most informative।",
+      "realExample": "Customer churn prediction-এ 50টা feature আছে। Entropy-based ranking বলে 'contract_type' আর 'monthly_charges' সবচেয়ে informative।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.tree import DecisionTreeClassifier\nfrom sklearn.datasets import load_iris\nimport numpy as np\n\n# Iris dataset load করো\niris = load_iris()\nX, y = iris.data, iris.target\n\n# Decision tree — entropy criterion\ntree = DecisionTreeClassifier(criterion='entropy', max_depth=3)\ntree.fit(X, y)\n\n# Feature importance (entropy-based)\nfor name, imp in zip(iris.feature_names, tree.feature_importances_):\n    print(f'{name}: {imp:.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Text Generation Quality",
+      "icon": "✍️",
+      "explanation": "LLM-এর output distribution-এর entropy দেখলে বোঝা যায় model কতটা confident। Low entropy মানে model sure, high entropy মানে model confused — কোন word পরে আসবে সেইটা নিয়া uncertain।",
+      "realExample": "GPT model-এ 'ঢাকায় সবচেয়ে ভালো ___' — এইখানে entropy বেশি কারণ অনেক valid completion আছে। কিন্তু '1+1 = ___' তে entropy কম।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef token_entropy(logits):\n    \"\"\"Next token prediction-এর entropy\"\"\"\n    # Softmax দিয়া probability বানাও\n    probs = np.exp(logits) / np.sum(np.exp(logits))\n    # Entropy calculate করো\n    return -np.sum(probs * np.log2(probs + 1e-10))\n\n# Confident prediction (low entropy)\nconfident = np.array([10.0, 0.1, 0.1, 0.1])\nprint(f'Confident entropy: {token_entropy(confident):.3f} bits')\n\n# Uncertain prediction (high entropy)\nuncertain = np.array([2.5, 2.4, 2.3, 2.5])\nprint(f'Uncertain entropy: {token_entropy(uncertain):.3f} bits')"
+      }
+    }
+  ],
+  "memoryTrick": "Entropy = অনিশ্চয়তা = কামরুলের গেসিং গেমে ঘামানোর পরিমাণ। সব সমান chance হইলে সবচেয়ে বেশি ঘামাবি — max entropy!",
+  "tags": ["entropy", "shannon", "information", "uncertainty", "surprise", "bits"],
+  "prev": "central-limit-theorem",
+  "next": "cross-entropy"
+}

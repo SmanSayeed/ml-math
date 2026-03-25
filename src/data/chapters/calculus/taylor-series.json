@@ -1,0 +1,121 @@
+{
+  "slug": "taylor-series",
+  "title": "Taylor Series — অসীম যোগফলে আসল ফাংশন",
+  "titleEn": "Taylor Series",
+  "category": "calculus",
+  "order": 11,
+  "readTime": 11,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🍳",
+    "title": "নানীর রেসিপি শেখা",
+    "content": "ধর তোর নানী ঢাকার সেরা কাচ্চি বিরিয়ানি বানায়। তুই রেসিপি শিখতে চাস কিন্তু নানী বলে 'এইটা মাথায় আছে, লেখা নাই।' তুই বললি 'নানী, সংক্ষেপে বলো।' নানী বলল 'চাল আর মাংস রান্না করো' — এইটা zeroth approximation, মোটামুটি idea পাইলি কিন্তু taste আসবে না। তারপর বলল 'এলাচ, দারচিনি, তেজপাতা দাও' — first approximation, একটু ভালো হইল। তারপর 'জাফরান দুধে ভিজাইয়া দাও, পেঁয়াজ বেরেস্তা করো' — second approximation, এখন কাছাকাছি! যত বেশি detail যোগ করবা, তত আসল taste-এর কাছে যাইবা।",
+    "reveal": "এইটাই Taylor Series, গুরু! যেকোনো complicated function-কে simple polynomial terms দিয়ে approximate করা — প্রথমে constant, তারপর linear, তারপর quadratic, তারপর cubic... যত বেশি term যোগ করবা, তত accurate! নানীর রেসিপির মতো — যত বেশি detail, তত আসল taste!"
+  },
+  "definition": {
+    "content": "Taylor Series হইল একটা function-কে একটা point-এর আশেপাশে infinite polynomial series হিসেবে express করা। Function-এর সব derivative information use কইরা polynomial approximation বানানো হয়। a = 0 হইলে এইটাকে Maclaurin Series বলে।",
+    "formula": "f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!}(x - a)^n = f(a) + f'(a)(x-a) + \\frac{f''(a)}{2!}(x-a)^2 + \\cdots",
+    "formulaLabel": "Taylor Series of f(x) around point a"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "মূল Idea — Polynomial দিয়া Approximation",
+        "content": "যেকোনো smooth function-কে তার এক point-এর value, slope, curvature, আর higher derivatives use কইরা polynomial হিসেবে লেখা যায়। যত বেশি term, তত accurate approximation — কিন্তু শুধু সেই point-এর কাছাকাছি। দূরে গেলে approximation খারাপ হইতে পারে।",
+        "formula": "f(x) \\approx f(a) + f'(a)(x-a) + \\frac{f''(a)}{2}(x-a)^2 \\quad \\text{(2nd order)}"
+      },
+      {
+        "title": "প্রতিটা Term কী করে",
+        "content": "0th term f(a): function-এর value (রেসিপির basic idea)। 1st term f'(a)(x-a): linear trend (মশলা)। 2nd term: curvature (texture)। 3rd term: rate of curvature change (subtlety)। প্রতিটা term আরো fine detail যোগ করে।",
+        "formula": "\\underbrace{f(a)}_{\\text{constant}} + \\underbrace{f'(a)(x-a)}_{\\text{linear}} + \\underbrace{\\frac{f''(a)}{2!}(x-a)^2}_{\\text{quadratic}} + \\cdots"
+      },
+      {
+        "title": "বিখ্যাত Taylor Series",
+        "content": "কিছু function-এর Taylor series মুখস্থ রাখা useful: e^x, sin(x), cos(x), ln(1+x)। এইগুলা ML-এ activation function approximation, numerical computation, আর theoretical analysis-এ বারবার আসে।",
+        "formula": "e^x = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots, \\quad \\sin(x) = x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\cdots"
+      },
+      {
+        "title": "Multivariate Taylor Series",
+        "content": "Multiple variable-এর function-এ gradient (1st order) আর Hessian (2nd order) দিয়া Taylor expansion হয়। ML-এ loss function-কে current point-এর আশেপাশে quadratic approximation করা খুব common — Newton's method ঠিক এইটাই করে!",
+        "formula": "f(\\mathbf{x} + \\Delta\\mathbf{x}) \\approx f(\\mathbf{x}) + \\nabla f^T \\Delta\\mathbf{x} + \\frac{1}{2} \\Delta\\mathbf{x}^T \\mathbf{H} \\Delta\\mathbf{x}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "e^x-এর Taylor Approximation",
+    "problem": "e^x function-কে x = 0 এর আশেপাশে 4th order পর্যন্ত Taylor expand করো। x = 1 এ actual value-র সাথে compare করো।",
+    "steps": [
+      {
+        "label": "Step 1: Derivatives বের করি",
+        "content": "e^x এর magic — সব derivative নিজেই! f(0) = f'(0) = f''(0) = ... = 1",
+        "formula": "f^{(n)}(x) = e^x \\implies f^{(n)}(0) = 1 \\; \\forall n"
+      },
+      {
+        "label": "Step 2: Taylor series লিখি",
+        "content": "a = 0 বসাই (Maclaurin series)",
+        "formula": "e^x \\approx 1 + x + \\frac{x^2}{2} + \\frac{x^3}{6} + \\frac{x^4}{24}"
+      },
+      {
+        "label": "Step 3: x = 1 এ evaluate করি",
+        "content": "প্রতিটা term-এর value যোগ করি",
+        "formula": "e^1 \\approx 1 + 1 + 0.5 + 0.167 + 0.042 = 2.708"
+      },
+      {
+        "label": "Step 4: Actual value-র সাথে compare",
+        "content": "e = 2.71828... আর আমাদের approximation 2.708",
+        "formula": "\\text{Error} = |2.71828 - 2.708| = 0.01028 \\approx 0.38\\%"
+      }
+    ],
+    "answer": "মাত্র 5 term দিয়া e^x approximate করলে 0.38% error — নানীর রেসিপির ৫টা step ফলো করলেই কাচ্চির taste 99.6% accurate, গুরু!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Loss Function-এর Quadratic Approximation",
+      "icon": "📐",
+      "explanation": "Optimization-এ loss function-কে current point-এর কাছে 2nd order Taylor expansion দিয়া quadratic function হিসেবে approximate করা হয়। Quadratic function-এর minimum সোজা formula দিয়ে বের করা যায়। Newton's method, L-BFGS — সব এই principle-এ কাজ করে।",
+      "realExample": "XGBoost-এর loss function 2nd order Taylor expansion use করে tree split decision নেয় — এইজন্য এত fast।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# XGBoost-style: 2nd order Taylor expansion of loss\ndef xgboost_objective(y_true, y_pred):\n    \"\"\"Custom loss with gradient (g) and hessian (h)\"\"\"\n    # MSE loss: L = (y - y_hat)^2\n    # Taylor: L(y_hat + delta) ≈ L + g*delta + 0.5*h*delta^2\n    g = 2 * (y_pred - y_true)      # 1st derivative\n    h = 2 * np.ones_like(y_true)   # 2nd derivative\n    return g, h\n\n# Optimal leaf value from Taylor approx:\n# min_delta [sum(g_i)*delta + 0.5*sum(h_i)*delta^2]\n# delta* = -sum(g_i) / sum(h_i)\ng_sum = np.sum(g)\nh_sum = np.sum(h)\noptimal_delta = -g_sum / (h_sum + 1e-8)  # regularization\nprint(f'Optimal leaf value: {optimal_delta:.4f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Activation Function Approximation",
+      "icon": "⚡",
+      "explanation": "GELU, Swish-এর মতো activation function-এর exact computation expensive হইতে পারে। Taylor series দিয়ে polynomial approximation compute করা faster, specially hardware accelerator-এ (TPU, FPGA)। Sigmoid, tanh-এর Taylor approximation numerical stability-র জন্যও use হয়।",
+      "realExample": "Google BERT-এ GELU activation-এর tanh-based approximation use হয় — Taylor series-এর practical application।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport numpy as np\n\n# GELU-র Taylor-based approximation (BERT-এ use হয়)\ndef gelu_approx(x):\n    \"\"\"GELU ≈ 0.5x(1 + tanh(sqrt(2/pi)(x + 0.044715x^3)))\n    tanh itself can be Taylor expanded!\n    \"\"\"\n    return 0.5 * x * (1 + torch.tanh(\n        np.sqrt(2/np.pi) * (x + 0.044715 * x**3)\n    ))\n\n# Sigmoid-এর Taylor expansion for small x\ndef sigmoid_taylor(x, order=3):\n    \"\"\"σ(x) ≈ 0.5 + x/4 - x^3/48 + ...\"\"\"\n    result = 0.5 + x/4\n    if order >= 3:\n        result -= x**3 / 48\n    if order >= 5:\n        result += x**5 / 480\n    return result\n\nx = torch.linspace(-2, 2, 100)\nprint(f'Max error (GELU): {(gelu_approx(x) - torch.nn.functional.gelu(x)).abs().max():.6f}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "KL Divergence-এর Approximation",
+      "icon": "📊",
+      "explanation": "KL divergence-এ log(p/q) term আছে। p আর q কাছাকাছি হইলে log(1 + ε)-এর Taylor expansion use কইরা KL divergence-কে simpler form-এ approximate করা যায়। Variational inference, policy gradient — অনেক জায়গায় এই trick কাজে লাগে।",
+      "realExample": "TRPO (Trust Region Policy Optimization)-এ KL divergence-এর 2nd order Taylor expansion use কইরা constraint enforce করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\ndef kl_divergence_exact(p, q):\n    \"\"\"Exact KL(p || q)\"\"\"\n    return (p * (p.log() - q.log())).sum(dim=-1)\n\ndef kl_divergence_taylor(p, q):\n    \"\"\"2nd order Taylor approximation of KL\n    KL(p || q) ≈ 0.5 * sum((p - q)^2 / q)\n    When p ≈ q (TRPO-তে consecutive policies)\n    \"\"\"\n    return 0.5 * ((p - q)**2 / (q + 1e-8)).sum(dim=-1)\n\n# Test: দুইটা কাছাকাছি distribution\np = F.softmax(torch.randn(5), dim=0)\nq = F.softmax(torch.randn(5) * 0.1 + torch.log(p + 1e-8), dim=0)\n\nprint(f'Exact KL:  {kl_divergence_exact(p, q):.6f}')\nprint(f'Taylor KL: {kl_divergence_taylor(p, q):.6f}')\n# কাছাকাছি distributions-এ approximation ভালো কাজ করে!"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Gradient Descent-এর Convergence Analysis",
+      "icon": "📈",
+      "explanation": "Taylor series দিয়া prove করা যায় gradient descent কখন converge করবে। Loss function-কে 2nd order expand করলে দেখা যায় learning rate < 2/L (L = largest Hessian eigenvalue) হইলে converge guaranteed। এই theoretical result practical lr selection guide করে।",
+      "realExample": "Convex optimization theory-র প্রায় সব convergence proof Taylor expansion-এ based।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport matplotlib.pyplot as plt\n\ndef gradient_descent_convergence_demo():\n    \"\"\"Taylor analysis: GD converges when lr < 2/L\n    f(x) = 0.5 * L * x^2 (quadratic, Hessian = L)\n    \"\"\"\n    L = 4.0  # Hessian eigenvalue (curvature)\n    x0 = 5.0\n    \n    for lr_name, lr in [('Safe (0.1/L)', 0.1/L), \n                         ('Optimal (1/L)', 1/L),\n                         ('Borderline (1.9/L)', 1.9/L),\n                         ('Diverge! (2.1/L)', 2.1/L)]:\n        x = x0\n        trajectory = [x]\n        for _ in range(30):\n            grad = L * x  # f'(x) = L*x\n            x = x - lr * grad\n            trajectory.append(x)\n        \n        plt.plot(trajectory, label=f'{lr_name}')\n    \n    plt.axhline(y=0, color='green', linestyle='--', label='Minimum')\n    plt.legend()\n    plt.title('Taylor বলে: lr < 2/L হইলে converge!')\n    plt.xlabel('Iteration')\n    plt.ylabel('x')\n    plt.show()\n\ngradient_descent_convergence_demo()"
+      }
+    }
+  ],
+  "memoryTrick": "Taylor Series = নানীর রেসিপি শেখা। 0th term = 'চাল আর মাংস' (basic idea), 1st term = 'মশলা দাও' (direction/slope), 2nd term = 'জাফরান দুধে ভিজাও' (curvature/texture), 3rd term = 'ধীরে ধীরে dum দাও' (fine detail)। যত term, তত আসল taste-এর কাছে। গুরু বলে — 'রান্না আর math একই — patience রাখো, detail যোগ করো!'",
+  "tags": ["taylor-series", "maclaurin", "polynomial-approximation", "quadratic-approximation", "convergence", "xgboost", "activation-function"],
+  "prev": "hessian",
+  "next": "convexity"
+}

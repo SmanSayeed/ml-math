@@ -1,0 +1,116 @@
+{
+  "slug": "l1-l2-regularization",
+  "title": "L1/L2 Regularization — নিয়ন্ত্রণের শক্তি",
+  "titleEn": "L1/L2 Regularization",
+  "category": "optimization",
+  "order": 4,
+  "readTime": 9,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "💰",
+    "title": "ফারুকের বাজেট কন্ট্রোল",
+    "content": "ধর তোর বন্ধু ফারুক কারওয়ান বাজারে গেছে কেনাকাটা করতে। বাজেট ৫০০০ টাকা। সে কিনতে চায় — মাছ, মাংস, সবজি, ফল, মসলা। দুইটা strategy আছে: Strategy 1 (L2 — ডায়েট): সবকিছু একটু একটু কমাও — মাছ কম, মাংস কম, সব item-এ budget distribute করো। Strategy 2 (L1 — বাজেট কাট): কিছু item পুরা বাদ দাও — ফল কিনব না, মসলা পুরানো আছে — বাকিতে ভালো মানের কেনো।",
+    "reveal": "ML-এও same concept! L2 (Ridge) সব weight ছোট করে কিন্তু zero করে না — ডায়েটের মতো। L1 (Lasso) কিছু weight পুরা zero করে দেয় — বাজেট কাটের মতো! গুরু বলে — 'Regularization = model-এর জন্য বাজেট constraint!'"
+  },
+  "definition": {
+    "content": "Regularization হইল loss function-এ একটা penalty term যোগ করা যাতে model-এর weights বেশি বড় না হয়। L1 penalty weights-এর absolute value যোগ করে (sparsity দেয়), L2 penalty weights-এর বর্গ যোগ করে (smooth shrinkage)।",
+    "formula": "\\mathcal{L}_{reg} = \\mathcal{L}_{data} + \\lambda \\cdot R(w)",
+    "formulaLabel": "Regularized Loss = Data Loss + λ × Penalty"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "L2 Regularization (Ridge)",
+        "content": "Weights-এর বর্গের যোগফল penalty হিসাবে যোগ করে। সব weight একটু একটু ছোট হয় কিন্তু zero হয় না। Gradient descent-এ weight decay হিসাবেও পরিচিত।",
+        "formula": "R_{L2}(w) = \\sum_{i} w_i^2, \\quad \\mathcal{L} = \\mathcal{L}_{data} + \\frac{\\lambda}{2}\\sum w_i^2"
+      },
+      {
+        "title": "L1 Regularization (Lasso)",
+        "content": "Weights-এর absolute value-র যোগফল penalty। কিছু weight exactly zero হয়ে যায় — automatic feature selection! Sparse model পাওয়া যায়।",
+        "formula": "R_{L1}(w) = \\sum_{i} |w_i|, \\quad \\mathcal{L} = \\mathcal{L}_{data} + \\lambda \\sum |w_i|"
+      },
+      {
+        "title": "Elastic Net — দুইটার কম্বো",
+        "content": "L1 + L2 দুইটা একসাথে use করলে Elastic Net হয়। L1-এর feature selection আর L2-এর stability দুইটাই পায়। অনেক practical problem-এ best choice।",
+        "formula": "R_{EN}(w) = \\alpha \\sum |w_i| + \\frac{(1-\\alpha)}{2} \\sum w_i^2"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ফারুকের বাজেটে L1 vs L2",
+    "problem": "Weights: w = [3, -2, 0.5, -0.1, 4]। λ = 0.1। L1 penalty, L2 penalty, আর gradient update দেখাও।",
+    "steps": [
+      {
+        "label": "Step 1: L1 Penalty",
+        "content": "সব weight-এর absolute value যোগ করো",
+        "formula": "R_{L1} = |3| + |-2| + |0.5| + |-0.1| + |4| = 9.6, \\quad \\lambda R_{L1} = 0.96"
+      },
+      {
+        "label": "Step 2: L2 Penalty",
+        "content": "সব weight-এর বর্গ যোগ করো",
+        "formula": "R_{L2} = 9 + 4 + 0.25 + 0.01 + 16 = 29.26, \\quad \\frac{\\lambda}{2} R_{L2} = 1.463"
+      },
+      {
+        "label": "Step 3: L1 Gradient Effect",
+        "content": "L1 gradient = sign(w) — সব weight সমান rate-এ zero-র দিকে যায়। 0.1 weight → 0 হয়ে যায় (sparse!)",
+        "formula": "\\frac{\\partial R_{L1}}{\\partial w} = \\text{sign}(w) = [1, -1, 1, -1, 1]"
+      },
+      {
+        "label": "Step 4: L2 Gradient Effect",
+        "content": "L2 gradient = 2w — বড় weight বেশি shrink হয়, ছোট weight অল্প shrink হয়",
+        "formula": "\\frac{\\partial R_{L2}}{\\partial w} = 2w = [6, -4, 1, -0.2, 8]"
+      }
+    ],
+    "answer": "L1: ছোট weights (0.1) zero হয়ে যাইব — sparse model। L2: বড় weights (4, 3) বেশি shrink হইব কিন্তু কেউ zero হইব না। Feature selection চাইলে L1, stable shrinkage চাইলে L2!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Ridge Regression (L2)",
+      "icon": "📏",
+      "explanation": "Multicollinear features (correlated) থাকলে Ridge ভালো কাজ করে। সব feature রাখে কিন্তু coefficient ছোট করে। House price prediction-এ area আর rooms correlated — Ridge handle করে।",
+      "realExample": "Real estate price prediction-এ 50+ features আছে, অনেকগুলা correlated। Ridge regression stable coefficient দেয়।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.linear_model import Ridge, Lasso\nfrom sklearn.datasets import load_diabetes\nfrom sklearn.model_selection import train_test_split\nimport numpy as np\n\nX, y = load_diabetes(return_X_y=True)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)\n\n# Ridge (L2) — সব weight ছোট করে\nridge = Ridge(alpha=1.0)\nridge.fit(X_train, y_train)\nprint(f'Ridge R²: {ridge.score(X_test, y_test):.4f}')\nprint(f'Ridge non-zero weights: {np.sum(ridge.coef_ != 0)}')\nprint(f'Ridge weights: {np.round(ridge.coef_, 2)}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Lasso Regression (L1)",
+      "icon": "✂️",
+      "explanation": "Feature selection automatically করতে Lasso best। অনেক feature আছে কিন্তু কোনগুলা important জানা নাই — Lasso unimportant features-এর weight zero করে দেয়।",
+      "realExample": "Genomics-এ 20,000+ genes আছে। Lasso বলে দেয় কোন ১০-২০টা gene disease-এর সাথে related।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.linear_model import Lasso\nfrom sklearn.datasets import load_diabetes\nimport numpy as np\n\nX, y = load_diabetes(return_X_y=True)\n\n# Lasso (L1) — কিছু weight zero করে দেয়\nlasso = Lasso(alpha=0.1)\nlasso.fit(X, y)\n\nprint(f'Lasso non-zero weights: {np.sum(lasso.coef_ != 0)} / {len(lasso.coef_)}')\nprint('\\nSelected features (non-zero):')\nfeature_names = load_diabetes().feature_names\nfor name, coef in zip(feature_names, lasso.coef_):\n    if coef != 0:\n        print(f'  {name}: {coef:.4f}')\n    else:\n        print(f'  {name}: ZERO (removed!)')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Weight Decay in Deep Learning",
+      "icon": "🧠",
+      "explanation": "Neural network-এ L2 regularization-কে weight decay বলে। AdamW optimizer-এ decoupled weight decay properly implement করা হয়। Overfitting কমাতে essential।",
+      "realExample": "GPT-3 training-এ weight_decay=0.1 use হয় AdamW-তে। এইটা ছাড়া model heavily overfit করত।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\n\nmodel = nn.Sequential(\n    nn.Linear(784, 256),\n    nn.ReLU(),\n    nn.Linear(256, 10)\n)\n\n# AdamW — proper weight decay (L2 regularization)\noptimizer = optim.AdamW(\n    model.parameters(),\n    lr=1e-3,\n    weight_decay=0.01  # λ = 0.01\n)\n\n# Manual L2 regularization (alternative)\ndef l2_regularization(model, lambda_val=0.01):\n    l2_norm = sum(p.pow(2).sum() for p in model.parameters())\n    return lambda_val * l2_norm\n\n# Training-এ: total_loss = loss + l2_regularization(model)\nprint('weight_decay=0.01 → সব weight slowly ছোট হয়')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Elastic Net — Combined Power",
+      "icon": "⚡",
+      "explanation": "L1 আর L2 একসাথে — Elastic Net। L1-এর sparsity আর L2-এর grouping effect দুইটাই পায়। Correlated features-এ L1 alone একটা বেছে নেয়, Elastic Net group-এ রাখে।",
+      "realExample": "Drug discovery-তে molecular features highly correlated। Elastic Net related features group-এ রাখে আর unrelated features বাদ দেয়।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.linear_model import ElasticNet, Ridge, Lasso\nfrom sklearn.datasets import make_regression\nimport numpy as np\n\n# Correlated features সহ data\nX, y = make_regression(\n    n_samples=200, n_features=20,\n    n_informative=5, random_state=42\n)\n\n# Compare all three\nridge = Ridge(alpha=1.0).fit(X, y)\nlasso = Lasso(alpha=0.1).fit(X, y)\nelastic = ElasticNet(alpha=0.1, l1_ratio=0.5).fit(X, y)\n\nprint(f'Ridge non-zero: {np.sum(np.abs(ridge.coef_) > 0.01)}')\nprint(f'Lasso non-zero: {np.sum(np.abs(lasso.coef_) > 0.01)}')\nprint(f'Elastic non-zero: {np.sum(np.abs(elastic.coef_) > 0.01)}')\nprint('\\nElastic Net = L1 + L2 — best of both worlds!')"
+      }
+    }
+  ],
+  "memoryTrick": "L1 = ফারুকের বাজেট কাট — কিছু item পুরা বাদ (sparse)। L2 = ফারুকের ডায়েট — সবকিছু একটু কম (shrink)। Elastic Net = ডায়েট + বাজেট কাট combo!",
+  "tags": ["l1", "l2", "ridge", "lasso", "elastic-net", "regularization", "weight-decay", "overfitting"],
+  "prev": "optimizers",
+  "next": "dropout"
+}

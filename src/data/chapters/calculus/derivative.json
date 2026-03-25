@@ -1,0 +1,116 @@
+{
+  "slug": "derivative",
+  "title": "Derivative — পরিবর্তনের হার",
+  "titleEn": "Derivative",
+  "category": "calculus",
+  "order": 2,
+  "readTime": 14,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🏍️",
+    "title": "Pathao Bike-এর Speed আর ঢাকার Traffic",
+    "content": "ধর গুরু, তুই Pathao bike-এ চড়ে মিরপুর থেইকা মতিঝিল যাইতেছস। রাস্তা ফাঁকা — bike ৬০ কিমি/ঘণ্টায় যাইতেছে। হঠাৎ ফার্মগেট signal-এ জ্যাম — speed কমে ২০ হইল। তারপর signal ছাড়ল — আবার speed বাড়তে শুরু করল ২০, ৩০, ৪০, ৫০... প্রতি মুহূর্তে speed পরিবর্তন হইতেছে। তুই ফোনে Pathao app-এ দেখতেছস — এখন ৪৫ কিমি/ঘণ্টা, ০.৫ সেকেন্ড পর ৪৭, তারপর ৪৯... ঠিক এই মুহূর্তে speed কত? এইটা বের করতে গেলেই derivative লাগে!",
+    "reveal": "Derivative হইল 'ঠিক এই মুহূর্তে' পরিবর্তনের হার। Pathao bike-এর speed আসলে position-এর derivative — কত তাড়াতাড়ি জায়গা বদলাইতেছে। ML-এ gradient হইল loss function-এর derivative — কোন দিকে loss কমতেছে বা বাড়তেছে। পুরা backpropagation derivative-এর উপর দাঁড়ায়!"
+  },
+  "definition": {
+    "content": "Derivative হইল কোনো function-এর instantaneous rate of change — মানে কোনো একটা point-এ function কত দ্রুত বাড়তেছে বা কমতেছে। এইটা limit দিয়া define করা হয় — দুইটা খুব কাছাকাছি point-এর মধ্যে change-এর ratio, যখন দূরত্ব শূন্যের কাছে যায়।",
+    "formula": "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}",
+    "formulaLabel": "Derivative — limit definition (first principles)"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Derivative = ঢাল (Slope)",
+        "content": "Graph-এ কোনো point-এ tangent line-এর slope হইল derivative। মানে curve ঐ point-এ কত খাড়া বা কত সমতল — সেইটা। Positive derivative = function বাড়তেছে (bike speed up), negative = কমতেছে (braking), zero = না বাড়ছে না কমছে (peak বা valley)।",
+        "formula": "\\text{slope} = \\frac{\\Delta y}{\\Delta x} \\xrightarrow{\\Delta x \\to 0} \\frac{dy}{dx}"
+      },
+      {
+        "title": "Power Rule — সবচেয়ে Common Rule",
+        "content": "f(x) = xⁿ হইলে f'(x) = nxⁿ⁻¹। এইটুকু মনে রাখলে অর্ধেক derivative পারবি! x² এর derivative 2x, x³ এর derivative 3x², x⁵ এর derivative 5x⁴। Power নামাও সামনে, power থেকে 1 বাদ দাও!",
+        "formula": "\\frac{d}{dx}[x^n] = nx^{n-1}"
+      },
+      {
+        "title": "Common Derivatives মুখস্থ রাখ",
+        "content": "কিছু derivative মুখস্থ রাখলে জীবন সহজ হইব: constant-এর derivative 0, e^x-এর derivative e^x নিজেই, sin(x)-এর derivative cos(x), ln(x)-এর derivative 1/x। ML-এ e^x আর ln(x) সবচেয়ে বেশি লাগে!",
+        "formula": "\\frac{d}{dx}[e^x] = e^x, \\quad \\frac{d}{dx}[\\ln x] = \\frac{1}{x}"
+      },
+      {
+        "title": "Chain Rule-এর Intro",
+        "content": "যদি function-এর ভিতরে function থাকে — f(g(x)) — তাইলে বাইরেরটার derivative গুণ ভিতরেরটার derivative। f(g(x))-এর derivative = f'(g(x)) × g'(x)। যেমন (2x+3)⁵-এর derivative = 5(2x+3)⁴ × 2 = 10(2x+3)⁴। এইটা ML-এ backpropagation-এর ভিত্তি!",
+        "formula": "\\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Pathao Bike-এর Position ও Speed",
+    "problem": "Pathao bike-এর position function: s(t) = 3t² + 2t + 5 (মিটার), t = সময় (সেকেন্ড)। t = 4 সেকেন্ডে bike-এর speed (velocity) বের কর।",
+    "steps": [
+      {
+        "label": "Step 1: Position function-এর derivative নে",
+        "content": "Speed = position-এর derivative। Power rule ব্যবহার কর।",
+        "formula": "v(t) = s'(t) = \\frac{d}{dt}[3t^2 + 2t + 5] = 6t + 2"
+      },
+      {
+        "label": "Step 2: t = 4 বসাও",
+        "content": "t = 4 সেকেন্ডে speed কত?",
+        "formula": "v(4) = 6 \\times 4 + 2 = 24 + 2 = 26 \\text{ m/s}"
+      },
+      {
+        "label": "Step 3: Acceleration-ও বের কর (bonus)",
+        "content": "Acceleration = velocity-র derivative = position-এর second derivative।",
+        "formula": "a(t) = v'(t) = s''(t) = 6 \\text{ m/s}^2 \\text{ (constant acceleration!)}"
+      }
+    ],
+    "answer": "t = 4 সেকেন্ডে speed = ২৬ m/s, acceleration = ৬ m/s² (constant)। Bike সমান হারে speed বাড়াইতেছে — ঢাকার রাস্তায় এইরকম ফাঁকা পাইলে তো মজাই!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Backpropagation — Neural Network Training",
+      "icon": "🔄",
+      "explanation": "Backpropagation-এ loss-এর derivative নেওয়া হয় প্রতিটা weight-এর respect-এ। এই derivative বলে দেয় কোন weight কোন দিকে change করলে loss কমবে। পুরা deep learning training loop-ই derivative-এর উপর depend করে!",
+      "realExample": "ResNet-50 training-এ ২৫ মিলিয়ন+ parameter-এর প্রতিটার জন্য loss-এর derivative compute হয় প্রতি batch-এ — automatic differentiation ব্যবহার কইরা।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\n# Derivative / Gradient in PyTorch\nx = torch.tensor(3.0, requires_grad=True)\n\n# f(x) = x^2 + 3x + 1\ny = x**2 + 3*x + 1\n\n# Derivative compute koro (backprop)\ny.backward()\n\n# f'(x) = 2x + 3, at x=3: f'(3) = 9\nprint(f'f(3) = {y.item()}')\nprint(f\"f'(3) = {x.grad.item()}\")  # 2*3 + 3 = 9\n\n# Neural network e same concept\nmodel = torch.nn.Linear(10, 1)\ninput_data = torch.randn(1, 10)\noutput = model(input_data)\nloss = (output - torch.tensor([1.0]))**2\nloss.backward()\n\nprint(f'\\nWeight gradients shape: {model.weight.grad.shape}')\nprint(f'Bias gradient: {model.bias.grad.item():.4f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Sigmoid Derivative — Activation Function Training",
+      "icon": "📈",
+      "explanation": "Sigmoid function sigma(x) = 1/(1+e^(-x))-এর একটা সুন্দর derivative আছে: sigma'(x) = sigma(x)(1-sigma(x))। Training-এ এই derivative লাগে gradient pass করতে। এইজন্যই sigmoid-এর vanishing gradient problem হয় — derivative সর্বোচ্চ 0.25!",
+      "realExample": "Logistic regression-এ sigmoid activation-এর derivative use হয় weight update-এ। Binary classification problem-এ এইটা fundamental।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\ndef sigmoid_derivative(x):\n    \"\"\"Sigmoid er derivative = sigmoid(x) * (1 - sigmoid(x))\"\"\"\n    s = sigmoid(x)\n    return s * (1 - s)\n\nx = np.linspace(-6, 6, 100)\n\n# Derivative at different points\nfor val in [-2, 0, 2, 5]:\n    print(f'sigmoid({val}) = {sigmoid(val):.4f}, '\n          f\"sigmoid'({val}) = {sigmoid_derivative(val):.4f}\")\n\n# Notice: derivative max at x=0 (0.25), vanishes at extremes!\n# Eita holo vanishing gradient problem er root cause\nprint(f'\\nMax derivative: {np.max(sigmoid_derivative(x)):.4f}')  # ~0.25\nprint(f'sigmoid\\'(10) = {sigmoid_derivative(10):.8f}')  # almost 0!"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Numerical Differentiation — Gradient Check",
+      "icon": "🔍",
+      "explanation": "Analytical derivative ঠিকমতো implement হইছে কিনা check করতে numerical derivative use হয়। Limit definition-ই ব্যবহার কইরা — h ছোট নিয়া [f(x+h)-f(x-h)]/(2h) বের কর। এইটা analytical gradient-এর কাছাকাছি হওয়া উচিত।",
+      "realExample": "PyTorch-এ torch.autograd.gradcheck() function numerical gradient check করে — custom autograd function ঠিক আছে কিনা verify করতে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef f(x):\n    return x**3 + 2*x**2 - 5*x + 3\n\ndef analytical_derivative(x):\n    \"\"\"Haate kore derivative: 3x^2 + 4x - 5\"\"\"\n    return 3*x**2 + 4*x - 5\n\ndef numerical_derivative(f, x, h=1e-5):\n    \"\"\"Limit definition use kore — central difference\"\"\"\n    return (f(x + h) - f(x - h)) / (2 * h)\n\n# Compare at x = 2\nx = 2.0\nanalytical = analytical_derivative(x)\nnumerical = numerical_derivative(f, x)\n\nprint(f'Analytical derivative at x=2: {analytical}')\nprint(f'Numerical derivative at x=2:  {numerical:.6f}')\nprint(f'Difference: {abs(analytical - numerical):.10f}')\n\n# h choto korle result better hoy (limit concept!)\nfor h in [1, 0.1, 0.01, 0.001, 0.0001, 1e-7]:\n    nd = (f(x + h) - f(x - h)) / (2 * h)\n    print(f'h = {h:>8}, numerical derivative = {nd:.8f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Weight Update Rule — SGD Optimizer",
+      "icon": "⚙️",
+      "explanation": "SGD (Stochastic Gradient Descent)-এ weight update rule: w = w - lr * dL/dw। এই dL/dw হইল loss L-এর derivative weight w-এর respect-এ। Derivative negative মানে loss কমতেছে ওই দিকে — তাই ওই দিকে যাও!",
+      "realExample": "ResNet ImageNet training-এ SGD with momentum use হয় — base learning rate 0.1, derivative অনুযায়ী ২৫M+ weights update হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Simple linear regression with gradient descent\nnp.random.seed(42)\n\n# Data: y = 3x + 2 + noise\nX = np.random.randn(100)\ny = 3 * X + 2 + np.random.randn(100) * 0.1\n\n# Parameters\nw = 0.0  # weight\nb = 0.0  # bias\nlr = 0.01  # learning rate\n\n# Training loop\nfor epoch in range(100):\n    # Forward pass\n    y_pred = w * X + b\n    loss = np.mean((y - y_pred) ** 2)\n    \n    # Derivatives (analytical)\n    dL_dw = -2 * np.mean(X * (y - y_pred))  # dLoss/dWeight\n    dL_db = -2 * np.mean(y - y_pred)         # dLoss/dBias\n    \n    # Update rule: w = w - lr * derivative\n    w = w - lr * dL_dw\n    b = b - lr * dL_db\n    \n    if epoch % 20 == 0:\n        print(f'Epoch {epoch}: loss={loss:.4f}, w={w:.4f}, b={b:.4f}')\n\nprint(f'\\nFinal: w={w:.4f} (true: 3), b={b:.4f} (true: 2)')"
+      }
+    }
+  ],
+  "memoryTrick": "Derivative = Pathao bike-এর speedometer — ঠিক এই মুহূর্তে কত speed-এ যাইতেছস সেইটা। Position-এর derivative = speed, speed-এর derivative = acceleration। Power rule: power নামাও সামনে, power কমাও 1!",
+  "tags": ["derivative", "differentiation", "power-rule", "chain-rule", "backpropagation", "gradient"],
+  "prev": "functions-limits",
+  "next": "partial-derivative"
+}

@@ -1,0 +1,116 @@
+{
+  "slug": "gradient",
+  "title": "Gradient — সব দিকের ঢাল",
+  "titleEn": "Gradient",
+  "category": "calculus",
+  "order": 5,
+  "readTime": 13,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "⛰️",
+    "title": "বান্দরবানের পাহাড়ে চড়া",
+    "content": "ধর গুরু, তুই বান্দরবানে নীলগিরি পাহাড়ে হাইকিং করতে গেছস। পাহাড়ের চূড়ায় উঠতে চাস, কিন্তু কুয়াশায় কিছু দেখা যাইতেছে না। তুই একটা point-এ দাঁড়ায়ে আছস — সামনে গেলে ঢাল কত, ডানে গেলে কত, বাঁয়ে গেলে কত? প্রতি direction-এ ঢাল আলাদা! উত্তরে গেলে হয়তো খুব খাড়া, পূর্বে গেলে একটু কম খাড়া, পশ্চিমে গেলে নিচের দিকে। তুই সবচেয়ে খাড়া ঢালের দিকে যাইতে চাস — সবচেয়ে দ্রুত উপরে উঠতে। কিন্তু কোন দিকটা সবচেয়ে খাড়া? Gradient তোরে সেই দিকটা বইলা দিব!",
+    "reveal": "Gradient হইল সব partial derivative মিলায়া বানানো vector — প্রতি direction-এ ঢাল কত সেইটা একটা vector-এ pack করা। Gradient-এর direction হইল steepest ascent-এর direction (সবচেয়ে খাড়া ঢালের দিক), আর magnitude হইল কত খাড়া। ML-এ loss function-এর gradient বলে দেয় loss কোন দিকে সবচেয়ে দ্রুত বাড়ে — তাই উল্টা দিকে গেলে loss কমবে!"
+  },
+  "definition": {
+    "content": "Gradient হইল multi-variable function-এর সব partial derivative মিলায়া বানানো vector। ∇f (nabla f) লেখা হয়। f(x,y,z) হইলে gradient = [∂f/∂x, ∂f/∂y, ∂f/∂z]। এই vector-এর direction বলে function কোন দিকে সবচেয়ে দ্রুত বাড়ে, আর magnitude বলে কত দ্রুত।",
+    "formula": "\\nabla f = \\begin{bmatrix} \\frac{\\partial f}{\\partial x_1} \\\\ \\frac{\\partial f}{\\partial x_2} \\\\ \\vdots \\\\ \\frac{\\partial f}{\\partial x_n} \\end{bmatrix}",
+    "formulaLabel": "Gradient — সব partial derivative-এর vector"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Gradient = Partial Derivative-দের Vector",
+        "content": "Partial derivative chapter-এ শিখছিলি একটা একটা variable-এর effect। Gradient হইল সেই সব effect একসাথে একটা vector-এ রাখা। f(x,y) = x² + 3xy হইলে ∇f = [2x+3y, 3x]। প্রতিটা component একটা direction-এর ঢাল!",
+        "formula": "f(x,y) = x^2 + 3xy \\implies \\nabla f = \\begin{bmatrix} 2x + 3y \\\\ 3x \\end{bmatrix}"
+      },
+      {
+        "title": "Gradient-এর Direction — সবচেয়ে খাড়া ঢাল",
+        "content": "বান্দরবানের পাহাড়ে তুই কোনো point-এ দাঁড়ালে gradient তোরে point করবে সেই দিকে যেইদিকে পাহাড় সবচেয়ে দ্রুত উঠতেছে। উল্টা দিকে (-∇f) গেলে সবচেয়ে দ্রুত নামা যায়। ML-এ loss কমাইতে চাই — তাই gradient-এর উল্টা দিকে যাই!",
+        "formula": "\\text{steepest ascent direction} = \\frac{\\nabla f}{\\|\\nabla f\\|}"
+      },
+      {
+        "title": "Gradient-এর Magnitude — কত খাড়া",
+        "content": "||∇f|| (gradient-এর length) বলে ঢাল কত steep। বড় magnitude = অনেক খাড়া ঢাল, ছোট magnitude = প্রায় সমতল। Zero gradient (∇f = 0) মানে পাহাড়ের চূড়া, গভীর খাদ, বা saddle point — কোনো দিকেই ঢাল নাই!",
+        "formula": "\\|\\nabla f\\| = \\sqrt{\\left(\\frac{\\partial f}{\\partial x}\\right)^2 + \\left(\\frac{\\partial f}{\\partial y}\\right)^2}"
+      },
+      {
+        "title": "ML-এ Gradient — Loss Function-এর Compass",
+        "content": "Neural network-এ parameters θ = [w₁, w₂, ..., wₙ]। Loss L(θ) একটা multi-variable function। ∇L = [∂L/∂w₁, ∂L/∂w₂, ..., ∂L/∂wₙ] — এই gradient vector বলে দেয় loss কমাইতে কোন weight কোন দিকে কতটুকু change করতে হইব। Gradient descent-এ এই vector-ই guide!",
+        "formula": "\\nabla_\\theta L = \\begin{bmatrix} \\frac{\\partial L}{\\partial w_1} \\\\ \\frac{\\partial L}{\\partial w_2} \\\\ \\vdots \\\\ \\frac{\\partial L}{\\partial w_n} \\end{bmatrix}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "বান্দরবান পাহাড়ের Gradient",
+    "problem": "পাহাড়ের height function: h(x,y) = -x² - 2y² + 4x + 6y + 10। Point (1, 2)-এ gradient বের কর, direction আর magnitude বের কর।",
+    "steps": [
+      {
+        "label": "Step 1: Partial derivatives বের কর",
+        "content": "প্রতিটা variable-এর respect-এ differentiate কর।",
+        "formula": "\\frac{\\partial h}{\\partial x} = -2x + 4, \\quad \\frac{\\partial h}{\\partial y} = -4y + 6"
+      },
+      {
+        "label": "Step 2: Point (1,2)-এ evaluate কর",
+        "content": "x=1, y=2 বসাও।",
+        "formula": "\\nabla h(1,2) = \\begin{bmatrix} -2(1)+4 \\\\ -4(2)+6 \\end{bmatrix} = \\begin{bmatrix} 2 \\\\ -2 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 3: Magnitude বের কর",
+        "content": "Gradient vector-এর length।",
+        "formula": "\\|\\nabla h\\| = \\sqrt{2^2 + (-2)^2} = \\sqrt{8} = 2\\sqrt{2} \\approx 2.83"
+      }
+    ],
+    "answer": "Gradient = [2, -2]। মানে x-দিকে height বাড়তেছে (2 rate-এ), y-দিকে কমতেছে (-2 rate-এ)। সবচেয়ে দ্রুত উঠতে চাইলে x-axis বরাবর সামনে আর y-axis বরাবর পিছনে যাও! পাহাড়ের চূড়া (gradient = 0) point-এ আছে x=2, y=1.5 — ওইখানে ∇h = [0, 0]।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Loss Surface Visualization",
+      "icon": "🗺️",
+      "explanation": "Loss function-কে surface হিসেবে visualize করলে gradient-এর meaning পরিষ্কার হয়। 2D parameter space-এ loss surface একটা landscape — gradient প্রতি point-এ arrow দেখায় কোন দিকে loss সবচেয়ে দ্রুত বাড়ে। Training হইল এই arrows-এর উল্টা দিকে হাঁটা!",
+      "realExample": "Loss landscape visualization tool দেখায় ResNet-এর loss surface smoother (residual connection-এর কারণে) — gradient descent সহজে minimum খুঁজে পায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Loss surface + gradient visualization\ndef loss_function(w1, w2):\n    \"\"\"Simple loss: L = w1^2 + 2*w2^2 - w1*w2\"\"\"\n    return w1**2 + 2*w2**2 - w1*w2\n\ndef gradient(w1, w2):\n    \"\"\"Gradient of loss\"\"\"\n    dL_dw1 = 2*w1 - w2     # partial L / partial w1\n    dL_dw2 = 4*w2 - w1     # partial L / partial w2\n    return np.array([dL_dw1, dL_dw2])\n\n# Evaluate at different points\npoints = [(3, 2), (1, 1), (0.5, 0.5), (0.1, 0.1)]\nfor w1, w2 in points:\n    g = gradient(w1, w2)\n    mag = np.linalg.norm(g)\n    print(f'Point ({w1},{w2}): loss={loss_function(w1,w2):.2f}, '\n          f'gradient={g}, magnitude={mag:.3f}')\n\n# Gradient magnitude decreases near minimum!\nprint(f'\\nMinimum at (0,0): loss={loss_function(0,0):.2f}, '\n      f'gradient={gradient(0,0)}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Gradient Computation in Neural Networks",
+      "icon": "🧠",
+      "explanation": "PyTorch-এ .backward() call করলে loss-এর gradient সব parameter-এর respect-এ compute হয়। parameter.grad attribute-এ gradient vector store হয়। এই gradient vector-ই optimizer ব্যবহার করে weight update-এ!",
+      "realExample": "BERT fine-tuning-এ 110M parameter-এর gradient vector compute হয় — 110M-dimensional space-এ steepest descent direction!",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Neural network gradient computation\nmodel = nn.Sequential(\n    nn.Linear(3, 4),\n    nn.ReLU(),\n    nn.Linear(4, 1)\n)\n\n# Count parameters\ntotal_params = sum(p.numel() for p in model.parameters())\nprint(f'Total parameters: {total_params}')\nprint(f'Gradient will be a {total_params}-dimensional vector!\\n')\n\n# Forward pass\nx = torch.randn(5, 3)  # 5 samples, 3 features\ntarget = torch.randn(5, 1)\noutput = model(x)\nloss = nn.MSELoss()(output, target)\n\n# Compute gradient (all partial derivatives at once)\nloss.backward()\n\n# Gradient vector\nprint('Gradient for each parameter:')\nfor name, param in model.named_parameters():\n    print(f'  {name}:')\n    print(f'    Shape: {param.grad.shape}')\n    print(f'    Gradient norm: {param.grad.norm():.4f}')\n    print(f'    Max gradient: {param.grad.abs().max():.4f}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Gradient Clipping — Gradient Taming",
+      "icon": "✂️",
+      "explanation": "কখনো gradient অনেক বড় হইয়া যায় (exploding gradient) — training unstable হইয়া পড়ে। Gradient clipping-এ gradient vector-এর magnitude একটা threshold-এর বেশি হইলে scale down কইরা ফেলা হয়। Direction same থাকে, শুধু magnitude limit করা হয়।",
+      "realExample": "Transformer model training-এ gradient clipping (max norm 1.0) almost always ব্যবহার হয় — ছাড়া training diverge হইয়া যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nmodel = nn.Sequential(\n    nn.Linear(10, 20),\n    nn.ReLU(),\n    nn.Linear(20, 1)\n)\n\n# Simulate training step\nx = torch.randn(1, 10)\ntarget = torch.tensor([[100.0]])  # big target = big loss = big gradient\noutput = model(x)\nloss = nn.MSELoss()(output, target)\nloss.backward()\n\n# Gradient BEFORE clipping\ngrad_norm_before = torch.nn.utils.clip_grad_norm_(\n    model.parameters(), max_norm=float('inf'))  # just measure\n\nprint(f'Gradient norm BEFORE clipping: {grad_norm_before:.4f}')\n\n# Apply gradient clipping\nmax_norm = 1.0\nloss.backward()  # recompute\ngrad_norm_after = torch.nn.utils.clip_grad_norm_(\n    model.parameters(), max_norm=max_norm)\n\nprint(f'Gradient norm AFTER clipping (max={max_norm}): '\n      f'{grad_norm_after:.4f}')\n\n# Check clipped gradient\nfor name, p in model.named_parameters():\n    if p.grad is not None:\n        print(f'  {name} grad norm: {p.grad.norm():.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Gradient-based Optimization Landscape",
+      "icon": "🏔️",
+      "explanation": "Gradient zero (∇L = 0) হইলে critical point — minimum, maximum, বা saddle point হইতে পারে। ML-এ high-dimensional space-এ saddle point minimum-এর চেয়ে অনেক বেশি common! SGD-র noise saddle point escape করতে help করে।",
+      "realExample": "Deep network-এর loss landscape-এ true local minimum rare — বেশিরভাগ critical point saddle point। Momentum optimizer এইগুলা থেকে escape করতে সাহায্য করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Critical points: where gradient = 0\n\n# 1. Minimum: f(x,y) = x^2 + y^2\ndef f_min(x, y): return x**2 + y**2\ndef grad_min(x, y): return np.array([2*x, 2*y])\n\n# 2. Saddle point: f(x,y) = x^2 - y^2\ndef f_saddle(x, y): return x**2 - y**2\ndef grad_saddle(x, y): return np.array([2*x, -2*y])\n\n# At origin (0,0) — gradient is zero for both!\nprint('At origin (0, 0):')\nprint(f'  Minimum:      grad = {grad_min(0, 0)}, f = {f_min(0, 0)}')\nprint(f'  Saddle point:  grad = {grad_saddle(0, 0)}, f = {f_saddle(0, 0)}')\n\n# Near origin — check if it's actually minimum\nprint('\\nNear origin check:')\nfor dx, dy in [(0.1, 0), (0, 0.1), (0.1, 0.1)]:\n    print(f'  Minimum f({dx},{dy}) = {f_min(dx,dy):.3f} (always > 0, true min)')\n    print(f'  Saddle  f({dx},{dy}) = {f_saddle(dx,dy):.3f} (can be negative!)')\n\n# In high-D, saddle points dominate!\ndims = [10, 100, 1000]\nfor d in dims:\n    # Random Hessian eigenvalues\n    eigenvalues = np.random.randn(d)\n    n_positive = np.sum(eigenvalues > 0)\n    print(f'\\n{d}D: {n_positive}/{d} positive eigenvalues '\n          f'(P(all positive) ~ {0.5**d:.2e})')"
+      }
+    }
+  ],
+  "memoryTrick": "Gradient = বান্দরবানের পাহাড়ে compass! তোরে বলে দেয় সবচেয়ে খাড়া ঢাল কোন দিকে (direction) আর কত খাড়া (magnitude)। চূড়ায় উঠতে চাইলে gradient-এর দিকে যাও, নামতে চাইলে উল্টা দিকে (gradient descent)!",
+  "tags": ["gradient", "nabla", "partial-derivative-vector", "steepest-ascent", "loss-surface", "gradient-clipping"],
+  "prev": "chain-rule",
+  "next": "gradient-descent"
+}

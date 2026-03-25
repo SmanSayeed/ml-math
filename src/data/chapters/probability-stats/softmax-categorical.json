@@ -1,0 +1,137 @@
+{
+  "slug": "softmax-categorical",
+  "title": "Softmax ও Categorical Distribution — বহু-শ্রেণি সম্ভাবনা",
+  "titleEn": "Softmax and Categorical Distribution — Multi-class Probability",
+  "category": "probability-stats",
+  "order": 11,
+  "readTime": 15,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🍛",
+    "title": "পুরান ঢাকার খাবার মেনু আর পছন্দের গল্প",
+    "content": "গুরু পুরান ঢাকায় হাজীর বিরিয়ানিতে ঢুকলো। মেনুতে আছে — কাচ্চি বিরিয়ানি, তেহারি, মোরগ পোলাও, বোরহানি। গুরু ভাবতেছে কোনটা খাবে। ওয়েটার আইসা কয়, 'ভাই কী খাইবেন?' গুরু কয়, 'দেখো ভাই, আমার পেটে এখন একটা neural network চলতেছে। কাচ্চির score 5.0, তেহারির 3.0, মোরগ পোলাও এর 2.0, বোরহানির 1.0। এখন softmax দিয়া probability বাইর করি!' ওয়েটার হতভম্ব হইয়া তাকায়া আছে। গুরু ক্যালকুলেটর বাইর কইরা হিসাব করে — 'কাচ্চি 84.2%, তেহারি 11.4%, মোরগ পোলাও 4.2%, বোরহানি 1.5%। বুঝলা? আমার পেট ৮৪% sure কাচ্চি চায়!' ওয়েটার কয়, 'ভাই শুধু order দেন, probability লাগবো না!' গুরু হাসতে হাসতে কয়, 'এইটাই তো Categorical Distribution — অনেকগুলা option থেইকা একটা বাছাই!'",
+    "reveal": "Softmax function যেকোনো real number এর vector কে probability distribution এ convert করে — সব value positive হয় আর তাদের sum = 1। Categorical Distribution হইলো k টা category এর মধ্যে একটা select করার distribution যেখানে প্রতিটা category র নিজস্ব probability আছে। Deep Learning এর multi-class classification এ Softmax + Categorical combination সবচেয়ে বেশি ব্যবহৃত!"
+  },
+  "definition": {
+    "content": "Softmax function হইলো একটা mathematical function যেটা K-dimensional real vector কে probability distribution এ transform করে। Categorical Distribution (বা Generalized Bernoulli) হইলো K টা category তে discrete probability distribution যেখানে প্রতিটা category i এর probability p_i আর সব p_i এর sum = 1।",
+    "formula": "\\text{Softmax: } \\sigma(z_i) = \\frac{e^{z_i}}{\\sum_{j=1}^{K} e^{z_j}} \\\\ \\text{Categorical: } P(X=i) = p_i, \\quad \\sum_{i=1}^{K} p_i = 1",
+    "formulaLabel": "Softmax Function ও Categorical PMF"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Softmax Function কী করে?",
+        "content": "Softmax নেয় একটা raw score vector (logits) আর বাইর করে probability vector। প্রতিটা score কে e^z করে positive বানায়, তারপর total sum দিয়া ভাগ করে normalize করে। বড় score = বড় probability।",
+        "formula": "\\sigma(z_i) = \\frac{e^{z_i}}{\\sum_{j=1}^{K} e^{z_j}}"
+      },
+      {
+        "title": "কেন e^z ব্যবহার করি?",
+        "content": "e^z এর তিনটা magical property আছে: (১) সবসময় positive — negative score ও positive হয়ে যায়, (২) monotonically increasing — বড় input = বড় output, (৩) difference amplify করে — score এর ছোটো পার্থক্যও probability তে বড় পার্থক্য তৈরি করে।",
+        "formula": "e^{-2} = 0.135, \\; e^{0} = 1, \\; e^{2} = 7.389, \\; e^{5} = 148.4"
+      },
+      {
+        "title": "Categorical Distribution",
+        "content": "Bernoulli distribution এর generalization — Bernoulli তে ২টা category (0/1), Categorical তে K টা category। প্রতিটা trial এ ঠিক একটা category select হয়। Dice roll (K=6), language model next word prediction (K=vocab size) — সব Categorical।",
+        "formula": "P(X = i) = p_i, \\quad i \\in \\{1, 2, ..., K\\}, \\quad \\sum p_i = 1"
+      },
+      {
+        "title": "Temperature Scaling",
+        "content": "Softmax এ temperature parameter T দিয়া distribution কে sharp বা smooth করা যায়। T < 1 হইলে confident (sharp) distribution, T > 1 হইলে uncertain (flat) distribution, T -> 0 হইলে argmax, T -> infinity হইলে uniform।",
+        "formula": "\\sigma(z_i; T) = \\frac{e^{z_i / T}}{\\sum_{j=1}^{K} e^{z_j / T}}"
+      },
+      {
+        "title": "Cross-Entropy Loss",
+        "content": "Categorical distribution এর সাথে সবচেয়ে বেশি ব্যবহৃত loss function হইলো Cross-Entropy। True label এর one-hot vector y আর predicted probability p এর মধ্যে cross-entropy measure করে model কতটা ভুল করতেছে।",
+        "formula": "H(y, p) = -\\sum_{i=1}^{K} y_i \\log(p_i)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Image Classification Softmax",
+    "problem": "একটা image classifier তিনটা class এ classify করে: cat, dog, bird। Model এর logit output হইলো z = [2.0, 1.0, 0.1]। Softmax probability বাইর করো।",
+    "steps": [
+      {
+        "label": "e^z হিসাব করো",
+        "content": "প্রতিটা logit এর exponential নাও: e^2.0 = 7.389, e^1.0 = 2.718, e^0.1 = 1.105",
+        "formula": "e^{2.0} = 7.389, \\; e^{1.0} = 2.718, \\; e^{0.1} = 1.105"
+      },
+      {
+        "label": "Sum হিসাব করো",
+        "content": "সব exponential যোগ করো: 7.389 + 2.718 + 1.105 = 11.212",
+        "formula": "\\sum e^{z_j} = 7.389 + 2.718 + 1.105 = 11.212"
+      },
+      {
+        "label": "Probability বাইর করো",
+        "content": "P(cat) = 7.389/11.212 = 0.659, P(dog) = 2.718/11.212 = 0.242, P(bird) = 1.105/11.212 = 0.099",
+        "formula": "P(\\text{cat}) = 0.659, \\; P(\\text{dog}) = 0.242, \\; P(\\text{bird}) = 0.099"
+      },
+      {
+        "label": "Verify — sum = 1?",
+        "content": "0.659 + 0.242 + 0.099 = 1.000 — ঠিক আছে! Model 65.9% confident যে এইটা cat।",
+        "formula": "0.659 + 0.242 + 0.099 = 1.000 \\; \\checkmark"
+      }
+    ],
+    "answer": "Softmax probabilities: Cat = 65.9%, Dog = 24.2%, Bird = 9.9%। Model সবচেয়ে বেশি confident যে ছবিতে cat আছে। এই probabilities থেইকা Categorical distribution sample করলে বেশিরভাগ সময় 'cat' আসবে।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Multi-class Image Classification",
+      "icon": "🖼️",
+      "explanation": "CNN/Vision Transformer এর last layer এ softmax দিয়া K টা class এর probability বাইর করা হয়। ImageNet এ ১০০০ class, CIFAR-10 এ ১০ class — সব ক্ষেত্রে softmax + categorical।",
+      "realExample": "Google Photos auto-tagging, Tesla Autopilot object detection, medical image diagnosis — সব multi-class classification softmax use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef softmax(logits):\n    \"\"\"Numerically stable softmax\"\"\"\n    exp_shifted = np.exp(logits - np.max(logits))  # subtract max for stability\n    return exp_shifted / exp_shifted.sum()\n\n# Image classifier logits for 5 classes\nclasses = ['cat', 'dog', 'bird', 'fish', 'horse']\nlogits = np.array([2.5, 1.2, 0.3, -0.5, 0.8])\nprobs = softmax(logits)\n\nprint(\"Class Probabilities:\")\nfor cls, prob in zip(classes, probs):\n    bar = '#' * int(prob * 50)\n    print(f\"  {cls:6s}: {prob:.3f} {bar}\")\n\nprint(f\"\\nPredicted class: {classes[np.argmax(probs)]}\")\nprint(f\"Confidence: {probs.max():.1%}\")"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Language Model Next Token Prediction",
+      "icon": "📝",
+      "explanation": "GPT/LLM এ প্রতিটা position এ vocabulary র সব word এর score (logits) বাইর হয়, তারপর softmax দিয়া probability করা হয়। এই Categorical distribution থেইকা sample কইরা next token generate হয়।",
+      "realExample": "ChatGPT, Gemini — সব language model softmax + categorical sampling use করে text generate করতে। Temperature parameter দিয়া creativity control করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef softmax_with_temperature(logits, temperature=1.0):\n    \"\"\"Softmax with temperature scaling\"\"\"\n    scaled = logits / temperature\n    exp_scaled = np.exp(scaled - np.max(scaled))\n    return exp_scaled / exp_scaled.sum()\n\n# Language model: next word prediction\nvocab = ['the', 'a', 'cat', 'dog', 'sat', 'ran', 'on', 'mat']\nlogits = np.array([3.0, 1.5, 4.2, 0.8, 2.1, 0.3, 1.8, 0.5])\n\nprint(\"Temperature effects on sampling:\")\nfor temp in [0.5, 1.0, 2.0]:\n    probs = softmax_with_temperature(logits, temp)\n    print(f\"\\nT={temp}: top-3 = \", end=\"\")\n    top3 = np.argsort(probs)[-3:][::-1]\n    for idx in top3:\n        print(f\"{vocab[idx]}({probs[idx]:.3f}) \", end=\"\")\n    \n    # Sample from categorical distribution\n    samples = np.random.choice(vocab, size=5, p=probs)\n    print(f\"\\n  Samples: {samples}\")"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Sentiment Analysis (Multi-class)",
+      "icon": "😊",
+      "explanation": "Text sentiment কে multiple category তে classify করা — positive, negative, neutral, mixed। Softmax output থেইকা সবচেয়ে বেশি probability ওয়ালা class select করা হয়।",
+      "realExample": "Amazon product review analysis, Twitter sentiment monitoring, customer feedback classification — সব multi-class sentiment analysis।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef softmax(z):\n    exp_z = np.exp(z - np.max(z))\n    return exp_z / exp_z.sum()\n\n# Sentiment Analysis Output\nsentiments = ['Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive']\n\n# Simulate model outputs for different reviews\nreviews = {\n    'Great product!': np.array([-2.0, -1.5, 0.1, 2.5, 3.8]),\n    'Terrible waste':  np.array([3.5, 2.0, -0.5, -1.5, -2.0]),\n    'It is okay':      np.array([-0.5, 0.3, 2.8, 0.5, -0.3]),\n}\n\nfor review, logits in reviews.items():\n    probs = softmax(logits)\n    pred_idx = np.argmax(probs)\n    print(f\"Review: '{review}'\")\n    print(f\"  Prediction: {sentiments[pred_idx]} ({probs[pred_idx]:.1%})\")\n    print(f\"  All probs: {dict(zip(sentiments, [f'{p:.1%}' for p in probs]))}\")\n    print()"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Reinforcement Learning Action Selection",
+      "icon": "🎮",
+      "explanation": "RL agent এর policy network action logits output করে, softmax দিয়া action probabilities বাইর করে, তারপর Categorical distribution থেইকা sample কইরা action select করে।",
+      "realExample": "AlphaGo/AlphaZero — board position দেখে softmax probability দিয়া next move select করে। Atari game playing agents ও softmax policy use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef softmax(z):\n    exp_z = np.exp(z - np.max(z))\n    return exp_z / exp_z.sum()\n\n# RL Agent: Action selection\nactions = ['up', 'down', 'left', 'right', 'jump', 'shoot']\naction_logits = np.array([1.2, 0.5, 0.8, 2.1, -0.3, 1.5])\n\n# Convert to action probabilities\naction_probs = softmax(action_logits)\n\nprint(\"Action Probabilities:\")\nfor action, prob in zip(actions, action_probs):\n    bar = '#' * int(prob * 40)\n    print(f\"  {action:6s}: {prob:.3f} {bar}\")\n\n# Categorical sampling (exploration)\nnp.random.seed(42)\nepisode_actions = np.random.choice(\n    actions, size=10, p=action_probs\n)\nprint(f\"\\nEpisode actions: {list(episode_actions)}\")\n\n# Greedy (exploitation)\ngreedy_action = actions[np.argmax(action_probs)]\nprint(f\"Greedy action: {greedy_action}\")"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Cross-Entropy Loss for Training",
+      "icon": "📉",
+      "explanation": "Categorical distribution এর negative log-likelihood হইলো Cross-Entropy Loss — deep learning এর সবচেয়ে common classification loss। True label আর predicted probability এর মধ্যে 'distance' measure করে।",
+      "realExample": "প্রতিটা classification neural network — ResNet, BERT, GPT — সবাই cross-entropy loss দিয়া train হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef softmax(z):\n    exp_z = np.exp(z - np.max(z))\n    return exp_z / exp_z.sum()\n\ndef cross_entropy_loss(true_label, predicted_probs):\n    \"\"\"Categorical cross-entropy for single sample\"\"\"\n    return -np.log(predicted_probs[true_label] + 1e-10)\n\n# Training example\nclasses = ['cat', 'dog', 'bird']\ntrue_label = 0  # cat\n\n# Good prediction vs Bad prediction\ngood_logits = np.array([3.5, 0.5, 0.1])  # high score for cat\nbad_logits = np.array([0.2, 3.0, 0.5])   # high score for dog\n\ngood_probs = softmax(good_logits)\nbad_probs = softmax(bad_logits)\n\nprint(f\"True label: {classes[true_label]}\")\nprint(f\"\\nGood prediction: {dict(zip(classes, [f'{p:.3f}' for p in good_probs]))}\")\nprint(f\"Loss: {cross_entropy_loss(true_label, good_probs):.4f}\")\n\nprint(f\"\\nBad prediction: {dict(zip(classes, [f'{p:.3f}' for p in bad_probs]))}\")\nprint(f\"Loss: {cross_entropy_loss(true_label, bad_probs):.4f}\")\n\nprint(\"\\n=> Lower loss = better prediction!\")"
+      }
+    }
+  ],
+  "memoryTrick": "Softmax = 'সফট-ম্যাক্স' — hard max (শুধু সবচেয়ে বড়টা নেয়) এর soft version (সবাইকে chance দেয়, বড়টা বেশি পায়)! Categorical = 'ক্যাটাগরি-ক্যাল' — অনেক category থেইকা call করো একটা! হাজীর বিরিয়ানিতে মেনু দেখে order দেওয়া = Categorical sampling!",
+  "tags": ["softmax", "categorical-distribution", "multi-class-classification", "cross-entropy", "temperature-scaling", "language-model", "deep-learning"],
+  "prev": "uniform-distribution",
+  "next": "mle"
+}

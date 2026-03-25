@@ -1,0 +1,126 @@
+{
+  "slug": "mutual-information",
+  "title": "Mutual Information — পারস্পরিক তথ্য",
+  "titleEn": "Mutual Information",
+  "category": "information-theory",
+  "order": 5,
+  "readTime": 10,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🤝",
+    "title": "রিফাত আর সামিমের Shared Knowledge",
+    "content": "ধর তোর দুই বন্ধু রিফাত আর সামিম বসুন্ধরা মলে ঘুরতেছে। রিফাত জানে কোন দোকানে কোন জিনিস সস্তা, সামিম জানে কোন দোকানে quality ভালো। দুইজন আলাদা আলাদা information রাখে, কিন্তু কিছু information common — দুইজনেই জানে 'আড়ং'-এ quality ভালো আবার দাম reasonable। এই shared knowledge-টুকু হইল mutual information। রিফাত-এর কাছ থেকে তুই যা জানলি, তার কতটুকু সামিম-এর কাছ থেকেও জানতে পারতি — সেইটাই MI!",
+    "reveal": "দুইটা random variable-এর মধ্যে কতটুকু shared information আছে — এইটাই Mutual Information! গুরু বলে — 'MI বেশি মানে একটা জানলে অন্যটা সম্পর্কে বেশি idea পাবি। zero মানে দুইটা completely independent!'"
+  },
+  "definition": {
+    "content": "Mutual Information I(X;Y) measure করে X জানলে Y সম্পর্কে কতটুকু uncertainty কমে (এবং vice versa)। এইটা symmetric — I(X;Y) = I(Y;X)। Independent হইলে MI = 0।",
+    "formula": "I(X;Y) = \\sum_{x,y} p(x,y) \\log \\frac{p(x,y)}{p(x)p(y)}",
+    "formulaLabel": "Mutual Information — X আর Y-এর shared information"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Entropy দিয়া MI বোঝো",
+        "content": "MI = X-এর entropy - X given Y-এর conditional entropy। মানে Y জানার পরে X-এর uncertainty কতটুকু কমলো। রিফাত (X) কী জানে তার uncertainty — সামিম (Y) কে জিজ্ঞেস করার পর কতটুকু কমলো।",
+        "formula": "I(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)"
+      },
+      {
+        "title": "KL Divergence হিসাবে MI",
+        "content": "MI হইল joint distribution P(X,Y) আর marginal-এর product P(X)P(Y)-এর মধ্যে KL Divergence। Joint যদি product-এর সমান হয় তাইলে X,Y independent — MI = 0।",
+        "formula": "I(X;Y) = D_{KL}(P(X,Y) \\| P(X) \\cdot P(Y))"
+      },
+      {
+        "title": "Correlation-এর চেয়ে Powerful",
+        "content": "Pearson correlation শুধু linear relationship ধরে। কিন্তু MI যেকোনো relationship ধরতে পারে — linear, nonlinear, complex। তাই ML-এ feature selection-এ MI বেশি reliable।"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ঢাকায় জ্যাম আর আবহাওয়ার MI",
+    "problem": "ঢাকায় বৃষ্টি (R) আর জ্যাম (J)-এর joint distribution: P(R=1,J=1)=0.3, P(R=1,J=0)=0.1, P(R=0,J=1)=0.2, P(R=0,J=0)=0.4। I(R;J) কত?",
+    "steps": [
+      {
+        "label": "Step 1: Marginals বের করো",
+        "content": "P(R=1)=0.4, P(R=0)=0.6, P(J=1)=0.5, P(J=0)=0.5",
+        "formula": "P(R=1) = 0.3 + 0.1 = 0.4, \\quad P(J=1) = 0.3 + 0.2 = 0.5"
+      },
+      {
+        "label": "Step 2: প্রতিটা term",
+        "content": "p(x,y) × log(p(x,y) / (p(x)×p(y))) — চারটা combination",
+        "formula": "0.3 \\log\\frac{0.3}{0.4 \\times 0.5} + 0.1 \\log\\frac{0.1}{0.4 \\times 0.5} + 0.2 \\log\\frac{0.2}{0.6 \\times 0.5} + 0.4 \\log\\frac{0.4}{0.6 \\times 0.5}"
+      },
+      {
+        "label": "Step 3: Calculate",
+        "content": "Natural log use করি",
+        "formula": "= 0.3 \\ln(1.5) + 0.1 \\ln(0.5) + 0.2 \\ln(0.667) + 0.4 \\ln(1.333)"
+      },
+      {
+        "label": "Step 4: যোগ করো",
+        "content": "সব term যোগ করো",
+        "formula": "= 0.122 + (-0.069) + (-0.081) + 0.115 = 0.087 \\text{ nats}"
+      }
+    ],
+    "answer": "I(R;J) ≈ 0.087 nats। Positive মানে বৃষ্টি আর জ্যামের মধ্যে কিছু shared information আছে — বৃষ্টি জানলে জ্যাম predict করতে কিছুটা সুবিধা হয়। তবে value খুব বেশি না, কারণ ঢাকায় বৃষ্টি ছাড়াও জ্যাম থাকে!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Feature Selection (MI-based)",
+      "icon": "🎯",
+      "explanation": "Scikit-learn-এ mutual_info_classif/mutual_info_regression দিয়া feature ranking করা যায়। Correlation-এর চেয়ে ভালো কারণ nonlinear relationships-ও ধরে।",
+      "realExample": "E-commerce recommendation-এ user-এর 200+ features আছে। MI-based selection বলে — purchase_history, browse_time, cart_additions top 3 informative feature।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.feature_selection import mutual_info_classif\nfrom sklearn.datasets import make_classification\nimport numpy as np\n\n# Synthetic data — কিছু feature informative, কিছু noise\nX, y = make_classification(\n    n_samples=1000, n_features=10,\n    n_informative=3, n_redundant=2,\n    random_state=42\n)\n\n# MI-based feature importance\nmi = mutual_info_classif(X, y, random_state=42)\n\nprint('Feature MI scores:')\nfor i, score in enumerate(mi):\n    marker = ' ★' if score > 0.1 else ''\n    print(f'  Feature {i}: {score:.4f}{marker}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Clustering Evaluation (NMI)",
+      "icon": "📊",
+      "explanation": "Clustering কতটা ভালো হইছে সেইটা measure করতে Normalized Mutual Information (NMI) use হয়। Predicted clusters আর actual labels-এর মধ্যে MI calculate করে normalize করা হয়।",
+      "realExample": "Customer segmentation-এ K-means clustering-এর output আর actual customer categories-এর NMI = 0.85 মানে clustering অনেক ভালো।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.metrics import normalized_mutual_info_score\nfrom sklearn.cluster import KMeans\nfrom sklearn.datasets import load_iris\n\niris = load_iris()\nX, y_true = iris.data, iris.target\n\n# K-means clustering\nkmeans = KMeans(n_clusters=3, random_state=42, n_init=10)\ny_pred = kmeans.fit_predict(X)\n\n# NMI — 1.0 = perfect, 0.0 = random\nnmi = normalized_mutual_info_score(y_true, y_pred)\nprint(f'NMI Score: {nmi:.4f}')\n# 0.75+ হইলে clustering ভালো হইছে"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Representation Learning (InfoNCE)",
+      "icon": "🧠",
+      "explanation": "Contrastive learning-এ (SimCLR, CLIP) InfoNCE loss use হয় — এইটা MI-র lower bound maximize করে। Same image-এর দুইটা augmented view-এর MI maximize করলে ভালো representation শেখা যায়।",
+      "realExample": "CLIP model image আর text-এর MI maximize করে — তাই 'a dog playing' text দিলে related image খুঁজে পায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\ndef info_nce_loss(features_a, features_b, temperature=0.07):\n    \"\"\"InfoNCE Loss — MI lower bound maximize করে\"\"\"\n    # Normalize features\n    a = F.normalize(features_a, dim=1)\n    b = F.normalize(features_b, dim=1)\n    \n    # Similarity matrix\n    logits = torch.mm(a, b.T) / temperature\n    \n    # Positive pairs = diagonal\n    labels = torch.arange(len(a))\n    \n    # Cross-entropy on similarity\n    loss = F.cross_entropy(logits, labels)\n    return loss\n\n# Example: batch of 4, feature dim = 128\nview1 = torch.randn(4, 128)\nview2 = torch.randn(4, 128)\nloss = info_nce_loss(view1, view2)\nprint(f'InfoNCE Loss: {loss.item():.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Information Bottleneck",
+      "icon": "🔬",
+      "explanation": "Deep learning-এ Information Bottleneck theory বলে — network-এর middle layers input-এর MI কমায় (compression) কিন্তু output-এর সাথে MI রাখে (relevant info)। এইটা generalization explain করে।",
+      "realExample": "ResNet-এর deeper layers-এ input image-এর সাথে MI কমে কিন্তু label-এর সাথে MI বাড়ে — noise বাদ দিয়া essential features রাখে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.feature_selection import mutual_info_classif\n\ndef estimate_layer_mi(layer_output, inputs, labels):\n    \"\"\"Layer-এর MI estimate করো input ও labels-এর সাথে\"\"\"\n    mi_input = mutual_info_classif(\n        layer_output, inputs[:, 0],  # MI with input\n        random_state=42\n    ).mean()\n    mi_label = mutual_info_classif(\n        layer_output, labels,  # MI with label\n        random_state=42\n    ).mean()\n    return mi_input, mi_label\n\n# Concept demonstration\nprint('Information Bottleneck:')\nprint('  Layer 1: High MI(X,T), Medium MI(T,Y)')\nprint('  Layer 3: Medium MI(X,T), High MI(T,Y)')\nprint('  Layer 5: Low MI(X,T), High MI(T,Y)')\nprint('  → Network compresses input, keeps label info!')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "MI-based Data Augmentation Selection",
+      "icon": "🔄",
+      "explanation": "কোন data augmentation strategy ভালো সেইটা MI দিয়া measure করা যায়। Augmented data আর original data-এর MI বেশি হইলে augmentation meaningful information রাখতেছে।",
+      "realExample": "Medical imaging-এ rotation augmentation-এর MI বেশি (disease feature রাখে) কিন্তু color jitter-এর MI কম (important color info হারায়)।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.metrics import mutual_info_score\n\ndef augmentation_quality(original_labels, augmented_predictions):\n    \"\"\"Augmentation quality MI দিয়া measure করো\"\"\"\n    mi = mutual_info_score(original_labels, augmented_predictions)\n    return mi\n\n# Original labels\noriginal = np.array([0, 1, 2, 1, 0, 2, 1, 0, 2, 1])\n\n# Good augmentation — labels mostly same\ngood_aug = np.array([0, 1, 2, 1, 0, 2, 1, 0, 2, 0])\n# Bad augmentation — labels random\nbad_aug = np.array([2, 0, 1, 0, 2, 1, 0, 2, 0, 2])\n\nprint(f'Good aug MI: {augmentation_quality(original, good_aug):.4f}')\nprint(f'Bad aug MI: {augmentation_quality(original, bad_aug):.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Mutual Information = রিফাত আর সামিমের shared knowledge। দুইজনই 'আড়ং' সম্পর্কে জানে — এইটা MI। যদি দুইজন সম্পূর্ণ আলাদা জিনিস জানতো, MI = 0!",
+  "tags": ["mutual-information", "mi", "nmi", "infonce", "information-bottleneck", "feature-selection"],
+  "prev": "information-gain",
+  "next": "loss-functions"
+}

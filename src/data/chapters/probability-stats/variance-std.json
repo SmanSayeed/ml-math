@@ -1,0 +1,120 @@
+{
+  "slug": "variance-std",
+  "title": "Variance ও Standard Deviation — বিচ্যুতি",
+  "titleEn": "Variance and Standard Deviation",
+  "category": "probability-stats",
+  "order": 6,
+  "readTime": 13,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "📝",
+    "title": "পরীক্ষার মার্কসের ছড়াছড়ি",
+    "content": "ধর ভাই, ঢাকা কলেজে দুইটা section-এ Math পরীক্ষা হইল। Section A-র ফলাফল: ৭০, ৭২, ৬৮, ৭১, ৬৯ — সবার মার্কস কাছাকাছি, average ৭০। Section B-র ফলাফল: ৩০, ৯৫, ৫০, ৮৫, ৯০ — average ও ৭০! দুই section-র average same, কিন্তু তুই বলতেই পারবি — Section B-তে ছেলেমেয়েদের মধ্যে অনেক তফাৎ! কেউ মেধাবী, কেউ পুরা ফেল। গুরু বলল 'Average same হইলেই সব same না — spread টা দেখতে হবে!'",
+    "reveal": "এইটাই Variance আর Standard Deviation, মামা! Average বলে data-র center কোথায়, কিন্তু Variance বলে data কতটা ছড়ানো-ছিটানো। Section A-র variance কম (সবাই গাদাগাদি), Section B-র variance বেশি (ছড়িয়ে আছে)। Standard Deviation = √Variance — original unit-এ মাপ দেয়। ML-এ variance বুঝা mandatory, না হইলে model-এর behavior বুঝবি না!"
+  },
+  "definition": {
+    "content": "Variance Var(X) হইল random variable X-এর values তার mean থেকে কতদূরে ছড়ানো সেইটার measure। প্রতিটা deviation-এর square-এর expected value। Standard Deviation σ হইল Variance-এর square root — original unit-এ spread বুঝায়।",
+    "formula": "\\text{Var}(X) = E[(X - \\mu)^2] = E[X^2] - (E[X])^2, \\quad \\sigma = \\sqrt{\\text{Var}(X)}",
+    "formulaLabel": "Variance ও Standard Deviation — ছড়ানোর পরিমাপ"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Variance কেন Square করি?",
+        "content": "Mean থেকে deviation নিলে কিছু positive (উপরে) আর কিছু negative (নিচে) — যোগ করলে cancel হইয়া ০ হয়! তাই square করি — সব positive হইয়া যায়। Section A: deviations = 0, 2, -2, 1, -1 → যোগ = 0। কিন্তু squares = 0, 4, 4, 1, 1 → average = 2!",
+        "formula": "E[X - \\mu] = 0 \\text{ (always!)}, \\quad E[(X - \\mu)^2] \\neq 0"
+      },
+      {
+        "title": "Shortcut Formula",
+        "content": "Var(X) = E[X²] - (E[X])² — এই shortcut formula computation-এ অনেক সুবিধা। E[X²] বাইর কর, E[X] বাইর কর, square কর, বিয়োগ কর — ব্যাস! পুরান ঢাকার calculator-এ করা যায়!",
+        "formula": "\\text{Var}(X) = E[X^2] - \\mu^2"
+      },
+      {
+        "title": "Variance-এর Properties",
+        "content": "Var(aX + b) = a²Var(X) — constant add করলে variance change হয় না (মার্কসে ৫ grace দিলে spread same থাকে)। কিন্তু multiply করলে square হয়ে যায়! আর independent X, Y-এর জন্য Var(X+Y) = Var(X) + Var(Y)।",
+        "formula": "\\text{Var}(aX + b) = a^2 \\text{Var}(X), \\quad \\text{Var}(X + Y) = \\text{Var}(X) + \\text{Var}(Y) \\text{ (if independent)}"
+      },
+      {
+        "title": "Standard Deviation কেন বেশি ব্যবহার হয়?",
+        "content": "Variance-র unit squared (মার্কস² — কী জিনিস!)। Standard deviation = √Variance, তাই unit আবার original-এ ফিরে আসে। σ = 5 মানে data mean থেকে গড়ে ৫ মার্কস দূরে। ঢাকায় তাপমাত্রা σ = 3°C মানে গড় থেকে ±৩ ডিগ্রি ওঠানামা করে।",
+        "formula": "\\sigma = \\sqrt{\\text{Var}(X)}, \\quad \\text{unit of } \\sigma = \\text{unit of } X"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "দুই Section-এর Marks তুলনা",
+    "problem": "Section A: [70, 72, 68, 71, 69], Section B: [30, 95, 50, 85, 90]। দুইটারই mean 70। Variance আর Standard Deviation বাইর কর এবং compare কর।",
+    "steps": [
+      {
+        "label": "Step 1: Section A-র Variance",
+        "content": "Mean = 70। Deviations: 0, 2, -2, 1, -1। Squared deviations-এর average।",
+        "formula": "\\text{Var}_A = \\frac{0^2 + 2^2 + (-2)^2 + 1^2 + (-1)^2}{5} = \\frac{0+4+4+1+1}{5} = 2.0"
+      },
+      {
+        "label": "Step 2: Section B-র Variance",
+        "content": "Mean = 70। Deviations: -40, 25, -20, 15, 20। বড় বড় deviations!",
+        "formula": "\\text{Var}_B = \\frac{(-40)^2 + 25^2 + (-20)^2 + 15^2 + 20^2}{5} = \\frac{1600+625+400+225+400}{5} = 650.0"
+      },
+      {
+        "label": "Step 3: Standard Deviations",
+        "content": "Square root নিয়া original unit-এ ফিরি",
+        "formula": "\\sigma_A = \\sqrt{2.0} \\approx 1.41, \\quad \\sigma_B = \\sqrt{650.0} \\approx 25.50"
+      },
+      {
+        "label": "Step 4: তুলনা",
+        "content": "Section A: σ ≈ 1.4 মার্কস (সবাই mean-এর ±2 এর মধ্যে)। Section B: σ ≈ 25.5 মার্কস (বিশাল spread!) — দুইটার mean same, কিন্তু variance বলে আসল গল্প!"
+      }
+    ],
+    "answer": "Section A: Var=2, σ≈1.41। Section B: Var=650, σ≈25.50। Section B-র ছাত্রদের মধ্যে বিশাল তারতম্য — কেউ genius, কেউ struggling। Variance ছাড়া এই তফাৎ ধরাই যাইত না!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Feature Scaling (Standardization)",
+      "icon": "📏",
+      "explanation": "ML-এ feature standardize করতে হয় — mean বিয়োগ করে standard deviation দিয়া ভাগ। z = (x - μ)/σ। এইভাবে সব feature same scale-এ আসে। না করলে বড় value-র feature model-কে dominate করে!",
+      "realExample": "Scikit-learn-এর StandardScaler ঠিক এই কাজ করে। Income (লক্ষ টাকা) আর age (বছর) — scale বিশাল different, standardize করলে দুইটাই mean=0, σ=1 হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.preprocessing import StandardScaler\nimport numpy as np\n\n# ঢাকার বাসার data\n# Feature 1: area (sqft), Feature 2: rooms\nX = np.array([\n    [1200, 3], [800, 2], [2000, 5],\n    [1500, 4], [900, 2]\n])\n\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n\nprint('Before scaling:')\nprint(f'  Area: mean={X[:,0].mean():.0f}, std={X[:,0].std():.0f}')\nprint(f'  Rooms: mean={X[:,1].mean():.1f}, std={X[:,1].std():.1f}')\n\nprint('\\nAfter scaling (z = (x-μ)/σ):')\nprint(f'  Area: mean={X_scaled[:,0].mean():.1f}, std={X_scaled[:,0].std():.1f}')\nprint(f'  Rooms: mean={X_scaled[:,1].mean():.1f}, std={X_scaled[:,1].std():.1f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Batch Normalization",
+      "icon": "🧠",
+      "explanation": "Deep learning-এ Batch Normalization layer প্রতিটা mini-batch-এর mean আর variance calculate করে normalize করে। এইটা training stable করে আর faster convergence দেয়। Internal covariate shift কমায়!",
+      "realExample": "ResNet, EfficientNet — সব modern architecture-এ BatchNorm আছে। Training-এ batch-র μ আর σ ব্যবহার হয়, inference-এ running average।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Batch Normalization: normalize by batch μ and σ\nbn = nn.BatchNorm1d(num_features=4)\n\n# Simulated batch of data (3 samples, 4 features)\nx = torch.tensor([\n    [100.0, 2.0, 50.0, 0.1],\n    [200.0, 5.0, 30.0, 0.9],\n    [150.0, 3.0, 40.0, 0.5]\n])\n\n# Before: different scales\nprint(f'Before BN - mean: {x.mean(0).tolist()}')\nprint(f'Before BN - std: {x.std(0).tolist()}')\n\n# After BatchNorm: each feature → mean≈0, std≈1\nbn.train()\nx_norm = bn(x)\nprint(f'After BN - mean: {x_norm.mean(0).data.tolist()}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Bias-Variance Tradeoff",
+      "icon": "🎯",
+      "explanation": "High variance model মানে training data change করলে prediction অনেক বদলায় — overfitting! Low variance মানে stable prediction। E[Error] = Bias² + Variance। Complex model = low bias, high variance। Simple model = high bias, low variance। Balance-ই key!",
+      "realExample": "Random Forest variance কমায় — অনেক decision tree-র average নেয়। প্রতিটা tree-র variance বেশি, কিন্তু average-র variance কম (Var(mean) = Var(X)/n)।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.tree import DecisionTreeRegressor\nfrom sklearn.ensemble import RandomForestRegressor\n\nnp.random.seed(42)\n\n# Multiple training sets simulate করি\npredictions_tree = []\npredictions_forest = []\n\nfor _ in range(50):\n    X = np.sort(np.random.uniform(0, 10, 50)).reshape(-1, 1)\n    y = np.sin(X).ravel() + np.random.normal(0, 0.3, 50)\n    \n    tree = DecisionTreeRegressor(max_depth=10)\n    forest = RandomForestRegressor(n_estimators=50, max_depth=10)\n    \n    tree.fit(X, y)\n    forest.fit(X, y)\n    \n    X_test = np.array([[5.0]])\n    predictions_tree.append(tree.predict(X_test)[0])\n    predictions_forest.append(forest.predict(X_test)[0])\n\nprint(f'Decision Tree Variance: {np.var(predictions_tree):.4f}')\nprint(f'Random Forest Variance: {np.var(predictions_forest):.4f}')\nprint('Forest-এর variance অনেক কম — ensemble power!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Anomaly Detection",
+      "icon": "🚨",
+      "explanation": "Anomaly = যেই data point mean থেকে অনেক standard deviation দূরে। 3σ rule: mean ± 3σ-র বাইরে গেলে anomaly! Credit card fraud detection-এ transaction amount-র μ আর σ calculate করে unusual transaction ধরে।",
+      "realExample": "Bank-র fraud detection: তোর average spending ৫,০০০ টাকা/দিন, σ = ২,০০০। যদি হঠাৎ ৫০,০০০ টাকার transaction হয় — mean থেকে 22.5σ দূরে — almost certainly fraud!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Anomaly Detection using μ and σ\nnp.random.seed(42)\n\n# Normal transactions (daily spending in টাকা)\nnormal_spending = np.random.normal(5000, 2000, 100)\n\nmu = normal_spending.mean()\nsigma = normal_spending.std()\n\n# New transactions check করি\nnew_transactions = [4500, 6000, 50000, 3000, 25000]\n\nfor t in new_transactions:\n    z_score = (t - mu) / sigma\n    is_anomaly = abs(z_score) > 3  # 3σ rule\n    status = '🚨 ANOMALY!' if is_anomaly else '✅ Normal'\n    print(f'৳{t:>6}: z={z_score:>6.2f} → {status}')\n\nprint(f'\\nμ = ৳{mu:.0f}, σ = ৳{sigma:.0f}')\nprint(f'3σ range: ৳{mu-3*sigma:.0f} to ৳{mu+3*sigma:.0f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Variance মনে রাখ পরীক্ষার মার্কস দিয়া: সবাই ৭০ পাইলে Var = ০ (কোনো spread নাই, সবাই copy করছে?)। কেউ ৩০, কেউ ৯৫ পাইলে Var বিশাল (আসল পরীক্ষা!)। Standard Deviation = √Variance — unit ঠিক করে দেয়। আর ML-এ মনে রাখ: High Variance model = ছেলে পরীক্ষায় কোনোদিন ১০০, কোনোদিন ২০ পায় (unstable!), Low Bias + Low Variance = consistent ভালো ছাত্র!",
+  "tags": ["variance", "standard-deviation", "spread", "standardization", "batch-normalization", "bias-variance", "anomaly-detection"],
+  "prev": "expected-value",
+  "next": "covariance-correlation"
+}

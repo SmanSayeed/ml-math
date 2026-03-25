@@ -1,0 +1,121 @@
+{
+  "slug": "probability-basics",
+  "title": "Probability Basics — সম্ভাবনার শুরু",
+  "titleEn": "Probability Basics",
+  "category": "probability-stats",
+  "order": 1,
+  "readTime": 10,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🏏",
+    "title": "ক্রিকেট টসের গল্প",
+    "content": "ধর ভাই, মিরপুর স্টেডিয়ামে বাংলাদেশ বনাম ভারত ম্যাচ। ক্যাপ্টেন শান্ত ভাই টস করতে গেছে। কয়েন উপরে উড়ল — এখন হয় Head আসবে, না হয় Tail। তুই বন্ধুদের সাথে চায়ের কাপ ধরে বইসা আছিস পুরান ঢাকার চায়ের দোকানে। তোর বন্ধু কালাম বলল 'Head আসবে ১০০%!' তুই বললি 'আরে মিয়া, কয়েন fair হইলে Head আসার chance ৫০-৫০!' কালাম রাগ কইরা বলল 'তুই ক্রিকেট বুঝিস না!' তুই বললি 'ক্রিকেট না, probability বুঝি!'",
+    "reveal": "এইটাই হইল Probability-র basic idea, মামা! কোনো event ঘটার chance কত — সেইটা measure করাই হইল probability। ০ মানে কোনো chance নাই, ১ মানে পাক্কা হবে, আর ০.৫ মানে ৫০-৫০। টসে Head আসার probability = ১/২ = ০.৫। এইটুকু বুঝলে ML-এর দরজায় পা রাখা হইয়া গেল!"
+  },
+  "definition": {
+    "content": "Probability হইল কোনো event ঘটার সম্ভাবনা, যেইটা ০ থেকে ১ এর মধ্যে একটা সংখ্যা। ০ মানে অসম্ভব, ১ মানে নিশ্চিত। Sample space-এর মধ্যে favorable outcomes আর total outcomes-এর ratio দিয়া probability বাইর করা হয়।",
+    "formula": "P(A) = \\frac{\\text{Number of favorable outcomes}}{\\text{Total number of outcomes}} = \\frac{|A|}{|S|}",
+    "formulaLabel": "Classical Probability Formula — অনুকূল ঘটনা ÷ মোট ঘটনা"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Sample Space (S) কী?",
+        "content": "সব possible outcome-এর সেটকে Sample Space বলে। টস করলে S = {Head, Tail} — মাত্র ২টা outcome। ডাইস গড়ালে S = {1, 2, 3, 4, 5, 6} — ৬টা outcome। পুরান ঢাকায় রিকশা ধরলে S = {পাওয়া যাবে, পাওয়া যাবে না, ভাড়া নিয়া তর্ক হবে} — ৩টা outcome!",
+        "formula": "S = \\{\\omega_1, \\omega_2, ..., \\omega_n\\}"
+      },
+      {
+        "title": "Event কী?",
+        "content": "Sample Space-এর যেকোনো subset হইল Event। 'ডাইসে even number আসা' — এইটা একটা event, A = {2, 4, 6}। 'ঢাকায় বৃষ্টি হওয়া' — এইটাও event। Event ঘটলে বলি favorable outcome পাইছি।",
+        "formula": "A \\subseteq S"
+      },
+      {
+        "title": "Probability-র ৩টা Axiom",
+        "content": "কলমগ্রভ নামে এক রুশ গণিতবিদ ৩টা rule দিয়া গেছে: (১) probability কখনো negative হয় না, (২) পুরা sample space-র probability ১, (৩) দুইটা mutually exclusive event-এর union-এর probability = তাদের আলাদা আলাদা probability-র যোগফল। এই ৩টা মাইনা চললেই তুই probability-র দুনিয়ায় safe!",
+        "formula": "P(A) \\geq 0, \\quad P(S) = 1, \\quad P(A \\cup B) = P(A) + P(B) \\text{ if } A \\cap B = \\emptyset"
+      },
+      {
+        "title": "Complement Rule",
+        "content": "কোনো event না ঘটার probability = ১ - ঘটার probability। টসে Head না আসার chance = ১ - ০.৫ = ০.৫। ঢাকায় জ্যাম না লাগার chance? ভাই, সেইটা প্রায় ০ — মানে P(জ্যাম) ≈ ১!",
+        "formula": "P(A^c) = 1 - P(A)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ক্রিকেট ডাইসের Probability",
+    "problem": "পুরান ঢাকায় বন্ধুরা মিলে ক্রিকেট ডাইস খেলছে। একটা fair ডাইস গড়ায়। (a) ৬ আসার probability কত? (b) even number আসার probability কত? (c) ৭ আসার probability কত?",
+    "steps": [
+      {
+        "label": "Step 1: Sample Space বানাও",
+        "content": "Fair ডাইসের ৬টা face — S = {1, 2, 3, 4, 5, 6}, তাই |S| = 6",
+        "formula": "S = \\{1, 2, 3, 4, 5, 6\\}, \\quad |S| = 6"
+      },
+      {
+        "label": "Step 2: P(৬ আসা)",
+        "content": "৬ আসার favorable outcome ১টা — শুধু {6}",
+        "formula": "P(6) = \\frac{1}{6} \\approx 0.167"
+      },
+      {
+        "label": "Step 3: P(even number)",
+        "content": "Even number = {2, 4, 6} — ৩টা favorable outcome",
+        "formula": "P(\\text{even}) = \\frac{3}{6} = \\frac{1}{2} = 0.5"
+      },
+      {
+        "label": "Step 4: P(৭ আসা)",
+        "content": "৭ তো ডাইসে নাই-ই! Favorable outcome = ০। এইটা impossible event।",
+        "formula": "P(7) = \\frac{0}{6} = 0"
+      }
+    ],
+    "answer": "P(6) = 1/6, P(even) = 1/2, P(7) = 0। মনে রাখ — probability সবসময় 0 আর 1 এর মধ্যে থাকে!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Binary Classification Confidence",
+      "icon": "🤖",
+      "explanation": "ML model যখন classify করে — spam নাকি not spam, positive নাকি negative — output হিসাবে একটা probability দেয়। 0.9 মানে model 90% sure যে এইটা spam। এই probability-ই তো আমরা শিখলাম — ০ থেকে ১ এর মধ্যে confidence score!",
+      "realExample": "Gmail-র spam filter তোর email দেখে বলে P(spam) = 0.95 — তাই spam folder-এ ফেলে দেয়। P(spam) = 0.3 হইলে inbox-এ রাখে।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.linear_model import LogisticRegression\nimport numpy as np\n\n# Training data: [word_count, has_link]\nX_train = np.array([[50, 1], [20, 0], [100, 1], [10, 0], [80, 1]])\ny_train = np.array([1, 0, 1, 0, 1])  # 1=spam, 0=not spam\n\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\n\n# নতুন email এর spam probability\nnew_email = np.array([[60, 1]])\nprob = model.predict_proba(new_email)\nprint(f'P(not spam) = {prob[0][0]:.2f}')\nprint(f'P(spam) = {prob[0][1]:.2f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Random Sampling ও Data Splitting",
+      "icon": "🎲",
+      "explanation": "ML-এ dataset কে train/test split করতে random sampling লাগে। প্রতিটা data point-এর test set-এ যাওয়ার probability equal রাখতে হয় — এইটা uniform probability। না হইলে model biased হইয়া যায়!",
+      "realExample": "Kaggle competition-এ 80-20 split করলে প্রতিটা row-এর test-এ পড়ার probability = 0.2, train-এ পড়ার probability = 0.8।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.model_selection import train_test_split\nimport numpy as np\n\n# ঢাকার বাসার দাম dataset (dummy)\nnp.random.seed(42)\nprices = np.random.randint(20, 100, size=100)  # লক্ষ টাকায়\nareas = np.random.randint(500, 2000, size=100)  # sqft\n\n# 80-20 random split\n# প্রতিটা data point-এর test-এ যাওয়ার P = 0.2\ntrain_p, test_p, train_a, test_a = train_test_split(\n    prices, areas, test_size=0.2, random_state=42\n)\n\nprint(f'Train size: {len(train_p)} (P=0.8)')\nprint(f'Test size: {len(test_p)} (P=0.2)')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Monte Carlo Simulation",
+      "icon": "🎰",
+      "explanation": "যখন analytically probability বাইর করা কঠিন, তখন random experiment বারবার চালায়া approximate করা হয় — এইটাই Monte Carlo method। Probability-র basic definition-ই কাজে লাগে — favorable/total!",
+      "realExample": "Pi (π) calculate করতে Monte Carlo ব্যবহার করা হয় — square-এর মধ্যে random points ফেলে দেখ কয়টা circle-এর ভিতর পড়ল!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Monte Carlo দিয়া Pi estimate করি\nnp.random.seed(42)\nn_points = 1000000\n\n# Random points (0,1) x (0,1) square-এ\nx = np.random.uniform(0, 1, n_points)\ny = np.random.uniform(0, 1, n_points)\n\n# Circle-র ভিতর পড়ল কিনা check\ninside_circle = (x**2 + y**2) <= 1\n\n# P(inside) = favorable / total\nprob_inside = np.sum(inside_circle) / n_points\npi_estimate = 4 * prob_inside\n\nprint(f'P(inside circle) = {prob_inside:.4f}')\nprint(f'Pi estimate = {pi_estimate:.4f}')\nprint(f'Actual Pi = {np.pi:.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Dropout Regularization",
+      "icon": "🧠",
+      "explanation": "Neural network-এ dropout মানে training-এর সময় random ভাবে কিছু neuron বন্ধ করা। প্রতিটা neuron-এর বন্ধ হওয়ার probability = dropout rate। P=0.5 মানে ৫০% chance বন্ধ থাকবে। এইভাবে model overfitting কম করে।",
+      "realExample": "GPT-এর মতো large language model-এও dropout ব্যবহার হয়। Dropout probability = 0.1 মানে training-এ প্রতিটা neuron-এর ১০% chance আছে বন্ধ থাকার।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Dropout layer — P(neuron off) = 0.5\ndropout = nn.Dropout(p=0.5)\n\n# Input tensor (simulate neuron activations)\nx = torch.ones(1, 10)  # 10 টা neuron\nprint(f'Before dropout: {x}')\n\n# Training mode-এ dropout active\ndropout.train()\nx_dropped = dropout(x)\nprint(f'After dropout: {x_dropped}')\n# কিছু neuron 0 হইয়া গেছে — randomly বন্ধ!"
+      }
+    }
+  ],
+  "memoryTrick": "মনে রাখ: Probability = Favorable ÷ Total। ঢাকার চায়ের দোকানে ১০টা আইটেম, তুই চা খাবি — P(চা পাওয়া) = ১/১০? না না, চা তো guaranteed আছে — P = ১! আর P সবসময় ০ থেকে ১ এর মাঝে — ঠিক যেমন ঢাকায় রিকশা পাওয়ার chance কখনো negative হয় না, আবার ১০০% guarantee-ও না (হরতাল থাকলে!)।",
+  "tags": ["probability", "sample-space", "event", "axioms", "complement", "classification", "dropout"],
+  "prev": "convexity",
+  "next": "conditional-probability"
+}

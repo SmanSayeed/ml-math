@@ -1,0 +1,120 @@
+{
+  "slug": "local-global-minimum",
+  "title": "Local ও Global Minimum — স্থানীয় আর বৈশ্বিক সর্বনিম্ন",
+  "titleEn": "Local and Global Minimum",
+  "category": "calculus",
+  "order": 8,
+  "readTime": 10,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🍛",
+    "title": "বিরিয়ানির সেরা দোকান খোঁজা",
+    "content": "ধর তুই পুরান ঢাকায় সেরা বিরিয়ানি খুঁজতে গেছিস। চকবাজারে একটা দোকানে খাইলি — অসাধারণ! তুই ভাবলি এইটাই সেরা। কিন্তু তোর বন্ধু শাকিল বলল 'মামা, হাজী বিরিয়ানি ট্রাই করছিস? নাজিরা বাজারে!' সেইখানে গিয়া খাইলি — আরো ভালো! কিন্তু আসল কথা, তুই তো পুরা ঢাকা ঘুরিস নাই। হয়তো ওল্ড ঢাকার কোনো গলিতে কেউ আরো সেরা বিরিয়ানি বানায় যেইটা তুই জানিসই না।",
+    "reveal": "চকবাজারেরটা হইল Local Minimum — আশেপাশে সেরা কিন্তু overall সেরা না। নাজিরা বাজারেরটা আরেকটা Local Minimum বা হয়তো Global Minimum — পুরা ঢাকায় সেরা! ML-এ আমরা চাই Global Minimum, কিন্তু পাই অনেকসময় Local Minimum। গুরু বলেছে 'একটা গলিতে থাইমা না, পুরা শহর ঘুরো!'"
+  },
+  "definition": {
+    "content": "Local Minimum হইল এমন একটা point যেইখানে function value তার আশেপাশের সব point থেকে কম, কিন্তু পুরা domain-এ সবচেয়ে কম নাও হইতে পারে। Global Minimum হইল পুরা domain-এ সবচেয়ে কম value-র point।",
+    "formula": "\\text{Local: } f(x^*) \\leq f(x) \\; \\forall \\; |x - x^*| < \\delta \\quad | \\quad \\text{Global: } f(x^*) \\leq f(x) \\; \\forall \\; x \\in \\text{domain}",
+    "formulaLabel": "Local vs Global Minimum-এর formal definition"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Local Minimum বুঝি",
+        "content": "কোনো point x*-এ যদি তার চারপাশের সব point-এ function value বেশি হয়, তাহলে x* হইল local minimum। পাহাড়ি এলাকায় একটা ছোট গর্তের তলানি — সেই গর্তে তুমি সবচেয়ে নিচুতে, কিন্তু পাশের পাহাড়ের ওপারে আরো গভীর গর্ত থাকতে পারে।",
+        "formula": "\\nabla f(x^*) = 0 \\quad \\text{and} \\quad \\nabla^2 f(x^*) > 0"
+      },
+      {
+        "title": "Global Minimum বুঝি",
+        "content": "পুরা function-এর domain-এ যেই point-এ value সবচেয়ে কম, সেইটা global minimum। পুরা ঢাকায় সবচেয়ে best বিরিয়ানি — কেউ beat করতে পারবে না!",
+        "formula": "x^*_{\\text{global}} = \\arg\\min_{x \\in \\mathcal{D}} f(x)"
+      },
+      {
+        "title": "Saddle Point — গাধার পিঠ",
+        "content": "এমন point যেইখানে এক direction-এ minimum কিন্তু আরেক direction-এ maximum। গাধার পিঠে বসলে দুই পাশে নামতে পারো কিন্তু সামনে-পিছনে উঠতে হয়। High-dimensional space-এ এইগুলা local minimum-এর চেয়ে বেশি সমস্যা করে।",
+        "formula": "\\nabla f = 0, \\quad \\text{but } \\nabla^2 f \\text{ has both +ve and -ve eigenvalues}"
+      },
+      {
+        "title": "ML-এ কেন সমস্যা",
+        "content": "Gradient descent hill-climbing-এর মতো — নিচের দিকে যায়। কিন্তু যদি local minimum-এ পড়ে, তাহলে আটকে যায় কারণ চারদিকে উপরে। ভালো খবর হইল deep learning-এ বেশিরভাগ local minima আসলে 'good enough' — global minimum-এর কাছাকাছি loss দেয়।"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Local ও Global Minimum খোঁজা",
+    "problem": "f(x) = x⁴ - 8x² + 12 function-এর local ও global minimum বের করো।",
+    "steps": [
+      {
+        "label": "Step 1: First derivative = 0",
+        "content": "Critical points খুঁজতে f'(x) = 0 সমাধান করি",
+        "formula": "f'(x) = 4x^3 - 16x = 4x(x^2 - 4) = 0 \\implies x = 0, \\pm 2"
+      },
+      {
+        "label": "Step 2: Second derivative test",
+        "content": "প্রতিটা critical point-এ f''(x) check করি — positive হইলে minimum",
+        "formula": "f''(x) = 12x^2 - 16 \\implies f''(0) = -16 \\text{ (max)}, \\; f''(\\pm 2) = 32 \\text{ (min)}"
+      },
+      {
+        "label": "Step 3: Function values compare",
+        "content": "দুইটা minimum-এ f(x) এর value বের করি",
+        "formula": "f(2) = 16 - 32 + 12 = -4, \\quad f(-2) = 16 - 32 + 12 = -4"
+      },
+      {
+        "label": "Step 4: সিদ্ধান্ত",
+        "content": "দুইটা point-ই same value দেয়, তাই দুইটাই global minimum!",
+        "formula": "x^*_{\\text{global}} = \\pm 2, \\quad f_{\\min} = -4"
+      }
+    ],
+    "answer": "x = ±2 এ global minimum, f = -4। x = 0 একটা local maximum (f = 12)। দুইটা বিরিয়ানির দোকানই সমান সেরা, গুরু!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Random Initialization দিয়ে Local Minima Escape",
+      "icon": "🎲",
+      "explanation": "Neural network-এর weights random initialize করলে প্রতিবার আলাদা জায়গা থেকে optimization শুরু হয়, ফলে আলাদা আলাদা local minima-তে পৌঁছায়। Multiple random seed দিয়া train কইরা best model বাছলে global minimum-এর কাছে যাওয়ার chance বাড়ে।",
+      "realExample": "Kaggle competition-এ top solutions সবসময় multiple seed দিয়া train করে ensemble করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\ndef train_with_seed(seed):\n    torch.manual_seed(seed)\n    model = nn.Sequential(\n        nn.Linear(784, 256),\n        nn.ReLU(),\n        nn.Linear(256, 10)\n    )\n    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)\n    # ... train loop ...\n    return model, final_loss\n\n# Multiple seeds try করো\nresults = [train_with_seed(s) for s in [42, 123, 456, 789]]\nbest_model = min(results, key=lambda x: x[1])[0]\nprint('Best seed-এর model নাও — local minima escape!')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Momentum দিয়ে Valley Cross করা",
+      "icon": "🏃",
+      "explanation": "SGD with Momentum হইল বলের মতো — গড়িয়ে আসা বল ছোট গর্ত (local minimum) পার হইয়া যায় কারণ তার গতি আছে। Momentum previous gradient-এর direction মনে রাখে, তাই shallow local minimum-এ আটকায় না।",
+      "realExample": "ResNet training-এ SGD + Momentum (0.9) standard — Adam-এর চেয়েও better generalization দেয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch.optim as optim\n\n# Momentum ছাড়া — local minima-তে আটকে যায়\nsgd_basic = optim.SGD(model.parameters(), lr=0.01)\n\n# Momentum সহ — local minima cross করতে পারে!\nsgd_momentum = optim.SGD(\n    model.parameters(),\n    lr=0.01,\n    momentum=0.9  # 90% previous velocity remember করে\n)\n\n# Nesterov Momentum — আরো smart, আগে দেখে তারপর update করে\nsgd_nesterov = optim.SGD(\n    model.parameters(),\n    lr=0.01,\n    momentum=0.9,\n    nesterov=True  # 'look ahead' gradient\n)"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Learning Rate দিয়ে Escape",
+      "icon": "📈",
+      "explanation": "Cyclical Learning Rate (CLR) periodically lr বাড়ায় — যখন lr হঠাৎ বাড়ে, model local minimum থেকে 'লাফ' দিয়ে বের হইতে পারে। তারপর lr কমলে নতুন, হয়তো better minimum-এ settle করে।",
+      "realExample": "Super-convergence paper দেখাইছে যে 1cycle policy দিয়ে 10x faster training possible।",
+      "code": {
+        "language": "python",
+        "snippet": "from torch.optim.lr_scheduler import CyclicLR\n\noptimizer = torch.optim.SGD(model.parameters(), lr=1e-4)\nscheduler = CyclicLR(\n    optimizer,\n    base_lr=1e-4,    # minimum lr\n    max_lr=1e-2,     # maximum lr\n    step_size_up=2000,\n    mode='triangular2'  # lr gradually decreases each cycle\n)\n\nfor step, (X, y) in enumerate(dataloader):\n    loss = criterion(model(X), y)\n    loss.backward()\n    optimizer.step()\n    scheduler.step()\n    optimizer.zero_grad()\n    # lr up-down cycle local minima escape-এ help করে!"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Loss Landscape Visualization",
+      "icon": "🗺️",
+      "explanation": "Loss function-এর 3D surface plot বানাইলে দেখা যায় কোথায় local minima, কোথায় global minimum, কোথায় saddle point। দুইটা random direction-এ weight perturb কইরা loss calculate করলে landscape-এর ছবি পাওয়া যায়।",
+      "realExample": "Li et al. (2018) paper দেখাইছে skip connection loss landscape smooth করে, তাই ResNet train করা easy।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport matplotlib.pyplot as plt\n\ndef loss_landscape_2d(model, X, y, direction1, direction2, steps=50, range_val=1.0):\n    \"\"\"2D loss landscape visualization\"\"\"\n    original_params = [p.clone() for p in model.parameters()]\n    alphas = np.linspace(-range_val, range_val, steps)\n    betas = np.linspace(-range_val, range_val, steps)\n    losses = np.zeros((steps, steps))\n    \n    for i, a in enumerate(alphas):\n        for j, b in enumerate(betas):\n            for p, orig, d1, d2 in zip(\n                model.parameters(), original_params, direction1, direction2\n            ):\n                p.data = orig + a * d1 + b * d2\n            losses[i, j] = criterion(model(X), y).item()\n    \n    # Restore\n    for p, orig in zip(model.parameters(), original_params):\n        p.data = orig.clone()\n    \n    plt.contour(alphas, betas, losses, levels=30)\n    plt.title('Loss Landscape — গর্ত খুঁজো!')\n    plt.show()"
+      }
+    }
+  ],
+  "memoryTrick": "Local Minimum = মহল্লার সেরা বিরিয়ানি, Global Minimum = পুরা ঢাকার সেরা বিরিয়ানি। Gradient descent হইল ক্ষুধার্ত মানুষ — সে নিচের দিকে যায়। প্রথম দোকানে ঢুকলে আর বের হয় না (local minima trap)। Momentum হইল বন্ধু যে টাইনা বাইর করে বলে 'চল আরো ঘুরি!'",
+  "tags": ["local-minimum", "global-minimum", "saddle-point", "optimization", "loss-landscape", "momentum", "convergence"],
+  "prev": "learning-rate",
+  "next": "jacobian"
+}

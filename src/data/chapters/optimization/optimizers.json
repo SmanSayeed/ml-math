@@ -1,0 +1,121 @@
+{
+  "slug": "optimizers",
+  "title": "Optimizers — SGD, Adam ও বন্ধুরা",
+  "titleEn": "Optimizers — SGD, Adam & Friends",
+  "category": "optimization",
+  "order": 3,
+  "readTime": 10,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🛒",
+    "title": "সবচেয়ে সস্তা দোকান খোঁজা",
+    "content": "ধর তুই নিউমার্কেটে জুতা কিনতে গেছিস। ৫০টা দোকান আছে। কিভাবে সবচেয়ে সস্তা দোকান খুঁজবি? উপায় ১ (Gradient Descent): প্রতিটা দোকানে যাও, দাম দেখো, সস্তার দিকে এগিয়া যাও — slow কিন্তু sure। উপায় ২ (SGD): রান্ডম ৫টা দোকান দেখো, সস্তার দিকে দৌড়াও — fast কিন্তু noisy। উপায় ৩ (Adam): আগের দোকানগুলার trend মনে রাখো, smart decision নাও — fast + stable!",
+    "reveal": "ML-এ model training-এ loss minimize করতে বিভিন্ন optimizer use হয়। গুরু বলে — 'SGD হইল বেসিক দোকানে দোকানে হাঁটা, Adam হইল Google Maps দিয়া shortest path! প্রতিটার নিজস্ব strength আছে।'"
+  },
+  "definition": {
+    "content": "Optimizer হইল সেই algorithm যেইটা loss function minimize করতে model-এর weights update করে। Gradient-এর direction আর magnitude use করে প্রতিটা step-এ weights adjust করে।",
+    "formula": "\\theta_{t+1} = \\theta_t - \\eta \\cdot g_t",
+    "formulaLabel": "Basic update rule — learning rate (η) × gradient (g) দিয়া weights update"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "SGD (Stochastic Gradient Descent)",
+        "content": "প্রতিটা step-এ random mini-batch select করে gradient compute করে। Full batch-এর চেয়ে fast কিন্তু noisy gradient। Momentum যোগ করলে আগের direction-এর memory থাকে — valley-তে দ্রুত converge করে।",
+        "formula": "v_t = \\beta v_{t-1} + (1-\\beta) g_t, \\quad \\theta_{t+1} = \\theta_t - \\eta \\cdot v_t"
+      },
+      {
+        "title": "Adam (Adaptive Moment Estimation)",
+        "content": "Adam দুইটা জিনিস track করে — gradient-এর running average (1st moment) আর gradient²-এর running average (2nd moment)। এইটা automatically per-parameter learning rate adjust করে। বেশিরভাগ problem-এ best default choice।",
+        "formula": "m_t = \\beta_1 m_{t-1} + (1-\\beta_1) g_t, \\quad v_t = \\beta_2 v_{t-1} + (1-\\beta_2) g_t^2"
+      },
+      {
+        "title": "কোন Optimizer কখন?",
+        "content": "Computer Vision-এ SGD + Momentum ভালো (ResNet, ViT)। NLP/Transformer-এ Adam/AdamW standard (BERT, GPT)। Small dataset-এ LBFGS ভালো। সবার default: Adam দিয়া শুরু করো!"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "SGD vs Adam — একটা Simple Example",
+    "problem": "Loss function L(w) = w⁴ - 3w² + 2। w₀ = 2.0 থেকে শুরু। SGD (lr=0.01) আর Adam দিয়া ৩ step update দেখাও।",
+    "steps": [
+      {
+        "label": "Step 1: Gradient বের করো",
+        "content": "dL/dw = 4w³ - 6w। w=2 তে gradient = 4(8) - 6(2) = 20",
+        "formula": "\\frac{dL}{dw} = 4w^3 - 6w, \\quad g(2.0) = 32 - 12 = 20"
+      },
+      {
+        "label": "Step 2: SGD Update",
+        "content": "w₁ = w₀ - η·g = 2.0 - 0.01(20) = 1.8",
+        "formula": "w_1 = 2.0 - 0.01 \\times 20 = 1.8"
+      },
+      {
+        "label": "Step 3: Adam Update",
+        "content": "Adam-এ m₁ = 0.1(20) = 2.0, v₁ = 0.001(400) = 0.4, bias-corrected: m̂ = 20, v̂ = 400",
+        "formula": "w_1^{\\text{adam}} = 2.0 - 0.01 \\times \\frac{20}{\\sqrt{400} + \\epsilon} \\approx 2.0 - 0.01 = 1.99"
+      }
+    ],
+    "answer": "SGD: 2.0 → 1.8 (বড় step)। Adam: 2.0 → 1.99 (ছোট কিন্তু controlled step)। Adam gradient-এর magnitude normalize করে, তাই large gradient-এও stable থাকে।"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "SGD + Momentum — Image Classification",
+      "icon": "📸",
+      "explanation": "ResNet, VGG — computer vision-এ SGD + Momentum standard choice। Learning rate scheduling (cosine annealing, step decay) সাথে use করলে Adam-এর চেয়ে ভালো generalization দেয়।",
+      "realExample": "ImageNet competition-এ top models SGD + Momentum (β=0.9) + cosine LR schedule use করে — ভালো generalization কারণ sharp minima avoid করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.optim as optim\n\nmodel = torch.nn.Linear(784, 10)\n\n# SGD with Momentum — CV-র standard\noptimizer = optim.SGD(\n    model.parameters(),\n    lr=0.1,\n    momentum=0.9,\n    weight_decay=1e-4  # L2 regularization\n)\n\n# Cosine Annealing LR Schedule\nscheduler = optim.lr_scheduler.CosineAnnealingLR(\n    optimizer, T_max=100  # 100 epochs-এ LR 0.1→0\n)\n\n# Training loop\nfor epoch in range(100):\n    # ... training code ...\n    scheduler.step()\n    print(f'Epoch {epoch}, LR: {scheduler.get_last_lr()[0]:.6f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Adam — Transformer/NLP",
+      "icon": "📝",
+      "explanation": "BERT, GPT, T5 — সব transformer model Adam বা AdamW দিয়া train হয়। AdamW weight decay-কে Adam-এ সঠিকভাবে implement করে (decoupled weight decay)।",
+      "realExample": "GPT-4 training-এ AdamW optimizer use হয় — β₁=0.9, β₂=0.95, weight_decay=0.1, lr warmup + cosine decay।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.optim as optim\n\nmodel = torch.nn.Transformer(d_model=512, nhead=8)\n\n# AdamW — Transformer-এর standard\noptimizer = optim.AdamW(\n    model.parameters(),\n    lr=3e-4,\n    betas=(0.9, 0.95),\n    weight_decay=0.1\n)\n\n# Warmup + Cosine Decay\ndef lr_lambda(step, warmup=1000, total=10000):\n    if step < warmup:\n        return step / warmup  # Linear warmup\n    progress = (step - warmup) / (total - warmup)\n    return 0.5 * (1 + torch.cos(torch.tensor(progress * 3.14159)).item())\n\nscheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)\nprint('AdamW + Warmup + Cosine — Transformer-এর standard recipe!')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "RMSprop — RNN/LSTM",
+      "icon": "🔄",
+      "explanation": "RNN/LSTM-এ gradient exploding/vanishing problem আছে। RMSprop gradient-কে running average দিয়া normalize করে — তাই RNN training-এ stable থাকে। Adam-এর আগে RNN-এর default ছিল।",
+      "realExample": "Google Translate-এর early LSTM model RMSprop use করত। এখন attention-based model-এ Adam standard।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.optim as optim\n\nmodel = torch.nn.LSTM(input_size=128, hidden_size=256, num_layers=2)\n\n# RMSprop — RNN-এ ভালো কাজ করে\noptimizer = optim.RMSprop(\n    model.parameters(),\n    lr=0.001,\n    alpha=0.99,  # smoothing constant\n    eps=1e-8\n)\n\n# Gradient clipping — RNN-এ essential\nfor epoch in range(10):\n    # ... forward pass ...\n    # loss.backward()\n    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)\n    optimizer.step()\n\nprint('RMSprop + Gradient Clipping — RNN-এর safe recipe!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Learning Rate Finder",
+      "icon": "🔍",
+      "explanation": "কোন learning rate ভালো সেইটা automatically খুঁজে বের করতে LR Finder use হয়। ছোট LR থেকে শুরু করে ধীরে ধীরে বাড়ায় — loss দ্রুত কমতে শুরু করলে সেইটা optimal LR।",
+      "realExample": "FastAI library-তে lr_find() function আছে যেইটা automatically best learning rate suggest করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport numpy as np\n\ndef lr_finder(model, train_loader, optimizer, criterion, start_lr=1e-7, end_lr=10, num_steps=100):\n    \"\"\"Learning Rate Finder — best LR খুঁজে বের করো\"\"\"\n    lrs = np.logspace(np.log10(start_lr), np.log10(end_lr), num_steps)\n    losses = []\n    \n    for i, lr in enumerate(lrs):\n        for param_group in optimizer.param_groups:\n            param_group['lr'] = lr\n        \n        # One training step\n        # ... (forward, backward, step)\n        # losses.append(loss.item())\n        pass\n    \n    # best_lr = lrs[losses কোথায় সবচেয়ে steep drop হয়]\n    print('LR Finder: loss vs LR plot করো')\n    print('যেখানে loss সবচেয়ে দ্রুত কমে, সেইটা optimal LR!')\n    return lrs, losses\n\nprint('Tip: best_lr ≈ steepest drop-এর 1/10')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Gradient Accumulation",
+      "icon": "📦",
+      "explanation": "GPU memory-তে বড় batch fit না করলে gradient accumulation use করি — কয়েকটা small batch-এর gradient যোগ করে একবার update। Effective batch size বাড়ে memory না বাড়ায়ে।",
+      "realExample": "LLaMA training-এ batch size 4M tokens লাগে কিন্তু single GPU-তে 4K tokens fit হয়। 1000 step gradient accumulate করে effective batch size পায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\nmodel = torch.nn.Linear(100, 10)\noptimizer = torch.optim.Adam(model.parameters(), lr=1e-3)\naccumulation_steps = 4  # 4 mini-batch = 1 effective batch\n\nfor i, (inputs, targets) in enumerate(train_loader):\n    outputs = model(inputs)\n    loss = torch.nn.functional.cross_entropy(outputs, targets)\n    loss = loss / accumulation_steps  # Scale loss\n    loss.backward()  # Gradient accumulate হয়\n    \n    if (i + 1) % accumulation_steps == 0:\n        optimizer.step()  # এখন update করো\n        optimizer.zero_grad()  # Gradient reset\n        print(f'Step {i+1}: effective batch = {accumulation_steps} * mini_batch_size')"
+      }
+    }
+  ],
+  "memoryTrick": "SGD = নিউমার্কেটে দোকানে দোকানে হাঁটা (slow, simple)। Adam = Google Maps দিয়া smart shortcut (fast, adaptive)। সন্দেহ হইলে Adam দিয়া শুরু করো, CV-তে SGD try করো!",
+  "tags": ["sgd", "adam", "adamw", "rmsprop", "momentum", "learning-rate", "optimizer"],
+  "prev": "convex-optimization",
+  "next": "l1-l2-regularization"
+}

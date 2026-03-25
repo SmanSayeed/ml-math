@@ -1,0 +1,127 @@
+{
+  "slug": "jacobian",
+  "title": "Jacobian — বহু-ভেরিয়েবলের ডেরিভেটিভ ম্যাট্রিক্স",
+  "titleEn": "Jacobian Matrix",
+  "category": "calculus",
+  "order": 9,
+  "readTime": 12,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🏭",
+    "title": "বাবুলের টি-শার্ট ফ্যাক্টরি",
+    "content": "ধর তোর বন্ধু বাবুল তেজগাঁওয়ে টি-শার্ট ফ্যাক্টরি দিছে। তার ৩টা input আছে — কাপড়ের পরিমাণ (x₁), শ্রমিক সংখ্যা (x₂), আর বিদ্যুৎ খরচ (x₃)। আর ২টা output — দৈনিক টি-শার্ট সংখ্যা (y₁) আর মোট খরচ (y₂)। এখন বাবুল জানতে চায় — কাপড় ১ মিটার বাড়াইলে production কতটুক বাড়ে আর cost কতটুক বাড়ে? শ্রমিক ১ জন বাড়াইলে? প্রতিটা input-এর প্রতিটা output-এ effect আলাদা — এইগুলা সব organize করতে একটা ম্যাট্রিক্স লাগে।",
+    "reveal": "এইটাই Jacobian Matrix, গুরু! সব partial derivative এক জায়গায় — প্রতিটা output-এর প্রতিটা input-এর সাপেক্ষে rate of change। Neural network-এ input layer থেকে output layer পর্যন্ত gradient বহন করার মূল হাতিয়ার!"
+  },
+  "definition": {
+    "content": "Jacobian হইল একটা matrix যেখানে একটা vector-valued function f: ℝⁿ → ℝᵐ এর সব first-order partial derivatives organized থাকে। i-তম row, j-তম column-এ থাকে ∂fᵢ/∂xⱼ — অর্থাৎ i-তম output-এর j-তম input-এর সাপেক্ষে derivative।",
+    "formula": "\\mathbf{J} = \\begin{bmatrix} \\frac{\\partial f_1}{\\partial x_1} & \\cdots & \\frac{\\partial f_1}{\\partial x_n} \\\\ \\vdots & \\ddots & \\vdots \\\\ \\frac{\\partial f_m}{\\partial x_1} & \\cdots & \\frac{\\partial f_m}{\\partial x_n} \\end{bmatrix}_{m \\times n}",
+    "formulaLabel": "Jacobian Matrix — m outputs, n inputs"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Jacobian-এর গঠন",
+        "content": "f: ℝⁿ → ℝᵐ function হইলে Jacobian m×n matrix। প্রতিটা row একটা output function-এর gradient, প্রতিটা column একটা input variable-এর সব output-এ effect। বাবুলের ফ্যাক্টরিতে 3 input, 2 output — তাই Jacobian হবে 2×3 matrix।",
+        "formula": "J_{ij} = \\frac{\\partial f_i}{\\partial x_j}"
+      },
+      {
+        "title": "Jacobian দিয়ে Linear Approximation",
+        "content": "Jacobian matrix হইল multivariate function-এর best linear approximation। ছোট পরিবর্তন Δx দিলে output-এর পরিবর্তন Δy ≈ J · Δx। বাবুল যদি একটু বেশি কাপড় কিনে, Jacobian বলে দিবে production আর cost কতটুক বদলাবে।",
+        "formula": "\\Delta \\mathbf{y} \\approx \\mathbf{J} \\cdot \\Delta \\mathbf{x}"
+      },
+      {
+        "title": "Chain Rule আর Jacobian",
+        "content": "দুইটা function compose করলে (g ∘ f), পুরা system-এর Jacobian হয় দুই Jacobian-এর multiplication। Neural network-এ প্রতিটা layer একটা function — backpropagation মানে হইল Jacobian-এর chain multiplication!",
+        "formula": "\\mathbf{J}_{g \\circ f} = \\mathbf{J}_g \\cdot \\mathbf{J}_f"
+      },
+      {
+        "title": "Jacobian Determinant",
+        "content": "Square Jacobian-এর determinant বলে transformation locally কতটুক area/volume stretch বা shrink করে। |det(J)| > 1 মানে expand, < 1 মানে shrink, = 0 মানে dimension collapse (singular)। Normalizing Flow model-এ এইটা critical।",
+        "formula": "|\\det(\\mathbf{J})| = \\text{volume scaling factor}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "বাবুলের ফ্যাক্টরির Jacobian",
+    "problem": "বাবুলের factory: production y₁ = 3x₁ + 2x₂, cost y₂ = x₁² + x₂। (x₁, x₂) = (2, 1) point-এ Jacobian বের করো এবং x₁ তে 0.1 বাড়লে output কত বদলাবে?",
+    "steps": [
+      {
+        "label": "Step 1: Partial Derivatives বের করি",
+        "content": "প্রতিটা output-এর প্রতিটা input-এর সাপেক্ষে derivative",
+        "formula": "\\frac{\\partial y_1}{\\partial x_1} = 3, \\; \\frac{\\partial y_1}{\\partial x_2} = 2, \\; \\frac{\\partial y_2}{\\partial x_1} = 2x_1, \\; \\frac{\\partial y_2}{\\partial x_2} = 1"
+      },
+      {
+        "label": "Step 2: Jacobian Matrix বসাই",
+        "content": "(x₁, x₂) = (2, 1) point-এ evaluate করি",
+        "formula": "\\mathbf{J} = \\begin{bmatrix} 3 & 2 \\\\ 2(2) & 1 \\end{bmatrix} = \\begin{bmatrix} 3 & 2 \\\\ 4 & 1 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 3: Δx = (0.1, 0) দিয়া Δy বের করি",
+        "content": "x₁ তে 0.1 বাড়লে, x₂ same থাকলে",
+        "formula": "\\Delta \\mathbf{y} = \\mathbf{J} \\cdot \\Delta \\mathbf{x} = \\begin{bmatrix} 3 & 2 \\\\ 4 & 1 \\end{bmatrix} \\begin{bmatrix} 0.1 \\\\ 0 \\end{bmatrix} = \\begin{bmatrix} 0.3 \\\\ 0.4 \\end{bmatrix}"
+      }
+    ],
+    "answer": "কাপড় 0.1 unit বাড়াইলে production 0.3 unit বাড়ে আর cost 0.4 unit বাড়ে। Jacobian একবারে সব effect দেখাইয়া দিল, গুরু!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Backpropagation-এ Jacobian",
+      "icon": "🔗",
+      "explanation": "Neural network-এর প্রতিটা layer-এর output, পরের layer-এর input। Backprop-এ loss-এর gradient backward pass-এ Jacobian matrix multiply হইতে হইতে input layer পর্যন্ত আসে। এইটাই chain rule-এর matrix version।",
+      "realExample": "PyTorch-এর autograd internally Jacobian-Vector Product (JVP) আর Vector-Jacobian Product (VJP) compute করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\n# Simple 2-layer network\nx = torch.randn(4, 3, requires_grad=True)  # batch=4, features=3\nW1 = torch.randn(3, 5, requires_grad=True)\nW2 = torch.randn(5, 2, requires_grad=True)\n\n# Forward pass — internally Jacobians are tracked\nh = F.relu(x @ W1)    # Jacobian: dh/dx, dh/dW1\ny = h @ W2             # Jacobian: dy/dh, dy/dW2\nloss = y.sum()\n\n# Backward pass — Jacobian chain multiplication!\nloss.backward()\nprint(f'dL/dW1 shape: {W1.grad.shape}')  # chain of Jacobians\nprint(f'dL/dx shape: {x.grad.shape}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Jacobian Full Matrix Compute",
+      "icon": "📊",
+      "explanation": "কখনো কখনো পুরা Jacobian matrix লাগে — যেমন sensitivity analysis, adversarial robustness check, বা network architecture analysis-এ। torch.autograd.functional.jacobian() দিয়া compute করা যায়।",
+      "realExample": "Adversarial attack detection-এ input-এর সাপেক্ষে output-এর Jacobian check করে unusual sensitivity ধরা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nfrom torch.autograd.functional import jacobian\n\ndef f(x):\n    \"\"\"R^3 -> R^2 function\"\"\"\n    return torch.stack([\n        x[0]**2 + x[1]*x[2],   # y1\n        torch.sin(x[0]) + x[2]  # y2\n    ])\n\nx = torch.tensor([1.0, 2.0, 3.0])\nJ = jacobian(f, x)\nprint(f'Jacobian shape: {J.shape}')  # (2, 3)\nprint(f'Jacobian:\\n{J}')\n# Row 0: [2*x0, x2, x1] = [2, 3, 2]\n# Row 1: [cos(x0), 0, 1] = [0.54, 0, 1]"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Normalizing Flow-এ Jacobian Determinant",
+      "icon": "🌊",
+      "explanation": "Normalizing Flow model simple distribution (Gaussian) কে complex distribution-এ transform করে। প্রতিটা transformation-এ probability density ঠিক রাখতে Jacobian determinant-এর log compute করতে হয়। তাই এই model-এ efficient Jacobian computation মূল চ্যালেঞ্জ।",
+      "realExample": "GLOW model (OpenAI) 1x1 convolution use করে efficient Jacobian determinant compute করে realistic face generation-এ।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nclass PlanarFlow(nn.Module):\n    \"\"\"Simple normalizing flow layer\"\"\"\n    def __init__(self, dim):\n        super().__init__()\n        self.w = nn.Parameter(torch.randn(dim))\n        self.b = nn.Parameter(torch.zeros(1))\n        self.u = nn.Parameter(torch.randn(dim))\n    \n    def forward(self, z):\n        # f(z) = z + u * tanh(w^T z + b)\n        linear = z @ self.w + self.b\n        f_z = z + self.u * torch.tanh(linear).unsqueeze(-1)\n        \n        # Log |det Jacobian| — efficient computation!\n        psi = (1 - torch.tanh(linear)**2) * self.w\n        log_det = torch.log(torch.abs(1 + psi @ self.u) + 1e-8)\n        return f_z, log_det  # density correction-এ log_det লাগে\n\nflow = PlanarFlow(dim=2)\nz = torch.randn(100, 2)  # samples from base distribution\nz_new, log_det = flow(z)\nprint(f'Jacobian det-এর log: {log_det.mean():.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Physics-Informed Neural Networks (PINNs)",
+      "icon": "⚛️",
+      "explanation": "PINNs-এ neural network-এর output-এর input-এর সাপেক্ষে Jacobian (আর higher-order derivatives) compute কইরা physics equation satisfy করাইতে হয়। যেমন fluid dynamics-এ velocity field-এর spatial derivative (Jacobian) Navier-Stokes equation-এ ঢুকে।",
+      "realExample": "DeepMind-এর weather prediction model physics constraints enforce করতে Jacobian use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\ndef physics_loss(model, x, t):\n    \"\"\"PDE: du/dt + u * du/dx = 0 (Burgers' equation)\"\"\"\n    x.requires_grad_(True)\n    t.requires_grad_(True)\n    \n    u = model(torch.cat([x, t], dim=-1))\n    \n    # Jacobian elements via autograd\n    du_dx = torch.autograd.grad(\n        u, x, grad_outputs=torch.ones_like(u),\n        create_graph=True\n    )[0]\n    du_dt = torch.autograd.grad(\n        u, t, grad_outputs=torch.ones_like(u),\n        create_graph=True\n    )[0]\n    \n    # Physics residual — should be 0\n    residual = du_dt + u * du_dx\n    return (residual ** 2).mean()"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Neural ODE-তে Jacobian Trace",
+      "icon": "🔄",
+      "explanation": "Neural ODE continuous-depth network define করে। Training-এ density tracking-এর জন্য Jacobian-এর trace (diagonal elements-এর যোগফল) compute করতে হয়। Hutchinson's estimator দিয়া stochastic trace estimate করে efficient করা হয়।",
+      "realExample": "FFJORD (Free-Form Jacobian of Reversible Dynamics) model continuous normalizing flow-এ Jacobian trace use করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\ndef hutchinson_trace_estimator(f, x, num_samples=1):\n    \"\"\"Stochastic Jacobian trace estimation\n    tr(J) ≈ E[ε^T J ε] where ε ~ N(0, I)\n    \"\"\"\n    x.requires_grad_(True)\n    trace_est = 0.0\n    \n    for _ in range(num_samples):\n        epsilon = torch.randn_like(x)  # random probe vector\n        f_x = f(x)\n        # Jacobian-vector product: J @ epsilon\n        jvp = torch.autograd.grad(\n            f_x, x, grad_outputs=epsilon,\n            create_graph=True\n        )[0]\n        # epsilon^T @ (J @ epsilon) estimates trace\n        trace_est += (epsilon * jvp).sum()\n    \n    return trace_est / num_samples\n\n# Use in Neural ODE for density estimation\n# Full Jacobian compute না কইরা trace estimate — অনেক fast!"
+      }
+    }
+  ],
+  "memoryTrick": "Jacobian = ফ্যাক্টরির Dashboard। প্রতিটা knob (input) ঘোরাইলে প্রতিটা meter (output) কতটুক নড়ে — সব information এক ম্যাট্রিক্সে। Row = output, Column = input। বাবুলের factory-র কথা মনে রাখ — ৩ knob, ২ meter, তাই 2×3 dashboard!",
+  "tags": ["jacobian", "partial-derivative", "matrix-calculus", "backpropagation", "chain-rule", "normalizing-flow", "neural-ode"],
+  "prev": "local-global-minimum",
+  "next": "hessian"
+}

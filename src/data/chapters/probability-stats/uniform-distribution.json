@@ -1,0 +1,116 @@
+{
+  "slug": "uniform-distribution",
+  "title": "Uniform Distribution — সমান সম্ভাবনা",
+  "titleEn": "Uniform Distribution — Equal Probability",
+  "category": "probability-stats",
+  "order": 10,
+  "readTime": 10,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🎲",
+    "title": "নিউমার্কেটের লটারি আর লুডুর ছক্কার গল্প",
+    "content": "গুরু নিউমার্কেট এলাকায় হাঁটতে হাঁটতে দেখে রাস্তার পাশে একটা লটারির দোকান। দোকানদার চিল্লাইয়া কইতেছে, 'ভাগ্য পরীক্ষা করেন, সবার সমান চান্স!' গুরু থামলো, কইলো 'মামা, এইটাই হইলো Uniform Distribution — সবার ভাগ্য সমান!' তারপর গুরু পাশের চায়ের দোকানে ঢুইকা দেখে দুইজন লুডু খেলতেছে। একজন কইতেছে, 'আমার ছক্কা আসে না!' গুরু বললো, 'ভাই, ডাইস তো fair — ১ থেইকা ৬ প্রতিটার probability ১/৬, সবার সমান! তোমার ভাগ্য খারাপ, ডাইস এর দোষ না!' রাতে বাসায় ফিরা গুরু ভাবলো — রাস্তায় random কোনো সময়ে বাস আসবে, সেই waiting time ও তো Uniform!",
+    "reveal": "Uniform Distribution হইলো সবচেয়ে সহজ distribution — সব outcome এর probability সমান! Discrete version এ প্রতিটা value এর probability 1/n (যেমন ডাইস), আর Continuous version এ কোনো range [a,b] এর মধ্যে সব point সমান সম্ভাব্য। Random number generation, weight initialization — সব জায়গায় Uniform লাগে!"
+  },
+  "definition": {
+    "content": "Uniform Distribution হইলো এমন একটা probability distribution যেখানে সব সম্ভাব্য outcome এর probability সমান। Discrete Uniform এ n টা value এর প্রতিটার probability 1/n। Continuous Uniform [a,b] এ যেকোনো subinterval এর probability তার দৈর্ঘ্যের সাথে proportional।",
+    "formula": "\\text{Discrete: } P(X=k) = \\frac{1}{n} \\\\ \\text{Continuous: } f(x) = \\frac{1}{b-a}, \\quad a \\le x \\le b",
+    "formulaLabel": "Uniform Distribution (Discrete ও Continuous)"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Discrete Uniform Distribution",
+        "content": "যখন নির্দিষ্ট সংখ্যক outcome আছে আর সবার probability সমান। ডাইস রোল (1-6), লটারি টিকেট নম্বর, random card draw — সব Discrete Uniform। n টা outcome থাকলে প্রতিটার probability 1/n।",
+        "formula": "P(X=k) = \\frac{1}{n}, \\quad k = 1, 2, ..., n"
+      },
+      {
+        "title": "Continuous Uniform Distribution",
+        "content": "যখন কোনো continuous range [a,b] এর মধ্যে সব value সমান সম্ভাব্য। বাস আসার waiting time (0-15 min), random number generation (0-1)। PDF হইলো constant 1/(b-a)।",
+        "formula": "f(x) = \\begin{cases} \\frac{1}{b-a} & a \\le x \\le b \\\\ 0 & \\text{otherwise} \\end{cases}"
+      },
+      {
+        "title": "Mean ও Variance",
+        "content": "Continuous Uniform [a,b] এর Mean হইলো ঠিক মাঝখানে (a+b)/2, আর Variance হইলো (b-a)^2/12। Discrete Uniform {1,...,n} এর Mean = (n+1)/2।",
+        "formula": "E[X] = \\frac{a+b}{2}, \\quad \\text{Var}(X) = \\frac{(b-a)^2}{12}"
+      },
+      {
+        "title": "CDF (Cumulative Distribution Function)",
+        "content": "Continuous Uniform এর CDF সোজা একটা straight line — a তে 0 থেইকা শুরু হয়া b তে 1 এ পৌঁছায়। P(X <= x) = (x-a)/(b-a)।",
+        "formula": "F(x) = \\frac{x - a}{b - a}, \\quad a \\le x \\le b"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "বাস আসার জন্য অপেক্ষা",
+    "problem": "ঢাকায় একটা বাস route এ প্রতি ২০ মিনিটে বাস আসে। তুমি random সময়ে bus stop এ আসলে, ৫ মিনিটের মধ্যে বাস পাওয়ার probability কত?",
+    "steps": [
+      {
+        "label": "Distribution চিহ্নিত করো",
+        "content": "Waiting time ~ Uniform(0, 20), কারণ তুমি ০ থেইকা ২০ মিনিটের মধ্যে যেকোনো সময়ে আসতে পারো।",
+        "formula": "X \\sim \\text{Uniform}(0, 20)"
+      },
+      {
+        "label": "PDF বাইর করো",
+        "content": "f(x) = 1/(20-0) = 1/20 = 0.05 — প্রতি মিনিটে সমান density।",
+        "formula": "f(x) = \\frac{1}{20} = 0.05"
+      },
+      {
+        "label": "Probability হিসাব করো",
+        "content": "P(X <= 5) = (5-0)/(20-0) = 5/20 = 0.25",
+        "formula": "P(X \\le 5) = \\frac{5-0}{20-0} = \\frac{5}{20} = 0.25"
+      }
+    ],
+    "answer": "৫ মিনিটের মধ্যে বাস পাওয়ার probability 25% বা ১/৪। মানে প্রতি ৪ বারে ১ বার তুমি ৫ মিনিটের মধ্যে বাস পাইবা!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Neural Network Weight Initialization",
+      "icon": "🧠",
+      "explanation": "Neural network এর weights শুরুতে random initialize করা হয়। অনেক ক্ষেত্রে Uniform distribution ব্যবহার করা হয় যাতে সব weights সমান chance পায়। Xavier/Glorot initialization এ Uniform(-limit, limit) use হয়।",
+      "realExample": "PyTorch এ nn.Linear layer default ভাবে Kaiming Uniform initialization use করে। TensorFlow এ Glorot Uniform popular।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport torch\nimport torch.nn as nn\n\n# Manual Xavier Uniform Initialization\nfan_in, fan_out = 784, 256\nlimit = np.sqrt(6.0 / (fan_in + fan_out))\nweights = np.random.uniform(-limit, limit, size=(fan_in, fan_out))\nprint(f\"Xavier Uniform range: [{-limit:.4f}, {limit:.4f}]\")\nprint(f\"Weights mean: {weights.mean():.6f}\")\nprint(f\"Weights std: {weights.std():.4f}\")\n\n# PyTorch built-in\nlayer = nn.Linear(784, 256)\nnn.init.xavier_uniform_(layer.weight)\nprint(f\"PyTorch Xavier weights range: [{layer.weight.min():.4f}, {layer.weight.max():.4f}]\")"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Random Search Hyperparameter Tuning",
+      "icon": "🔍",
+      "explanation": "Hyperparameter tuning এ Random Search করার সময় Uniform distribution থেইকা random hyperparameter values sample করা হয়। Grid Search এর চাইতে Random Search অনেক সময় ভালো কাজ করে কারণ এইটা uniformly explore করে।",
+      "realExample": "Scikit-learn এর RandomizedSearchCV তে learning_rate, regularization strength ইত্যাদি Uniform distribution থেইকা sample করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import uniform\n\n# Random Search for Hyperparameters\nnp.random.seed(42)\nn_trials = 20\n\n# Sample hyperparameters from Uniform distributions\nlearning_rates = uniform.rvs(loc=0.0001, scale=0.01, size=n_trials)\ndropout_rates = uniform.rvs(loc=0.1, scale=0.5, size=n_trials)\n\nprint(\"Trial | Learning Rate | Dropout\")\nprint(\"-\" * 40)\nfor i in range(5):\n    print(f\"  {i+1}   |   {learning_rates[i]:.6f}   |  {dropout_rates[i]:.3f}\")\n\n# Log-uniform for learning rate (better practice)\nlog_lr = np.exp(uniform.rvs(loc=np.log(1e-5), scale=np.log(1e-1)-np.log(1e-5), size=n_trials))\nprint(f\"\\nLog-uniform LR range: [{log_lr.min():.6f}, {log_lr.max():.6f}]\")"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Data Augmentation — Random Crop/Flip",
+      "icon": "🖼️",
+      "explanation": "Image augmentation এ random crop position, random rotation angle, random brightness — সব Uniform distribution থেইকা sample করা হয়। এইভাবে model বিভিন্ন variation দেখে আর robust হয়।",
+      "realExample": "ImageNet training এ random crop (uniform random position), random horizontal flip (Bernoulli 0.5), random color jitter (uniform range) — সব standard augmentation।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Image Augmentation with Uniform sampling\ndef random_crop(image_size, crop_size):\n    \"\"\"Uniform random crop position\"\"\"\n    max_x = image_size[0] - crop_size[0]\n    max_y = image_size[1] - crop_size[1]\n    x = np.random.randint(0, max_x + 1)  # Discrete Uniform\n    y = np.random.randint(0, max_y + 1)\n    return x, y\n\ndef random_augment(image_shape=(224, 224)):\n    \"\"\"Sample augmentation params from Uniform distributions\"\"\"\n    brightness = np.random.uniform(0.8, 1.2)    # Uniform[0.8, 1.2]\n    contrast = np.random.uniform(0.8, 1.2)\n    rotation = np.random.uniform(-15, 15)         # degrees\n    crop_x, crop_y = random_crop((256, 256), image_shape)\n    return {\n        'brightness': round(brightness, 3),\n        'contrast': round(contrast, 3),\n        'rotation': round(rotation, 1),\n        'crop_position': (crop_x, crop_y)\n    }\n\nfor i in range(3):\n    params = random_augment()\n    print(f\"Augment {i+1}: {params}\")"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Monte Carlo Simulation",
+      "icon": "🎰",
+      "explanation": "Monte Carlo method এ Uniform(0,1) random numbers generate করে complex integral বা probability estimate করা হয়। Uniform samples দিয়া pi এর value ও estimate করা যায়!",
+      "realExample": "Finance এ option pricing, physics simulation, Bayesian inference — সব জায়গায় Uniform random number generation base হিসাবে কাজ করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Monte Carlo: Estimate pi using Uniform random numbers\nnp.random.seed(42)\nn_samples = 100000\n\n# Uniform(0,1) samples\nx = np.random.uniform(0, 1, n_samples)\ny = np.random.uniform(0, 1, n_samples)\n\n# Check if point is inside unit circle\ninside_circle = (x**2 + y**2) <= 1.0\npi_estimate = 4 * inside_circle.mean()\n\nprint(f\"Samples: {n_samples}\")\nprint(f\"Points inside circle: {inside_circle.sum()}\")\nprint(f\"Pi estimate: {pi_estimate:.6f}\")\nprint(f\"Actual pi:   {np.pi:.6f}\")\nprint(f\"Error:       {abs(pi_estimate - np.pi):.6f}\")"
+      }
+    }
+  ],
+  "memoryTrick": "Uniform = 'ইউনিফর্ম' — স্কুলের ইউনিফর্ম এর মতো সবাই সমান! ডাইস এর ৬ মুখ = ৬ জন ছাত্র, সবার uniform এক রকম, সবার chance সমান ১/৬! নিউমার্কেটে লটারি = সবার কপাল সমান!",
+  "tags": ["uniform-distribution", "random-number-generation", "weight-initialization", "monte-carlo", "discrete-uniform", "continuous-uniform"],
+  "prev": "bernoulli-binomial",
+  "next": "softmax-categorical"
+}

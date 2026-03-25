@@ -1,0 +1,141 @@
+{
+  "slug": "bernoulli-binomial",
+  "title": "Bernoulli ও Binomial Distribution — হ্যাঁ/না ও গণনা",
+  "titleEn": "Bernoulli and Binomial Distribution — Yes/No and Counting",
+  "category": "probability-stats",
+  "order": 9,
+  "readTime": 14,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🪙",
+    "title": "গুলিস্তানের টস আর স্প্যাম ফিল্টারের গল্প",
+    "content": "গুরু একদিন গুলিস্তান মোড়ে দাঁড়াইয়া টস করতেছে। পাশে দাঁড়ানো মামা জিগায়, 'গুরু ভাই, হেড না টেইল?' গুরু কয়, 'দেখো মামা, জীবনটাই তো একটা কয়েন টস! হয় হেড, না হয় টেইল। হয় ভালোবাসা পাইবা, না হয় ভাসা পাইবা!' তারপর গুরু ফোন বাইর করলো, ইনবক্সে ৫০টা মেইল। গুরু কয়, 'এইটাও তো একই জিনিস মামা — প্রতিটা মেইল হয় spam, না হয় not spam। একটা টসেই সব সমাধান!' মামা কয়, 'কিন্তু গুরু ভাই, ১০টা মেইলের মধ্যে কয়টা spam হইব সেইটা ক্যামনে বুঝমু?' গুরু হাসলো, 'ওইটাই হইলো Binomial, মামা। একটা টস হইলো Bernoulli, আর অনেকগুলা টস একসাথে হইলো Binomial!'",
+    "reveal": "Bernoulli Distribution হইলো একটা single yes/no trial — মাত্র দুইটা outcome (success/failure)। আর Binomial Distribution হইলো n সংখ্যক independent Bernoulli trial এর মধ্যে মোট কতগুলা success হইলো তার distribution। Spam detection এ প্রতিটা email একটা Bernoulli trial (spam বা not spam), আর n টা email এর মধ্যে কয়টা spam সেইটা Binomial!"
+  },
+  "definition": {
+    "content": "Bernoulli Distribution হইলো একটা random variable যেটার মাত্র দুইটা outcome — success (1) probability p তে, আর failure (0) probability (1-p) তে। Binomial Distribution হইলো n সংখ্যক independent Bernoulli trial এর মধ্যে মোট success এর সংখ্যা গণনা করে।",
+    "formula": "\\text{Bernoulli: } P(X=k) = p^k(1-p)^{1-k}, \\quad k \\in \\{0,1\\} \\\\ \\text{Binomial: } P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}",
+    "formulaLabel": "Bernoulli ও Binomial PMF"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Bernoulli Trial কী?",
+        "content": "একটা experiment যেটার শুধু দুইটা result হইতে পারে — success (probability p) অথবা failure (probability 1-p)। যেমন: কয়েন টস (Head/Tail), ইমেইল (Spam/Not Spam), পরীক্ষায় পাস/ফেল।",
+        "formula": "P(X=1) = p, \\quad P(X=0) = 1-p"
+      },
+      {
+        "title": "Bernoulli Distribution এর Mean ও Variance",
+        "content": "Mean হইলো E[X] = p, মানে success এর probability ই average। Variance হইলো p(1-p), যেটা p=0.5 হইলে সবচেয়ে বেশি হয় — মানে ৫০-৫০ chance থাকলে uncertainty সবচেয়ে বেশি।",
+        "formula": "E[X] = p, \\quad \\text{Var}(X) = p(1-p)"
+      },
+      {
+        "title": "Bernoulli থেইকা Binomial",
+        "content": "ধরো তুমি n বার independently টস করলা, প্রতিবার success এর probability p। তাহলে মোট কতবার success পাইলা সেইটার distribution হইলো Binomial(n, p)। Formula তে C(n,k) হইলো combination — n টা থেইকা k টা বাছাই করার উপায়ের সংখ্যা।",
+        "formula": "P(X=k) = \\binom{n}{k} p^k (1-p)^{n-k}"
+      },
+      {
+        "title": "Binomial এর Mean ও Variance",
+        "content": "n টা Bernoulli trial এর sum হওয়ায়, Mean হইলো np আর Variance হইলো np(1-p)। যেমন ১০০ বার টস করলে (p=0.5) average ৫০ বার Head আসবে, আর variance হবে ২৫।",
+        "formula": "E[X] = np, \\quad \\text{Var}(X) = np(1-p)"
+      },
+      {
+        "title": "কখন Binomial ব্যবহার করবা?",
+        "content": "তিনটা শর্ত লাগবে: (১) নির্দিষ্ট সংখ্যক trial n, (২) প্রতিটা trial independent, (৩) প্রতিটা trial এ success probability p একই। যদি এই তিনটা শর্ত পূরণ হয়, তাহলে Binomial ব্যবহার করতে পারো!"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "স্প্যাম ইমেইল গণনা",
+    "problem": "একটা ইমেইল সার্ভারে ৩০% ইমেইল spam। তুমি ১০টা random ইমেইল নিলা। ঠিক ৩টা spam পাওয়ার probability কত?",
+    "steps": [
+      {
+        "label": "Parameter চিহ্নিত করো",
+        "content": "n = 10 (মোট ইমেইল), k = 3 (spam চাই), p = 0.30 (spam probability)",
+        "formula": "n=10, \\; k=3, \\; p=0.30"
+      },
+      {
+        "label": "Combination হিসাব করো",
+        "content": "১০টা থেইকা ৩টা বাছাইয়ের উপায় = C(10,3) = 10!/(3! * 7!) = 120",
+        "formula": "\\binom{10}{3} = \\frac{10!}{3! \\cdot 7!} = 120"
+      },
+      {
+        "label": "Success part হিসাব করো",
+        "content": "p^k = 0.30^3 = 0.027 — ৩টা spam পাওয়ার probability",
+        "formula": "p^k = 0.30^3 = 0.027"
+      },
+      {
+        "label": "Failure part হিসাব করো",
+        "content": "(1-p)^(n-k) = 0.70^7 = 0.0824 — বাকি ৭টা not spam হওয়ার probability",
+        "formula": "(1-p)^{n-k} = 0.70^7 \\approx 0.0824"
+      },
+      {
+        "label": "সব গুণ করো",
+        "content": "P(X=3) = 120 * 0.027 * 0.0824 = 0.2668",
+        "formula": "P(X=3) = 120 \\times 0.027 \\times 0.0824 \\approx 0.2668"
+      }
+    ],
+    "answer": "১০টা ইমেইলের মধ্যে ঠিক ৩টা spam পাওয়ার probability প্রায় 26.68%। মানে প্রতি ৪ বারে প্রায় ১ বার এইরকম হইবে!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Spam Email Classification",
+      "icon": "📧",
+      "explanation": "প্রতিটা email কে spam (1) বা not spam (0) হিসাবে classify করা — এইটা pure Bernoulli trial। Model এর output probability p হইলো সেই email spam হওয়ার likelihood।",
+      "realExample": "Gmail এর spam filter প্রতিটা incoming email এ Bernoulli probability estimate করে। যদি p > 0.5 হয়, spam folder এ যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import bernoulli, binom\n\n# Bernoulli: Single email spam check\np_spam = 0.3  # 30% emails are spam\nsingle_trial = bernoulli.rvs(p_spam, size=1)\nprint(f\"Email is spam: {bool(single_trial[0])}\")\n\n# Binomial: Out of 100 emails, how many spam?\nn_emails = 100\nspam_count = binom.rvs(n=n_emails, p=p_spam)\nprint(f\"Spam emails out of {n_emails}: {spam_count}\")\n\n# Probability of exactly 30 spam in 100 emails\nprob_exact_30 = binom.pmf(k=30, n=100, p=0.3)\nprint(f\"P(exactly 30 spam): {prob_exact_30:.4f}\")"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Click-Through Rate (CTR) Prediction",
+      "icon": "🖱️",
+      "explanation": "Ad দেখানোর পর user click করলো (1) না করলো না (0) — এইটাও Bernoulli। n জন user এর মধ্যে কতজন click করলো সেইটা Binomial।",
+      "realExample": "Facebook/Google Ads এ CTR prediction এ Bernoulli model use হয়। ১০০০ জন user কে ad দেখালে expected click count = n * p_click।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import binom\nimport matplotlib.pyplot as plt\n\n# CTR prediction\np_click = 0.05  # 5% CTR\nn_users = 1000\n\n# Expected clicks\nexpected_clicks = n_users * p_click\nprint(f\"Expected clicks: {expected_clicks}\")\n\n# Distribution of possible click counts\nk_values = np.arange(20, 80)\nprobabilities = binom.pmf(k_values, n=n_users, p=p_click)\n\n# 95% confidence interval\nlower, upper = binom.interval(0.95, n=n_users, p=p_click)\nprint(f\"95% CI for clicks: [{lower:.0f}, {upper:.0f}]\")"
+      }
+    },
+    {
+      "id": 3,
+      "title": "A/B Testing with Binomial",
+      "icon": "🧪",
+      "explanation": "A/B test এ conversion rate compare করার সময় প্রতিটা user এর conversion একটা Bernoulli trial। দুইটা group এর conversion count দুইটা independent Binomial distribution follow করে।",
+      "realExample": "E-commerce site এ নতুন checkout page test করতে হইলে — Group A (পুরানো page) ও Group B (নতুন page) এর conversion rate Binomial test দিয়া compare করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import binom_test, binom\n\n# A/B Test Example\nn_A, conversions_A = 1000, 50   # Control: 5% conversion\nn_B, conversions_B = 1000, 65   # Treatment: 6.5% conversion\n\np_A = conversions_A / n_A\np_B = conversions_B / n_B\n\nprint(f\"Control conversion rate: {p_A:.1%}\")\nprint(f\"Treatment conversion rate: {p_B:.1%}\")\n\n# Is treatment significantly better?\n# Under null hypothesis, p_B = p_A\nfrom scipy.stats import binomtest\nresult = binomtest(conversions_B, n_B, p_A, alternative='greater')\nprint(f\"p-value: {result.pvalue:.4f}\")\nprint(f\"Significant at 5%: {result.pvalue < 0.05}\")"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Defect Detection in Manufacturing",
+      "icon": "🏭",
+      "explanation": "প্রতিটা product defective (1) বা non-defective (0) — Bernoulli। n টা product inspect করলে কতগুলা defective সেইটা Binomial। Quality control এ acceptance sampling এ এইটা key।",
+      "realExample": "Tesla factory তে battery cell inspection — ১০০টা cell inspect করে যদি ৩টার বেশি defective পায়, পুরা batch reject।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import binom\n\n# Quality Control: Acceptance Sampling\np_defect = 0.02  # 2% defect rate\nn_inspect = 100   # inspect 100 items\nmax_defects = 3   # reject if > 3 defects\n\n# Probability of accepting the batch\np_accept = binom.cdf(max_defects, n=n_inspect, p=p_defect)\nprint(f\"P(accept batch): {p_accept:.4f}\")\nprint(f\"P(reject batch): {1-p_accept:.4f}\")\n\n# What if defect rate is actually 5%?\np_defect_bad = 0.05\np_accept_bad = binom.cdf(max_defects, n=n_inspect, p=p_defect_bad)\nprint(f\"P(accept bad batch): {p_accept_bad:.4f}\")"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Binary Classification Model Evaluation",
+      "icon": "📊",
+      "explanation": "Model এর prediction correct (1) বা incorrect (0) — Bernoulli। n টা test sample এ কতগুলা correct prediction সেইটা Binomial follow করে। এইভাবে accuracy এর confidence interval বাইর করা যায়।",
+      "realExample": "Medical diagnosis model — ২০০ patient এ ১৮০টা correct prediction দিলে accuracy = 90%। কিন্তু true accuracy কত range এ আছে সেইটা Binomial CI দিয়া বুঝা যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import binom\n\n# Model Accuracy Confidence Interval\nn_test = 200\ncorrect = 180\naccuracy = correct / n_test\n\nprint(f\"Observed accuracy: {accuracy:.1%}\")\n\n# 95% Confidence Interval using Binomial\n# Clopper-Pearson exact interval\nalpha = 0.05\nlower = binom.ppf(alpha/2, n_test, accuracy) / n_test\nupper = binom.ppf(1 - alpha/2, n_test, accuracy) / n_test\nprint(f\"95% CI: [{lower:.1%}, {upper:.1%}]\")\n\n# Is model significantly better than random (50%)?\nfrom scipy.stats import binomtest\nresult = binomtest(correct, n_test, 0.5, alternative='greater')\nprint(f\"Better than random? p-value: {result.pvalue:.2e}\")"
+      }
+    }
+  ],
+  "memoryTrick": "Bernoulli = 'বার-নুল্লি' — একবার (বার) ই null (শূন্য) বা one হয়! Binomial = 'Bi-NO-mial' — দুই (Bi) টা option (yes/NO), অনেকবার (mial = many trial)! গুলিস্তানে টস মারো একবার = Bernoulli, ১০ বার মারো = Binomial!",
+  "tags": ["bernoulli", "binomial", "binary-classification", "spam-detection", "coin-flip", "discrete-distribution", "a-b-testing"],
+  "prev": "normal-distribution",
+  "next": "uniform-distribution"
+}
