@@ -1,0 +1,110 @@
+{
+  "slug": "vector",
+  "title": "Vector — দিক আছে, মান আছে",
+  "titleEn": "Vector",
+  "category": "linear-algebra",
+  "order": 2,
+  "readTime": 8,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🛺",
+    "title": "কামালের CNG-র গল্প",
+    "content": "ধর ভাই, তুই মিরপুর-১০ থেকে ফার্মগেটে যাইবি CNG-তে। ড্রাইভার কামাল ভাই জিজ্ঞেস করল 'কই যাইবেন?' তুই বললি 'ফার্মগেট।' শুধু '৫ কিলোমিটার' বলসি না — দিকটাও বলসি! কারণ ৫ কিলোমিটার তো যেকোনো দিকে যাইতে পারো — উত্তানে গেলে তো বনানী চইলা যাইবি, দক্ষিণে গেলে ধানমন্ডি। কামাল ভাইরে শুধু দূরত্ব বললে হইব না, দিকটাও লাগবে!",
+    "reveal": "এইটাই হইল Vector, মামা! মান (magnitude) আছে — কত দূর, আর দিক (direction) আছে — কোনদিকে। Scalar-এর সাথে পার্থক্যটা হইল direction। বুঝলা?"
+  },
+  "definition": {
+    "content": "Vector হইল ordered list of numbers যেইটার মান (magnitude) এবং দিক (direction) দুইটাই আছে। n-dimensional space-এ n-টা component থাকে।",
+    "formula": "\\vec{v} = \\begin{bmatrix} v_1 \\\\ v_2 \\\\ \\vdots \\\\ v_n \\end{bmatrix} \\in \\mathbb{R}^n",
+    "formulaLabel": "n-dimensional vector — n-টা সংখ্যার ordered list"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Vector কী জিনিস?",
+        "content": "Scalar হইল একটা সংখ্যা। কিন্তু Vector হইল একগাদা সংখ্যা সাজানো — ordered list। প্রতিটা সংখ্যারে component বলে। ধর তোর CNG GPS coordinate (23.8, 90.4) — এইটা একটা 2D vector। দুইটা component: latitude আর longitude।",
+        "formula": "\\vec{position} = \\begin{bmatrix} 23.8 \\\\ 90.4 \\end{bmatrix}"
+      },
+      {
+        "title": "Vector-এর Dimension",
+        "content": "কয়টা component আছে সেইটাই dimension। 2D vector-এ ২টা number, 3D-তে ৩টা, আর ML-এ? ভাই, হাজার হাজার dimension থাকতে পারে! GPT-এর word embedding-এ ১২২৮৮টা dimension আছে। মাথা খারাপ না?",
+        "formula": "\\vec{v} \\in \\mathbb{R}^2, \\quad \\vec{w} \\in \\mathbb{R}^{12288}"
+      },
+      {
+        "title": "Vector Notation",
+        "content": "Vector লেখার কয়েকটা style আছে — তীরচিহ্ন দিয়া v⃗, bold করে v, বা bracket-এ [v₁, v₂]। ML-এ সাধারণত column vector হিসাবে লেখা হয়। Row vector হইলে transpose চিহ্ন লাগে।",
+        "formula": "\\vec{v} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}, \\quad \\vec{v}^T = \\begin{bmatrix} 3 & 4 \\end{bmatrix}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "CNG-র Route Vector",
+    "problem": "কামালের CNG মিরপুর-১০ (0, 0) থেকে ফার্মগেট (3, 4)-তে গেল। Route-র vector বাইর কর এবং magnitude (দূরত্ব) হিসাব কর।",
+    "steps": [
+      {
+        "label": "Step 1: Vector বানাও",
+        "content": "Start point (0,0) আর end point (3,4) থেকে vector পাই",
+        "formula": "\\vec{d} = \\begin{bmatrix} 3 - 0 \\\\ 4 - 0 \\end{bmatrix} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 2: Magnitude বাইর কর",
+        "content": "Pythagorean theorem — x² + y² এর root",
+        "formula": "\\|\\vec{d}\\| = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5"
+      },
+      {
+        "label": "Step 3: মানে কী দাঁড়াল?",
+        "content": "CNG পূর্বে ৩ unit আর উত্তরে ৪ unit গেছে, মোট সরলরেখায় দূরত্ব ৫ unit।"
+      }
+    ],
+    "answer": "Route vector হইল [3, 4] আর সরলরেখায় দূরত্ব ৫ unit — ঠিক 3-4-5 right triangle, মামা!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Feature Vector",
+      "icon": "📊",
+      "explanation": "ML-এ প্রতিটা data point-কে vector হিসাবে represent করা হয়। ধর তুই বাসার ভাড়া predict করবি — তোর কাছে area (sqft), rooms, floor, age আছে। এই ৪টা feature মিলায়া একটা feature vector হয়। Model এই vector দেখে predict করে।",
+      "realExample": "Zillow-এর house price prediction-এ প্রতিটা বাসারে একটা feature vector দিয়া represent করা হয় — [1200, 3, 5, 10] মানে 1200 sqft, 3 rooms, 5th floor, 10 years old।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# বাসার feature vector\n# [area_sqft, rooms, floor, age_years]\nhouse_vector = np.array([1200, 3, 5, 10])\n\nprint(f'Feature vector: {house_vector}')\nprint(f'Dimensions: {house_vector.shape[0]}')\nprint(f'Area: {house_vector[0]} sqft')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Word Embedding (Word2Vec)",
+      "icon": "📝",
+      "explanation": "NLP-তে প্রতিটা word-কে একটা vector-এ convert করা হয়। 'রাজা' শব্দের vector আর 'রাণী' শব্দের vector কাছাকাছি থাকে কারণ meaning similar। এইটাই word embedding — শব্দের অর্থকে সংখ্যায় ধরা!",
+      "realExample": "Google-র Word2Vec-এ বিখ্যাত example: vector('King') - vector('Man') + vector('Woman') ≈ vector('Queen')। মানে vector-এ meaning encode হইয়া আছে!",
+      "code": {
+        "language": "python",
+        "snippet": "from gensim.models import KeyedVectors\n\n# Pre-trained word vectors load করো\nmodel = KeyedVectors.load_word2vec_format(\n    'GoogleNews-vectors-negative300.bin', binary=True\n)\n\n# 'king' শব্দের vector (300 dimensions!)\nking_vector = model['king']\nprint(f'Dimensions: {king_vector.shape}')  # (300,)\n\n# বিখ্যাত analogy: King - Man + Woman = Queen\nresult = model.most_similar(\n    positive=['king', 'woman'],\n    negative=['man'], topn=1\n)\nprint(f'Result: {result[0][0]}')  # 'queen'"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Image as Vector",
+      "icon": "🖼️",
+      "explanation": "একটা image-ও vector! 28x28 pixel-এর MNIST digit image-কে 784-dimensional vector-এ flatten করা হয়। প্রতিটা pixel-এর brightness (0-255) হইল একেকটা component। ছবি = সংখ্যার লিস্ট!",
+      "realExample": "MNIST dataset-এ হাতে লেখা ০-৯ digit recognize করতে প্রতিটা 28x28 image-কে 784-dimensional vector হিসাবে neural network-এ feed করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.datasets import load_digits\nimport numpy as np\n\n# 8x8 digit images load করো\ndigits = load_digits()\nimage = digits.images[0]  # 8x8 matrix\nprint(f'Image shape: {image.shape}')  # (8, 8)\n\n# Flatten করো — vector বানাও\nimage_vector = image.flatten()\nprint(f'Vector shape: {image_vector.shape}')  # (64,)\nprint(f'Pixel values: {image_vector[:10]}...')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Gradient Vector",
+      "icon": "⬇️",
+      "explanation": "Neural network train করার সময় loss function-এর gradient একটা vector — প্রতিটা weight-এর জন্য loss কোনদিকে বাড়ছে সেইটা বলে। Gradient descent এই vector-এর বিপরীত দিকে যায়!",
+      "realExample": "PyTorch-এ .backward() call করলে সব parameter-এর .grad attribute-এ gradient vector store হয়। Optimizer সেই vector follow করে weight update করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\n# Simple model: y = w1*x1 + w2*x2\nw = torch.tensor([1.0, 2.0], requires_grad=True)\nx = torch.tensor([3.0, 4.0])\n\ny = torch.dot(w, x)  # 1*3 + 2*4 = 11\nloss = (y - 10.0) ** 2  # target = 10\n\nloss.backward()\nprint(f'Gradient vector: {w.grad}')  # [6.0, 8.0]\n# gradient vector বলতেছে কোনদিকে loss বাড়ে"
+      }
+    }
+  ],
+  "memoryTrick": "Vector = CNG-র route — শুধু কত দূর (magnitude) না, কোনদিকে (direction) সেইটাও লাগে। Scalar-এ শুধু টাকা, Vector-এ টাকা + কারে দিবি!",
+  "tags": ["vector", "direction", "magnitude", "feature-vector", "embedding", "dimension"],
+  "prev": "scalar",
+  "next": "vector-norm"
+}

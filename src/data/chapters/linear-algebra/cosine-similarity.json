@@ -1,0 +1,122 @@
+{
+  "slug": "cosine-similarity",
+  "title": "Cosine Similarity — কোণের মিল",
+  "titleEn": "Cosine Similarity",
+  "category": "linear-algebra",
+  "order": 6,
+  "readTime": 10,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🍕",
+    "title": "বাজারে রুচির মিল",
+    "content": "ধর মামা, তুই আর তোর দোস্ত ফাহিম বাজারে গেছস। তোর কেনাকাটা vector: [চাল=১০কেজি, মুরগি=২কেজি, পেঁয়াজ=৫কেজি]। ফাহিমের: [চাল=২০কেজি, মুরগি=৪কেজি, পেঁয়াজ=১০কেজি]। ফাহিম সব দ্বিগুণ কিনছে — কিন্তু রুচি তো same! দুইজনেই চাল বেশি, মুরগি কম, পেঁয়াজ মাঝামাঝি কিনতেছস। আবার তোর আরেক দোস্ত জামাল কিনছে [চাল=১কেজি, মুরগি=১০কেজি, পেঁয়াজ=১কেজি] — পরিমাণ কম কিন্তু রুচি সম্পূর্ণ আলাদা!",
+    "reveal": "Cosine Similarity পরিমাণ ignore করে শুধু 'রুচি' (direction) দেখে! তোর আর ফাহিমের cosine similarity ≈ 1.0 (same রুচি), কিন্তু তোর আর জামালের cosine similarity অনেক কম (আলাদা রুচি)। পরিমাণ যতই হোক, pattern match করলেই similar! বুঝলা?"
+  },
+  "definition": {
+    "content": "Cosine Similarity দুইটা vector-এর মধ্যকার কোণের cosine মাপে। +১ মানে একই দিকে (identical), ০ মানে perpendicular (কোনো মিল নাই), -১ মানে বিপরীত দিকে। Magnitude ignore করে শুধু direction compare করে।",
+    "formula": "\\cos(\\theta) = \\frac{\\vec{a} \\cdot \\vec{b}}{\\|\\vec{a}\\| \\|\\vec{b}\\|} = \\frac{\\sum_{i=1}^{n} a_i b_i}{\\sqrt{\\sum_{i=1}^{n} a_i^2} \\cdot \\sqrt{\\sum_{i=1}^{n} b_i^2}}",
+    "formulaLabel": "Cosine Similarity — dot product ÷ (norms-এর গুণফল)"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Cosine Similarity vs Dot Product",
+        "content": "Dot product magnitude-দ্বারা affected হয় — বড় vector-এর dot product বড় হবেই। কিন্তু cosine similarity normalize করে ফেলে, তাই শুধু 'দিক'-এর মিল দেখে। তোর বাজারের ১০কেজি চাল আর ফাহিমের ২০কেজি চাল — পরিমাণ আলাদা কিন্তু pattern same!",
+        "formula": "\\text{dot: } \\vec{a} \\cdot \\vec{b} = 150, \\quad \\text{cosine: } \\frac{150}{\\|a\\| \\cdot \\|b\\|} = 1.0"
+      },
+      {
+        "title": "Value Range আর Interpretation",
+        "content": "Cosine similarity সবসময় -১ থেকে +১ এর মধ্যে থাকে। +১ = হুবহু same direction, ০ = কোনো সম্পর্ক নাই, -১ = সম্পূর্ণ উল্টা। NLP-তে সাধারণত ০ থেকে +১ পাই কারণ word count negative হয় না।",
+        "formula": "-1 \\leq \\cos(\\theta) \\leq 1"
+      },
+      {
+        "title": "Unit Vector-এর সাথে সম্পর্ক",
+        "content": "যদি দুইটা vector আগেই unit vector হয় (norm = ১), তাইলে cosine similarity = dot product! কারণ denominator ১×১ = ১ হইয়া যায়। তাই embedding-গুলা normalize করে রাখলে cosine similarity হিসাব অনেক fast হয়!",
+        "formula": "\\text{If } \\|\\hat{a}\\| = \\|\\hat{b}\\| = 1: \\quad \\cos(\\theta) = \\hat{a} \\cdot \\hat{b}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "বাজারের রুচির Similarity",
+    "problem": "তোর কেনাকাটা a = [10, 2, 5] আর ফাহিমের b = [20, 4, 10]। দুইজনের রুচির cosine similarity হিসাব কর।",
+    "steps": [
+      {
+        "label": "Step 1: Dot Product",
+        "content": "Component-wise গুণ করে যোগ কর",
+        "formula": "\\vec{a} \\cdot \\vec{b} = 10 \\times 20 + 2 \\times 4 + 5 \\times 10 = 200 + 8 + 50 = 258"
+      },
+      {
+        "label": "Step 2: Norms বাইর কর",
+        "content": "দুইটা vector-এর L2 norm",
+        "formula": "\\|\\vec{a}\\| = \\sqrt{100+4+25} = \\sqrt{129} \\approx 11.36, \\quad \\|\\vec{b}\\| = \\sqrt{400+16+100} = \\sqrt{516} \\approx 22.72"
+      },
+      {
+        "label": "Step 3: ভাগ কর",
+        "content": "Dot product ÷ norms-এর গুণফল",
+        "formula": "\\cos(\\theta) = \\frac{258}{11.36 \\times 22.72} = \\frac{258}{258.01} \\approx 1.0"
+      }
+    ],
+    "answer": "Cosine similarity ≈ ১.০! ফাহিম তোর ঠিক দ্বিগুণ কিনছে, তাই direction same — রুচি ১০০% match! পরিমাণ আলাদা কিন্তু taste identical, মামা!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Recommendation System",
+      "icon": "🎬",
+      "explanation": "Netflix/YouTube-তে তোর দেখার history vector আর অন্যদের history vector-এর cosine similarity মাইপা similar user খুঁজে। তুই আর ফাহিম যদি same genre-র movie দেখো (যদিও ফাহিম বেশি দেখে), তোমাদের cosine similarity বেশি — ফাহিম যা দেখছে তুইও পছন্দ করবি!",
+      "realExample": "Netflix-এর recommendation engine user-এর rating vector-এর cosine similarity ব্যবহার করে — 'ভাই তুমি আর এই user-এর taste ৯২% match, তাই এই movie try করো!'",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.metrics.pairwise import cosine_similarity\n\n# User rating vectors [action, comedy, drama, horror]\nuser_tui = np.array([[5, 3, 4, 1]])   # তুই\nuser_fahim = np.array([[10, 6, 8, 2]])  # ফাহিম (দ্বিগুণ দেখে)\nuser_jamal = np.array([[1, 1, 1, 5]])   # জামাল (horror fan)\n\nsim_fahim = cosine_similarity(user_tui, user_fahim)\nsim_jamal = cosine_similarity(user_tui, user_jamal)\n\nprint(f'তুই vs ফাহিম: {sim_fahim[0][0]:.4f}')  # ~1.0\nprint(f'তুই vs জামাল: {sim_jamal[0][0]:.4f}')  # অনেক কম"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Semantic Search (NLP)",
+      "icon": "🔍",
+      "explanation": "Google search এখন keyword match না করে meaning match করে! Query আর document-কে embedding vector-এ convert করে cosine similarity মাপে। 'ঢাকার সেরা খাবার' আর 'best food in Dhaka' — শব্দ আলাদা কিন্তু cosine similarity বেশি কারণ meaning same!",
+      "realExample": "Google-র Semantic Search-এ BERT embedding-এর cosine similarity দিয়া query-র সাথে relevant page rank করা হয়। Exact keyword match না থাকলেও meaning match করলে result আসে।",
+      "code": {
+        "language": "python",
+        "snippet": "from sentence_transformers import SentenceTransformer\nfrom sklearn.metrics.pairwise import cosine_similarity\n\nmodel = SentenceTransformer('all-MiniLM-L6-v2')\n\nquery = 'best restaurants in Dhaka'\ndocs = [\n    'Top 10 places to eat in Dhaka city',\n    'Dhaka traffic is terrible',\n    'Famous food spots near Dhanmondi'\n]\n\nq_emb = model.encode([query])\nd_emb = model.encode(docs)\n\nsims = cosine_similarity(q_emb, d_emb)[0]\nfor doc, sim in zip(docs, sims):\n    print(f'{sim:.4f} | {doc}')\n# Food-related docs বেশি similar হইব!"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Plagiarism Detection",
+      "icon": "📋",
+      "explanation": "দুইটা document-এর cosine similarity বেশি মানে content অনেকটা same — plagiarism! Turnitin, Copyscape এই principle-এ কাজ করে। Document-কে TF-IDF vector-এ convert করে cosine similarity মাপলেই ধরা পড়ে কে কার থেকে কপি করছে!",
+      "realExample": "Turnitin-এ student-এর paper-এর TF-IDF vector আর database-র সব paper-এর vector-এর cosine similarity মাইপা similarity percentage দেখায়।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.feature_extraction.text import TfidfVectorizer\nfrom sklearn.metrics.pairwise import cosine_similarity\n\noriginal = 'Machine learning uses data to train models'\ncopy = 'ML uses data for training models'\ndifferent = 'I love eating biryani in Dhaka'\n\nvectorizer = TfidfVectorizer()\nvectors = vectorizer.fit_transform([original, copy, different])\n\nsim_matrix = cosine_similarity(vectors)\nprint(f'Original vs Copy: {sim_matrix[0][1]:.4f}')     # বেশি!\nprint(f'Original vs Different: {sim_matrix[0][2]:.4f}')  # কম"
+      }
+    },
+    {
+      "id": 4,
+      "title": "RAG — Retrieval-Augmented Generation",
+      "icon": "📚",
+      "explanation": "ChatGPT/Claude-কে তোর নিজের document-এর উপর ভিত্তি করে answer দিতে চাইলে RAG ব্যবহার করো। Question-এর embedding আর document chunk-এর embedding-এর cosine similarity দিয়া সবচেয়ে relevant chunk খুঁজে বাইর করে LLM-কে দেওয়া হয়।",
+      "realExample": "ChatGPT Plugins আর Perplexity AI-তে user question-এর embedding vector-এর সাথে knowledge base-র chunk-এর cosine similarity মাইপা top-k relevant chunks retrieve করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Simplified RAG retrieval\ndef retrieve_top_k(query_emb, doc_embs, k=2):\n    \"\"\"Cosine similarity দিয়া top-k documents খুঁজো\"\"\"\n    # Normalize for cosine similarity\n    q_norm = query_emb / np.linalg.norm(query_emb)\n    d_norms = doc_embs / np.linalg.norm(\n        doc_embs, axis=1, keepdims=True\n    )\n    # Cosine sim = dot product (normalized vectors)\n    similarities = d_norms @ q_norm\n    top_k_idx = np.argsort(similarities)[-k:][::-1]\n    return top_k_idx, similarities[top_k_idx]\n\n# Example\nquery = np.random.randn(384)  # query embedding\ndocs = np.random.randn(100, 384)  # 100 doc embeddings\nidx, scores = retrieve_top_k(query, docs, k=3)\nprint(f'Top docs: {idx}, Scores: {scores}')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Face Verification",
+      "icon": "🤳",
+      "explanation": "Phone unlock করার সময় তোর মুখের ছবি একটা embedding vector-এ convert হয়। Stored face vector-এর সাথে cosine similarity মাপা হয় — threshold (যেমন 0.7)-এর বেশি হইলে unlock! Same person-এর different angle-এর ছবির similarity বেশি থাকে।",
+      "realExample": "Apple Face ID-তে TrueDepth camera-র 3D face data-কে 128-dimensional embedding-এ convert করে cosine similarity দিয়া match করা হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\ndef verify_face(face_emb, stored_emb, threshold=0.7):\n    \"\"\"Cosine similarity দিয়া face verify করো\"\"\"\n    cos_sim = np.dot(face_emb, stored_emb) / (\n        np.linalg.norm(face_emb) * np.linalg.norm(stored_emb)\n    )\n    is_match = cos_sim >= threshold\n    return is_match, cos_sim\n\n# Simulate face embeddings (128-dim)\nstored_face = np.random.randn(128)\nsame_person = stored_face + np.random.randn(128) * 0.1  # slight variation\ndiff_person = np.random.randn(128)  # totally different\n\nmatch1, sim1 = verify_face(same_person, stored_face)\nmatch2, sim2 = verify_face(diff_person, stored_face)\nprint(f'Same person: sim={sim1:.4f}, match={match1}')\nprint(f'Diff person: sim={sim2:.4f}, match={match2}')"
+      }
+    }
+  ],
+  "memoryTrick": "Cosine Similarity = বাজারের রুচি match — কে কতটুকু কিনছে (পরিমাণ) সেইটা বাদ দাও, কী ধরনের জিনিস কিনছে (pattern) সেইটা দেখো। +১ = টুইন রুচি, ০ = কোনো মিল নাই!",
+  "tags": ["cosine-similarity", "similarity", "recommendation", "search", "NLP", "RAG", "face-verification"],
+  "prev": "dot-product",
+  "next": "vector-operations"
+}

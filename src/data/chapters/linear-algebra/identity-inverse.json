@@ -1,0 +1,122 @@
+{
+  "slug": "identity-inverse",
+  "title": "Identity ও Inverse Matrix — পরিচয় ও উল্টো",
+  "titleEn": "Identity and Inverse Matrix",
+  "category": "linear-algebra",
+  "order": 11,
+  "readTime": 12,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🔑",
+    "title": "ফারুকের Ctrl+Z আর পাসওয়ার্ড",
+    "content": "ধর তোর বন্ধু ফারুক মতিঝিলে একটা অফিসে কাজ করে। একদিন সে Excel-এ বিশাল একটা হিসাব করতে গিয়া ভুল কইরা ফেলল — সব data গায়েব! ফারুক চিৎকার দিল 'Ctrl+Z! Ctrl+Z!' আর সব আগের মতো ফিরা আসল। এই Ctrl+Z = Inverse operation! আসল কাজ × উল্টো কাজ = কিছুই হয় নাই (Identity)। এবার ধর ফারুকের ফোনে পাসওয়ার্ড আছে। পাসওয়ার্ড দিলে ফোন unlock হয় — মানে পাসওয়ার্ড হইল encryption-এর inverse। Lock × Unlock = ফোন যেমন ছিল তেমনই (Identity)। আবার ধর ফারুক কিছুই করে নাই — শুধু বইসা আছে। এইটা হইল Identity — ১ দিয়া গুণ করলে সংখ্যা যেমন থাকে তেমনই, Identity matrix দিয়া গুণ করলে matrix-ও তেমনই থাকে!",
+    "reveal": "Identity Matrix = কিছু করি নাই! Inverse Matrix = Ctrl+Z — undo button! A × A⁻¹ = I (Identity)!"
+  },
+  "definition": {
+    "content": "Identity Matrix (I) হইল এমন square matrix যেইটা দিয়া গুণ করলে কোনো পরিবর্তন হয় না — AI = IA = A। এইটার diagonal-এ সব ১, বাকি সব ০। Inverse Matrix (A⁻¹) হইল এমন matrix যেইটা দিয়া A-কে গুণ করলে Identity পাবা — AA⁻¹ = A⁻¹A = I। শুধু square matrix-এর inverse থাকতে পারে, আর সবার থাকেও না।",
+    "formula": "I_n = \\begin{bmatrix} 1 & 0 & \\cdots & 0 \\\\ 0 & 1 & \\cdots & 0 \\\\ \\vdots & \\vdots & \\ddots & \\vdots \\\\ 0 & 0 & \\cdots & 1 \\end{bmatrix}, \\quad A A^{-1} = A^{-1} A = I",
+    "formulaLabel": "Identity Matrix I আর Inverse: AA⁻¹ = I"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Identity Matrix — সংখ্যায় ১ এর মতো",
+        "content": "সাধারণ সংখ্যায় ১ দিয়া গুণ করলে সংখ্যা same থাকে: 5 × 1 = 5। Matrix-এর জগতে Identity matrix I ঠিক সেই কাজ করে: AI = IA = A। কোনো matrix-কে I দিয়া গুণ করলে সেই matrix-ই আসে। I-এর main diagonal-এ (উপরে-বাম থেকে নিচে-ডান) সব ১, বাকি সব ০। 2×2 identity = [[1,0],[0,1]], 3×3 identity = [[1,0,0],[0,1,0],[0,0,1]]।",
+        "formula": "\\begin{bmatrix} 2 & 3 \\\\ 4 & 5 \\end{bmatrix} \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix} = \\begin{bmatrix} 2 & 3 \\\\ 4 & 5 \\end{bmatrix}"
+      },
+      {
+        "title": "Inverse Matrix — Ctrl+Z",
+        "content": "সাধারণ সংখ্যায় ৫ এর inverse হইল ১/৫, কারণ ৫ × ১/৫ = ১। Matrix-এও একই concept: A × A⁻¹ = I। কিন্তু matrix-এ 'ভাগ' বইলা কিছু নাই — inverse দিয়া গুণ করতে হয়। সবার inverse থাকে না — determinant ০ হইলে inverse নাই (singular matrix)। যেমন সব row same হইলে, বা একটা row আরেকটার গুণিতক হইলে।",
+        "formula": "A^{-1} = \\frac{1}{ad - bc} \\begin{bmatrix} d & -b \\\\ -c & a \\end{bmatrix} \\quad \\text{for } A = \\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}"
+      },
+      {
+        "title": "Inverse-এর Properties",
+        "content": "কিছু গুরুত্বপূর্ণ properties: (1) (A⁻¹)⁻¹ = A — inverse-এর inverse = আসল। Ctrl+Z-এর Ctrl+Z = আসল কাজ! (2) (AB)⁻¹ = B⁻¹A⁻¹ — গুণের inverse-এ order উলটা যায়। জুতা আগে পরো তারপর মোজা — খুলতে হইলে আগে মোজা তারপর জুতা! (3) (Aᵀ)⁻¹ = (A⁻¹)ᵀ — transpose আর inverse-এর order বদলানো যায়।",
+        "formula": "(A^{-1})^{-1} = A, \\quad (AB)^{-1} = B^{-1}A^{-1}, \\quad (A^T)^{-1} = (A^{-1})^T"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "2×2 Matrix-এর Inverse বের করা",
+    "problem": "A = [[4, 7], [2, 6]] matrix-এর inverse বের কর এবং verify কর যে AA⁻¹ = I।",
+    "steps": [
+      {
+        "label": "Step 1: Determinant বের কর",
+        "content": "2×2 matrix-এ det = ad - bc",
+        "formula": "\\det(A) = 4 \\times 6 - 7 \\times 2 = 24 - 14 = 10 \\neq 0 \\quad \\checkmark"
+      },
+      {
+        "label": "Step 2: Inverse formula apply কর",
+        "content": "d আর a swap কর, b আর c-তে minus দাও, 1/det দিয়া গুণ কর",
+        "formula": "A^{-1} = \\frac{1}{10} \\begin{bmatrix} 6 & -7 \\\\ -2 & 4 \\end{bmatrix} = \\begin{bmatrix} 0.6 & -0.7 \\\\ -0.2 & 0.4 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 3: Verify — AA⁻¹ = I?",
+        "content": "A আর A⁻¹ গুণ কইরা দেখ Identity আসে কিনা",
+        "formula": "AA^{-1} = \\begin{bmatrix} 4 & 7 \\\\ 2 & 6 \\end{bmatrix} \\begin{bmatrix} 0.6 & -0.7 \\\\ -0.2 & 0.4 \\end{bmatrix} = \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix} = I \\quad \\checkmark"
+      }
+    ],
+    "answer": "A⁻¹ = [[0.6, -0.7], [-0.2, 0.4]] এবং AA⁻¹ = I confirm হইল! Ctrl+Z কাজ করতেছে!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Linear Regression — Normal Equation",
+      "icon": "📈",
+      "explanation": "Linear regression-এর closed-form solution-এ inverse লাগে: w = (XᵀX)⁻¹Xᵀy। Data matrix-কে transpose কর, নিজের সাথে গুণ কর, inverse নাও, তারপর target-এর সাথে গুণ কর — optimal weights পাইবা! Gradient descent ছাড়াই! কিন্তু বড় dataset-এ inverse compute করা expensive, তাই gradient descent বেশি use হয়।",
+      "realExample": "ঢাকার বাসার দাম predict করতে — area, rooms, floor number দিয়া Normal Equation-এ একবারেই weight বের করা যায়!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Dataset: ঢাকার বাসার দাম\n# Features: area (sqft), rooms, floor\nX = np.array([\n    [1, 1200, 3, 5],  # 1 = bias term\n    [1, 800,  2, 3],\n    [1, 1500, 4, 8],\n    [1, 1000, 3, 6],\n    [1, 2000, 5, 10],\n])\ny = np.array([50, 30, 70, 45, 90])  # price in lakh\n\n# Normal Equation: w = (X^T X)^{-1} X^T y\nXtX = X.T @ X                    # X^T × X\nXtX_inv = np.linalg.inv(XtX)     # (X^T X)^{-1} — INVERSE!\nw = XtX_inv @ X.T @ y            # optimal weights!\n\nprint(f'Weights: {w}')\nprint(f'Prediction for [1, 1100, 3, 7]: {np.dot([1, 1100, 3, 7], w):.1f} lakh')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Solving Linear Systems — Ax = b",
+      "icon": "🔢",
+      "explanation": "অনেক ML problem-এ Ax = b solve করতে হয় — মানে x = A⁻¹b। A inverse বের কইরা b-এর সাথে গুণ করলেই solution! Kalman filter, Gaussian processes, optimization — সবখানে linear system solve করা লাগে। Identity matrix check করে solution ঠিক আছে কিনা।",
+      "realExample": "Self-driving car-এর Kalman filter-এ প্রতি second-এ matrix inverse compute হয় position estimate-এর জন্য!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# System of equations:\n# 2x + 3y = 8\n# 4x + y  = 6\n\nA = np.array([[2, 3], [4, 1]])\nb = np.array([8, 6])\n\n# Method 1: x = A^{-1} × b\nA_inv = np.linalg.inv(A)\nx = A_inv @ b\nprint(f'Solution: x={x[0]:.2f}, y={x[1]:.2f}')\n\n# Verify: A × x = b?\nprint(f'Verify A @ x = {A @ x}')  # should be [8, 6]\n\n# Method 2: More numerically stable\nx_stable = np.linalg.solve(A, b)  # internally uses LU decomposition\nprint(f'Stable solution: {x_stable}')\n\n# Identity check\nprint(f'A @ A_inv = \\n{A @ A_inv}')  # Should be Identity!"
+      }
+    },
+    {
+      "id": 3,
+      "title": "PCA — Principal Component Analysis",
+      "icon": "📉",
+      "explanation": "PCA-তে covariance matrix-এর eigendecomposition করা হয়, আর whitening step-এ inverse square root of eigenvalue matrix লাগে। Data-কে uncorrelated করতে — মানে features-এর মধ্যে dependency সরাতে — inverse essential। Identity matrix verify করে whitened data properly uncorrelated কিনা।",
+      "realExample": "Face recognition-এ Eigenfaces method-এ ১০০+ dimensional face data-কে PCA দিয়া ১০-২০ dimension-এ নামানো হয়!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\n\n# High-dimensional data\nX = np.random.randn(100, 10)  # 100 samples, 10 features\n\n# Manual PCA with covariance matrix\nX_centered = X - X.mean(axis=0)\ncov = (X_centered.T @ X_centered) / (len(X) - 1)  # 10×10\n\n# Eigendecomposition\neigenvalues, eigenvectors = np.linalg.eigh(cov)\n\n# Whitening: scale by inverse sqrt of eigenvalues\nwhitening_matrix = eigenvectors @ np.diag(1.0 / np.sqrt(eigenvalues + 1e-5))\nX_whitened = X_centered @ whitening_matrix\n\n# Verify: covariance ≈ Identity!\ncov_whitened = np.cov(X_whitened.T)\nprint(f'Close to Identity: {np.allclose(cov_whitened, np.eye(10), atol=0.1)}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Weight Initialization — Identity Init",
+      "icon": "🏗️",
+      "explanation": "Deep network training-এ কিছু layer-এর weight identity matrix দিয়া initialize করা হয় — এইটা ResNet-এর skip connection-এর মূল idea! Input যেমন আছে তেমন pass through হইব (identity), আর network শুধু residual (পার্থক্য) শিখবে। এই simple trick-এ ১০০+ layer-এর network train করা possible হইছে!",
+      "realExample": "ResNet-152 (ImageNet winner) — identity shortcut connection ছাড়া ১৫২ layer train করা impossible ছিল!",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\nimport numpy as np\n\n# Identity initialization for RNN/LSTM\nrnn = nn.RNN(input_size=64, hidden_size=64)  # square!\n\n# Initialize weight with identity matrix\nwith torch.no_grad():\n    nn.init.eye_(rnn.weight_hh_l0)  # Identity matrix!\n    print(f'Identity initialized weight:\\n{rnn.weight_hh_l0[:3, :3]}')\n\n# ResNet-style skip connection\nclass ResidualBlock(nn.Module):\n    def __init__(self, dim):\n        super().__init__()\n        self.layer = nn.Linear(dim, dim)\n    \n    def forward(self, x):\n        return x + self.layer(x)  # Identity + learned residual!\n\nblock = ResidualBlock(64)\nx = torch.randn(1, 64)\nout = block(x)  # output ≈ x + small change\nprint(f'Input norm: {x.norm():.4f}')\nprint(f'Output norm: {out.norm():.4f}')  # similar to input!"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Least Squares — Pseudo-Inverse",
+      "icon": "🎯",
+      "explanation": "যখন equation system overdetermined (more equations than unknowns), তখন exact inverse নাই। তখন pseudo-inverse use হয়: A⁺ = (AᵀA)⁻¹Aᵀ। এইটা least squares solution দেয় — মানে সবচেয়ে কম error-এর solution। ML-এর regression, curve fitting সবখানে এইটাই চলে।",
+      "realExample": "GPS satellite ৪+ টা signal থেকে তোর ঢাকায় exact position বের করে least squares (pseudo-inverse) দিয়া!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Overdetermined system: 5 equations, 2 unknowns\n# Fit line y = mx + c to noisy data\nx_data = np.array([1, 2, 3, 4, 5])\ny_data = np.array([2.1, 3.9, 6.2, 7.8, 10.1])  # noisy\n\n# Design matrix\nA = np.column_stack([x_data, np.ones(5)])  # 5×2\n\n# Pseudo-inverse solution: w = (A^T A)^{-1} A^T y\nATA = A.T @ A            # (2×5) × (5×2) = (2×2)\nATA_inv = np.linalg.inv(ATA)  # INVERSE!\nw = ATA_inv @ A.T @ y    # (2×2) × (2×5) × (5,) = (2,)\n\nprint(f'Slope: {w[0]:.2f}, Intercept: {w[1]:.2f}')\n# y ≈ 2.0x + 0.1 — almost perfect!\n\n# Or use numpy's built-in\nw_builtin = np.linalg.lstsq(A, y_data, rcond=None)[0]\nprint(f'Built-in: slope={w_builtin[0]:.2f}, intercept={w_builtin[1]:.2f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Identity = কিছু করি নাই (I × A = A), Inverse = Ctrl+Z (A × A⁻¹ = I)! জুতা-মোজা rule: (AB)⁻¹ = B⁻¹A⁻¹ — পরার উল্টো ক্রমে খোলো!",
+  "tags": ["identity-matrix", "inverse-matrix", "linear-systems", "normal-equation", "pseudo-inverse", "initialization"],
+  "prev": "matrix-transpose",
+  "next": "determinant"
+}

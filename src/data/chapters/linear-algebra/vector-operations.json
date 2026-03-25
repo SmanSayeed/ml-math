@@ -1,0 +1,111 @@
+{
+  "slug": "vector-operations",
+  "title": "Vector Operations — ভেক্টর অপারেশন",
+  "titleEn": "Vector Operations",
+  "category": "linear-algebra",
+  "order": 7,
+  "readTime": 10,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🛒",
+    "title": "করিম ভাইয়ের বাজারের হিসাব",
+    "content": "ধর করিম ভাই কারওয়ান বাজারে গেছে সবজি কিনতে। প্রথম দোকানে আলু ৩ কেজি, পেঁয়াজ ২ কেজি, মরিচ ১ কেজি কিনল — মানে তার ব্যাগে এখন [৩, ২, ১]। এরপর পাশের দোকানে গিয়া আরো আলু ১ কেজি, পেঁয়াজ ৩ কেজি, মরিচ ২ কেজি কিনল — [১, ৩, ২]। এখন করিম ভাই হিসাব করতেছে মোট কত কিনল। সে দুই ব্যাগ যোগ করল: [৩+১, ২+৩, ১+২] = [৪, ৫, ৩]। এরপর বউ ফোন দিল 'পুরা বাজারের দ্বিগুণ লাগবে, শ্বশুরবাড়ি আসতেছে!' করিম ভাই পুরা list-টা ২ দিয়া গুণ করল: ২ × [৪, ৫, ৩] = [৮, ১০, ৬]। আবার বউ বলল 'পেঁয়াজ কমাও ৩ কেজি' — তখন বিয়োগ করল!",
+    "reveal": "এইটাই হইল Vector Operations, মামা! যোগ, বিয়োগ, আর scalar দিয়া গুণ — বাজারের হিসাবের মতোই সোজা!"
+  },
+  "definition": {
+    "content": "Vector Operations হইল ভেক্টরগুলার উপরে যোগ, বিয়োগ, আর scalar গুণ করা। দুইটা same dimension-এর vector element-wise যোগ/বিয়োগ করা যায়, আর যেকোনো scalar দিয়া প্রতিটা element-কে গুণ করা যায়।",
+    "formula": "\\vec{a} + \\vec{b} = \\begin{bmatrix} a_1 + b_1 \\\\ a_2 + b_2 \\\\ \\vdots \\\\ a_n + b_n \\end{bmatrix}, \\quad c \\cdot \\vec{a} = \\begin{bmatrix} c \\cdot a_1 \\\\ c \\cdot a_2 \\\\ \\vdots \\\\ c \\cdot a_n \\end{bmatrix}",
+    "formulaLabel": "Vector Addition ও Scalar Multiplication"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Vector Addition — ভেক্টর যোগ",
+        "content": "দুইটা vector যোগ করতে হইলে same position-এর element গুলা যোগ কর। মানে প্রথমটার সাথে প্রথমটা, দ্বিতীয়টার সাথে দ্বিতীয়টা। করিম ভাইয়ের দুই দোকানের বাজার যোগ করার মতো। শর্ত হইল — দুইটার dimension same হইতে হইব, নাইলে যোগ করতে পারবা না।",
+        "formula": "\\vec{a} + \\vec{b} = \\begin{bmatrix} 3 \\\\ 2 \\\\ 1 \\end{bmatrix} + \\begin{bmatrix} 1 \\\\ 3 \\\\ 2 \\end{bmatrix} = \\begin{bmatrix} 4 \\\\ 5 \\\\ 3 \\end{bmatrix}"
+      },
+      {
+        "title": "Vector Subtraction — ভেক্টর বিয়োগ",
+        "content": "বিয়োগও same ভাবে — position by position বিয়োগ কর। করিম ভাই যদি কিছু ফেরত দেয় দোকানে, সেইটা বিয়োগ। ML-এ gradient descent-এ weights থেকে gradient বিয়োগ করা হয় — এইটাই মূল ব্যাপার।",
+        "formula": "\\vec{a} - \\vec{b} = \\begin{bmatrix} 4 \\\\ 5 \\\\ 3 \\end{bmatrix} - \\begin{bmatrix} 1 \\\\ 2 \\\\ 1 \\end{bmatrix} = \\begin{bmatrix} 3 \\\\ 3 \\\\ 2 \\end{bmatrix}"
+      },
+      {
+        "title": "Scalar Multiplication — Scalar দিয়া গুণ",
+        "content": "একটা scalar (সংখ্যা) দিয়া vector-এর প্রতিটা element-কে গুণ কর। বউ বলল দ্বিগুণ আনো — মানে পুরা vector-কে ২ দিয়া গুণ। ML-এ learning rate দিয়া gradient-কে গুণ করা হয় ঠিক এইভাবেই।",
+        "formula": "c \\cdot \\vec{a} = 2 \\times \\begin{bmatrix} 4 \\\\ 5 \\\\ 3 \\end{bmatrix} = \\begin{bmatrix} 8 \\\\ 10 \\\\ 6 \\end{bmatrix}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Gradient Descent Update Step",
+    "problem": "তোর model-এর weight vector হইল w = [0.5, -0.3, 0.8]। Gradient হইল g = [0.1, -0.2, 0.05]। Learning rate α = 0.01। একবার gradient descent step-এ নতুন weight কত হইব?",
+    "steps": [
+      {
+        "label": "Step 1: Values চেন",
+        "content": "Weight vector w = [0.5, -0.3, 0.8], gradient g = [0.1, -0.2, 0.05], learning rate α = 0.01",
+        "formula": "\\vec{w} = \\begin{bmatrix} 0.5 \\\\ -0.3 \\\\ 0.8 \\end{bmatrix}, \\quad \\vec{g} = \\begin{bmatrix} 0.1 \\\\ -0.2 \\\\ 0.05 \\end{bmatrix}, \\quad \\alpha = 0.01"
+      },
+      {
+        "label": "Step 2: Scalar Multiplication — gradient-কে learning rate দিয়া গুণ",
+        "content": "আগে gradient-কে α দিয়া scale কর",
+        "formula": "\\alpha \\cdot \\vec{g} = 0.01 \\times \\begin{bmatrix} 0.1 \\\\ -0.2 \\\\ 0.05 \\end{bmatrix} = \\begin{bmatrix} 0.001 \\\\ -0.002 \\\\ 0.0005 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 3: Vector Subtraction — weight update",
+        "content": "এখন পুরানা weight থেকে scaled gradient বিয়োগ কর",
+        "formula": "\\vec{w}_{new} = \\vec{w} - \\alpha \\vec{g} = \\begin{bmatrix} 0.5 - 0.001 \\\\ -0.3 - (-0.002) \\\\ 0.8 - 0.0005 \\end{bmatrix} = \\begin{bmatrix} 0.499 \\\\ -0.298 \\\\ 0.7995 \\end{bmatrix}"
+      }
+    ],
+    "answer": "নতুন weight হইল w_new = [0.499, -0.298, 0.7995] — vector subtraction দিয়া gradient descent!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Gradient Descent Weight Update",
+      "icon": "⚡",
+      "explanation": "Neural network training-এর হার্ট হইল gradient descent। প্রতিটা step-এ weight vector থেকে scaled gradient vector বিয়োগ করা হয়: w = w - α∇L। এইখানে scalar multiplication (α × gradient) আর vector subtraction (w - result) দুইটাই লাগে। এই simple operation-ই billion parameter model-কে train করে!",
+      "realExample": "GPT-4 training-এ প্রতিটা step-এ billion+ weights একসাথে update হয় — সব vector subtraction!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Weight vector আর gradient\nweights = np.array([0.5, -0.3, 0.8, 1.2])\ngradient = np.array([0.1, -0.2, 0.05, -0.15])\nlearning_rate = 0.01  # scalar\n\n# Gradient descent: scalar multiplication + vector subtraction\nnew_weights = weights - learning_rate * gradient\nprint(f'Old weights: {weights}')\nprint(f'New weights: {new_weights}')\n# Output: [0.499, -0.298, 0.7995, 1.2015]"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Feature Engineering — Feature Combine করা",
+      "icon": "🔧",
+      "explanation": "ML-এ অনেক সময় multiple feature vector যোগ করে নতুন feature বানানো হয়। যেমন একটা user-এর browsing history vector আর purchase history vector যোগ করলে combined preference vector পাওয়া যায়। এইটা recommendation system-এ বহুত কাজে আসে।",
+      "realExample": "Netflix-এর recommendation system-এ user-এর viewing vector + rating vector + search vector যোগ করে user profile vector বানায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# User-এর different activity vectors\nbrowsing = np.array([0.8, 0.2, 0.5, 0.1])  # browsing score\npurchase = np.array([0.3, 0.9, 0.1, 0.7])  # purchase score\nratings = np.array([0.5, 0.6, 0.8, 0.4])   # rating score\n\n# Vector addition — combined profile\nuser_profile = browsing + purchase + ratings\nprint(f'Combined profile: {user_profile}')\n# Output: [1.6, 1.7, 1.4, 1.2]\n\n# Weighted combination (scalar multiplication + addition)\nprofile = 0.5 * browsing + 0.3 * purchase + 0.2 * ratings\nprint(f'Weighted profile: {profile}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Batch Normalization",
+      "icon": "📊",
+      "explanation": "Neural network-এ batch normalization-এ প্রথমে feature vector থেকে mean vector বিয়োগ করা হয় (centering), তারপর standard deviation দিয়া ভাগ করা হয় (scaling)। এই vector subtraction আর scalar division-ই training-কে stable আর fast করে।",
+      "realExample": "ResNet-50 image classifier-এ প্রতিটা layer-এ batch norm থাকে — ছাড়া training converge করতো না।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Feature vector (mini-batch এর একটা sample)\nfeatures = np.array([10.0, 25.0, 3.0, 100.0])\n\n# Batch statistics\nmean = np.array([8.0, 20.0, 5.0, 80.0])   # mean vector\nstd = np.array([2.0, 5.0, 1.0, 20.0])      # std vector\n\n# Batch Normalization: vector subtraction + element-wise division\nnormalized = (features - mean) / std\nprint(f'Normalized: {normalized}')\n# Output: [1.0, 1.0, -2.0, 1.0] — সব ছোট range-এ আইসা গেল!"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Word Embedding Arithmetic",
+      "icon": "📝",
+      "explanation": "NLP-তে word embedding-এ একটা মজার ব্যাপার হইল vector arithmetic দিয়া meaning বোঝা যায়। King - Man + Woman = Queen! এইখানে vector subtraction আর addition দিয়া semantic relationship বোঝানো হইতেছে। ঢাকাই ভাষায় — রাজা থেকে পুরুষ বিয়োগ করো, মহিলা যোগ করো, রানী পাইবা!",
+      "realExample": "Word2Vec model-এ 'Dhaka' - 'Bangladesh' + 'Japan' ≈ 'Tokyo' — vector operation দিয়া geography শিখে!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Simplified word embeddings (real ones হয় 300-dim)\nking = np.array([0.9, 0.5, 0.8, 0.2])\nman = np.array([0.8, 0.1, 0.7, 0.1])\nwoman = np.array([0.8, 0.9, 0.7, 0.1])\n\n# Vector arithmetic: King - Man + Woman ≈ Queen\nqueen_approx = king - man + woman\nprint(f'Queen (approx): {queen_approx}')\n# Output: [0.9, 1.3, 0.8, 0.2]\n\n# Real implementation with gensim\n# from gensim.models import KeyedVectors\n# model = KeyedVectors.load_word2vec_format('vectors.bin')\n# result = model.most_similar(\n#     positive=['king', 'woman'], negative=['man']\n# )"
+      }
+    }
+  ],
+  "memoryTrick": "Vector Operations = বাজারের হিসাব! যোগ = দুই দোকানের ব্যাগ মেলাও, বিয়োগ = ফেরত দাও, scalar গুণ = বউ বলল দ্বিগুণ আনো!",
+  "tags": ["vector", "addition", "subtraction", "scalar-multiplication", "gradient-descent", "operations"],
+  "prev": "cosine-similarity",
+  "next": "matrix"
+}

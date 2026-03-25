@@ -1,0 +1,110 @@
+{
+  "slug": "dot-product",
+  "title": "Dot Product — বিন্দু গুণন",
+  "titleEn": "Dot Product",
+  "category": "linear-algebra",
+  "order": 5,
+  "readTime": 10,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🤝",
+    "title": "বিরিয়ানির দোকানে টিমওয়ার্ক",
+    "content": "ধর মামা, তুই আর তোর বন্ধু মিলে কাজী ভাইয়ের বিরিয়ানির দোকানে কাজ করস। তোর skill vector হইল [রান্না=৮, পরিবেশন=৩] আর তোর বন্ধুর skill হইল [রান্না=২, পরিবেশন=৯]। কাজী ভাই বলল 'আজকে রান্নার কাজ ৫ আর পরিবেশনের কাজ ৪।' তোর contribution হইব ৮×৫ + ৩×৪ = ৪০+১২ = ৫২। তোর বন্ধুর contribution ২×৫ + ৯×৪ = ১০+৩৬ = ৪৬। তুই বেশি contribute করলি কারণ আজকে রান্নার কাজ বেশি ছিল!",
+    "reveal": "এইটাই Dot Product, ভাই! দুইটা vector-এর corresponding component গুণ করে সব যোগ করো। এইটা বলে দেয় দুইটা vector কতটা 'একদিকে' কাজ করতেছে — alignment measure!"
+  },
+  "definition": {
+    "content": "Dot Product (বা Inner Product বা Scalar Product) হইল দুইটা same-dimension vector-এর corresponding components গুণ করে সব যোগ করা। Result হইল একটা scalar — একটা মাত্র number।",
+    "formula": "\\vec{a} \\cdot \\vec{b} = \\sum_{i=1}^{n} a_i b_i = a_1 b_1 + a_2 b_2 + \\cdots + a_n b_n",
+    "formulaLabel": "Dot Product — component-wise গুণ আর যোগ"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Dot Product হিসাব করা",
+        "content": "সোজা কথা — প্রতিটা position-এর element গুণ কর, তারপর সব যোগ কর। [1,2,3] · [4,5,6] = 1×4 + 2×5 + 3×6 = 4+10+18 = 32। ব্যস, একটা number আসবে — scalar! দুইটা vector ঢুকল, একটা number বাইর হইল।",
+        "formula": "\\begin{bmatrix} 1 \\\\ 2 \\\\ 3 \\end{bmatrix} \\cdot \\begin{bmatrix} 4 \\\\ 5 \\\\ 6 \\end{bmatrix} = 1 \\times 4 + 2 \\times 5 + 3 \\times 6 = 32"
+      },
+      {
+        "title": "Geometric Meaning — কোণের ব্যাপার",
+        "content": "Dot product আসলে বলে দুইটা vector কতটা একই দিকে point করতেছে। Positive মানে একদিকে, zero মানে ৯০° angle (perpendicular), negative মানে উল্টাদিকে। এইটা angle-এর cosine-এর সাথে related!",
+        "formula": "\\vec{a} \\cdot \\vec{b} = \\|\\vec{a}\\| \\|\\vec{b}\\| \\cos\\theta"
+      },
+      {
+        "title": "Dot Product-এর Properties",
+        "content": "Commutative: a·b = b·a (order matter করে না)। Distributive: a·(b+c) = a·b + a·c। নিজের সাথে dot product করলে? v·v = ||v||² — norm-এর square পাওয়া যায়!",
+        "formula": "\\vec{v} \\cdot \\vec{v} = \\|\\vec{v}\\|^2_2"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "বিরিয়ানি দোকানের Contribution",
+    "problem": "তোর skill = [8, 3, 5] (রান্না, পরিবেশন, হিসাব) আর আজকের কাজ = [5, 4, 2] (রান্না, পরিবেশন, হিসাব)। তোর total contribution (dot product) হিসাব কর।",
+    "steps": [
+      {
+        "label": "Step 1: Component-wise গুণ",
+        "content": "প্রতিটা skill × corresponding কাজ",
+        "formula": "8 \\times 5 = 40, \\quad 3 \\times 4 = 12, \\quad 5 \\times 2 = 10"
+      },
+      {
+        "label": "Step 2: সব যোগ কর",
+        "content": "সব product যোগ করো",
+        "formula": "\\vec{skill} \\cdot \\vec{work} = 40 + 12 + 10 = 62"
+      },
+      {
+        "label": "Step 3: মানে কী দাঁড়াল",
+        "content": "তোর contribution score 62 — রান্নায় তুই এক্সপার্ট আর আজকে রান্নার কাজ বেশি, তাই তোর score বেশি।"
+      }
+    ],
+    "answer": "Total contribution = ৬২। Dot product বড় মানে তোর skill আর কাজের demand ভালোই match করতেছে!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Attention Mechanism (Transformers)",
+      "icon": "👁️",
+      "explanation": "ChatGPT/Claude-এর ভেতরে Attention mechanism আছে — এইখানে Query আর Key vector-এর dot product নেওয়া হয় বোঝার জন্য কোন word কোন word-এর দিকে 'মনোযোগ' দিব। Dot product বেশি = বেশি attention!",
+      "realExample": "GPT-4-এ 'The cat sat on the mat' sentence-এ 'sat' শব্দ 'cat'-এর সাথে বেশি attend করে কারণ তাদের Query-Key dot product বেশি।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn.functional as F\n\n# Simplified self-attention\nd_k = 64  # dimension\n\nquery = torch.randn(1, 5, d_k)  # 5 tokens\nkey = torch.randn(1, 5, d_k)\nvalue = torch.randn(1, 5, d_k)\n\n# Attention scores = dot product of Q and K\nscores = torch.matmul(query, key.transpose(-2, -1))\nscores = scores / (d_k ** 0.5)  # scale\n\nattention_weights = F.softmax(scores, dim=-1)\noutput = torch.matmul(attention_weights, value)\nprint(f'Attention weights shape: {attention_weights.shape}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Linear Layer (Neural Network)",
+      "icon": "🧠",
+      "explanation": "Neural network-এর সবচেয়ে basic operation — linear layer — আসলে dot product! প্রতিটা neuron input vector-এর সাথে weight vector-এর dot product নেয়, bias যোগ করে। পুরা deep learning-এর ভিত্তি এই dot product!",
+      "realExample": "একটা 768→512 linear layer মানে ৫১২টা neuron, প্রতিটা 768-dimensional input-এর সাথে dot product নিচ্ছে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Manual neuron — just a dot product!\nweights = np.array([0.5, -0.3, 0.8])\nbias = 0.1\ninput_vector = np.array([1.0, 2.0, 3.0])\n\n# Neuron output = dot product + bias\noutput = np.dot(weights, input_vector) + bias\nprint(f'Dot product: {np.dot(weights, input_vector)}')\nprint(f'Neuron output: {output}')  # 0.5-0.6+2.4+0.1 = 2.4\n\n# PyTorch-এ same জিনিস\nimport torch\nlinear = torch.nn.Linear(3, 1, bias=True)\nresult = linear(torch.tensor([1.0, 2.0, 3.0]))"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Similarity Score",
+      "icon": "🔍",
+      "explanation": "দুইটা vector কতটা similar সেইটা dot product দিয়া measure করা যায়। দুইটা document-এর TF-IDF vector-এর dot product বেশি মানে document-এর content similar। Search engine-এ query আর document-এর similarity এইভাবে মাপা হয়।",
+      "realExample": "Elasticsearch-এ search relevance score আসলে query vector আর document vector-এর dot product (BM25 algorithm-এর কাছাকাছি)।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.feature_extraction.text import TfidfVectorizer\n\n# দুইটা document-এর similarity\ndocs = [\n    'machine learning is great',\n    'deep learning is amazing',\n    'cooking biryani is fun'\n]\n\nvectorizer = TfidfVectorizer()\ntfidf = vectorizer.fit_transform(docs).toarray()\n\n# Dot product দিয়া similarity\nsim_01 = np.dot(tfidf[0], tfidf[1])\nsim_02 = np.dot(tfidf[0], tfidf[2])\nprint(f'ML vs DL similarity: {sim_01:.4f}')    # বেশি\nprint(f'ML vs Biryani similarity: {sim_02:.4f}')  # কম"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Projection — ছায়া ফেলা",
+      "icon": "🔦",
+      "explanation": "Dot product দিয়া একটা vector-কে আরেকটার উপর project করা যায় — মানে ছায়া ফেলা। এইটা PCA (Principal Component Analysis)-তে data-র dimension reduce করতে ব্যবহার হয়।",
+      "realExample": "PCA-তে ১০০০ feature-এর data-কে ৫০টা principal component-এ project করা হয় — প্রতিটা projection একটা dot product।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Vector a-কে vector b-এর উপর project করো\na = np.array([3.0, 4.0])\nb = np.array([1.0, 0.0])  # x-axis\n\n# Projection formula: (a·b / b·b) * b\nproj_scalar = np.dot(a, b) / np.dot(b, b)\nprojection = proj_scalar * b\n\nprint(f'a = {a}')\nprint(f'Projection of a onto x-axis = {projection}')  # [3, 0]\n# a-এর x-axis-এ ছায়া পড়ল [3, 0]-তে"
+      }
+    }
+  ],
+  "memoryTrick": "Dot Product = বিরিয়ানির দোকানে skill × demand — match যত ভালো, score তত বেশি। দুইটা vector ঢোকে, একটা number (scalar) বাইর হয়!",
+  "tags": ["dot-product", "inner-product", "attention", "similarity", "linear-layer", "projection"],
+  "prev": "unit-vector",
+  "next": "cosine-similarity"
+}

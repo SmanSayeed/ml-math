@@ -1,0 +1,127 @@
+{
+  "slug": "eigenvalue-eigenvector",
+  "title": "Eigenvalue ও Eigenvector — নিজস্ব মান ও দিক",
+  "titleEn": "Eigenvalue and Eigenvector",
+  "category": "linear-algebra",
+  "order": 14,
+  "readTime": 18,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🌀",
+    "title": "পুরান ঢাকার লাটিম",
+    "content": "ধর তুই পুরান ঢাকায় গেছস, চকবাজারের গলিতে বাচ্চারা লাটিম ঘুরাইতেছে। লাটিম যখন spin করে, সব পয়েন্ট ঘুরে — কিন্তু একটা জায়গা আছে যেইটা স্থির থাকে: লাটিমের ঠিক মাঝের axis! মামা বলল 'দেখ, সব কিছু ঘুরতেছে কিন্তু এই axis-টা নিজের জায়গায় আছে। শুধু একটু লম্বা-খাটো হইতে পারে, কিন্তু দিক বদলায় না!' একটা পোলাপান জিজ্ঞেস করল 'মামা, axis-টা কতটুকু stretch হয়?' মামা বলল 'সেইটাই eigenvalue! আর axis-এর direction-টাই eigenvector! ঘুরাও যতই — এই direction special!'",
+    "reveal": "এইটাই Eigenvalue আর Eigenvector! একটা matrix যখন কোনো vector-এর উপর কাজ করে, বেশিরভাগ vector দিক বদলায়। কিন্তু কিছু special vector আছে যারা শুধু scale হয়, দিক বদলায় না — এরাই eigenvector। কতটুকু scale হইল সেইটা eigenvalue!"
+  },
+  "definition": {
+    "content": "Matrix A-র eigenvector হইল সেই non-zero vector v যেইটারে A দিয়া multiply করলে দিক বদলায় না, শুধু scale হয়। সেই scaling factor-ই eigenvalue (λ)। সোজা কথায়: Av = λv — matrix-এর action শুধু stretching, কোনো rotation না।",
+    "formula": "A\\mathbf{v} = \\lambda \\mathbf{v}",
+    "formulaLabel": "Eigen Equation: A × eigenvector = eigenvalue × eigenvector"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Eigen Equation বোঝো",
+        "content": "Av = λv মানে কি? বাম পাশে matrix A vector v-কে transform করতেছে। ডান পাশে v-কে শুধু λ দিয়া scale করতেছে। দুইটা same হইলে v হইল eigenvector আর λ হইল eigenvalue। মানে A-র transformation v-এর উপর শুধু stretching — কোনো direction change নাই!",
+        "formula": "A\\mathbf{v} = \\lambda \\mathbf{v} \\iff (A - \\lambda I)\\mathbf{v} = \\mathbf{0}"
+      },
+      {
+        "title": "Eigenvalue কিভাবে বাইর করবা",
+        "content": "Characteristic equation solve করো! (A - λI)v = 0 এর non-trivial solution থাকতে হইলে det(A - λI) = 0 হইতে হইব। এই equation solve করলে λ (eigenvalue) পাইবা। তারপর প্রতিটা λ-এর জন্য (A - λI)v = 0 solve করলে eigenvector v পাইবা।",
+        "formula": "\\det(A - \\lambda I) = 0 \\quad \\text{(Characteristic Equation)}"
+      },
+      {
+        "title": "2×2 Example",
+        "content": "ধর A = [[2, 1], [1, 2]]। det(A - λI) = (2-λ)(2-λ) - 1 = λ² - 4λ + 3 = (λ-1)(λ-3) = 0। তাহলে λ₁ = 1, λ₂ = 3। λ₁ = 1 দিলে eigenvector v₁ = [1, -1], λ₂ = 3 দিলে v₂ = [1, 1]। দেখো — v₁ direction-এ stretch 1x (same), v₂ direction-এ stretch 3x!",
+        "formula": "A = \\begin{bmatrix} 2 & 1 \\\\ 1 & 2 \\end{bmatrix}, \\quad \\lambda_1 = 1, \\; \\mathbf{v}_1 = \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix}, \\quad \\lambda_2 = 3, \\; \\mathbf{v}_2 = \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Covariance Matrix-এর Eigen Decomposition",
+    "problem": "2D data-র covariance matrix C = [[4, 2], [2, 3]]। Principal directions আর তাদের variance বাইর করো।",
+    "steps": [
+      {
+        "label": "Step 1: Characteristic Equation",
+        "content": "det(C - λI) = 0 set করো",
+        "formula": "\\det \\begin{bmatrix} 4-\\lambda & 2 \\\\ 2 & 3-\\lambda \\end{bmatrix} = (4-\\lambda)(3-\\lambda) - 4 = \\lambda^2 - 7\\lambda + 8 = 0"
+      },
+      {
+        "label": "Step 2: Eigenvalue বাইর করো",
+        "content": "Quadratic formula apply করো",
+        "formula": "\\lambda = \\frac{7 \\pm \\sqrt{49 - 32}}{2} = \\frac{7 \\pm \\sqrt{17}}{2} \\implies \\lambda_1 \\approx 5.56, \\; \\lambda_2 \\approx 1.44"
+      },
+      {
+        "label": "Step 3: Eigenvector বাইর করো",
+        "content": "প্রতিটা λ-এর জন্য (C - λI)v = 0 solve করো। λ₁ = 5.56 দিলে v₁ ≈ [0.79, 0.62], λ₂ = 1.44 দিলে v₂ ≈ [-0.62, 0.79]।",
+        "formula": "\\mathbf{v}_1 \\approx \\begin{bmatrix} 0.79 \\\\ 0.62 \\end{bmatrix}, \\quad \\mathbf{v}_2 \\approx \\begin{bmatrix} -0.62 \\\\ 0.79 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 4: Interpretation",
+        "content": "v₁ direction-এ data সবচেয়ে বেশি vary করে (variance = 5.56), v₂ direction-এ কম vary করে (variance = 1.44)। v₁-ই principal component!",
+        "formula": "\\text{Total variance} = \\lambda_1 + \\lambda_2 = 5.56 + 1.44 = 7"
+      }
+    ],
+    "answer": "λ₁ ≈ 5.56 (max variance direction), λ₂ ≈ 1.44 (min variance direction)। PCA-তে v₁ ধরলে 5.56/7 = 79.4% variance capture হইব! মামা বলে 'বড় eigenvalue-এর direction-ই বড় কথা বলে!'"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "PCA (Principal Component Analysis)",
+      "icon": "📊",
+      "explanation": "PCA-এ data-র covariance matrix-এর eigenvectors হইল principal components — data যেদিকে সবচেয়ে বেশি vary করে। Eigenvalues বলে কোন direction-এ কতটুকু variance আছে। Top-k eigenvectors নিলে dimensionality reduction হয়।",
+      "realExample": "Face recognition-এ 10,000-dimensional face images-এর top 100 eigenvectors (eigenfaces) নিলে 99% information retain করে dimension 100-তে নামানো যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\n\n# Sample data generate করো\nnp.random.seed(42)\nX = np.random.randn(200, 5)\n\n# Covariance matrix-এর eigenvalues\ncov = np.cov(X.T)\neigenvalues, eigenvectors = np.linalg.eigh(cov)\n\n# Sort descending\nidx = np.argsort(eigenvalues)[::-1]\neigenvalues = eigenvalues[idx]\neigenvectors = eigenvectors[:, idx]\n\nprint('Eigenvalues (variance per direction):')\nfor i, ev in enumerate(eigenvalues):\n    pct = ev / eigenvalues.sum() * 100\n    print(f'  PC{i+1}: {ev:.3f} ({pct:.1f}%)')\n\n# sklearn PCA verify করো\npca = PCA()\npca.fit(X)\nprint(f'\\nsklearn eigenvalues: {np.round(pca.explained_variance_, 3)}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Google PageRank",
+      "icon": "🌐",
+      "explanation": "Google-এর original PageRank algorithm eigenvector দিয়া কাজ করে! Web-এর link structure-কে matrix হিসাবে দেখো — সেই matrix-এর dominant eigenvector-ই হইল PageRank score। বড় score = বেশি important page।",
+      "realExample": "Google Search-এর founder Larry Page এই algorithm দিয়াই billion-dollar company বানাইছে। Web graph-এর transition matrix-এর principal eigenvector = page importance ranking।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Simple web graph: 4 pages\n# Page i → Page j link আছে\nlinks = np.array([\n    [0, 1, 1, 0],  # Page 0 links to 1, 2\n    [0, 0, 1, 1],  # Page 1 links to 2, 3\n    [1, 0, 0, 1],  # Page 2 links to 0, 3\n    [1, 0, 0, 0],  # Page 3 links to 0\n], dtype=float)\n\n# Transition matrix (column stochastic)\nM = links / links.sum(axis=0, keepdims=True)\n\n# Damping factor\nd = 0.85\nn = M.shape[0]\nA = d * M + (1-d)/n * np.ones((n, n))\n\n# Power iteration (eigenvector খুঁজো)\nrank = np.ones(n) / n\nfor _ in range(100):\n    rank = A @ rank\n    rank /= rank.sum()\n\nprint('PageRank scores:')\nfor i, r in enumerate(rank):\n    print(f'  Page {i}: {r:.4f}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Spectral Clustering",
+      "icon": "🎨",
+      "explanation": "Traditional k-means non-convex clusters ধরতে পারে না, কিন্তু spectral clustering পারে! Graph Laplacian matrix-এর smallest eigenvalues-এর eigenvectors দিয়া data-কে নতুন space-এ project করো, তারপর k-means করো — magical result!",
+      "realExample": "Social network-এ community detection — কে কার সাথে connected সেই graph-এর Laplacian-এর eigenvectors দিয়া communities খুঁজে বাইর করা যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.cluster import SpectralClustering, KMeans\nfrom sklearn.datasets import make_moons\n\n# Non-convex data (k-means fail করবে)\nX, y_true = make_moons(n_samples=200, noise=0.1, random_state=42)\n\n# K-Means (fail!)\nkm = KMeans(n_clusters=2, random_state=42, n_init=10)\ny_km = km.fit_predict(X)\nkm_acc = max(np.mean(y_km == y_true), np.mean(y_km != y_true))\n\n# Spectral Clustering (eigenvector magic!)\nsc = SpectralClustering(n_clusters=2, affinity='nearest_neighbors',\n                        random_state=42)\ny_sc = sc.fit_predict(X)\nsc_acc = max(np.mean(y_sc == y_true), np.mean(y_sc != y_true))\n\nprint(f'K-Means accuracy: {km_acc:.2%}')\nprint(f'Spectral accuracy: {sc_acc:.2%}')\nprint('Spectral clustering eigenvector magic দিয়া জিতে!')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Stability Analysis of Neural Networks",
+      "icon": "⚡",
+      "explanation": "RNN/LSTM-এ weight matrix-এর eigenvalue-র magnitude চেক করা জরুরি। |λ| > 1 হইলে exploding gradients, |λ| < 1 হইলে vanishing gradients। এইজন্য orthogonal initialization popular — eigenvalues সব 1 এর কাছাকাছি থাকে।",
+      "realExample": "Vanilla RNN-এ 100 timestep পরে gradient 0 হইয়া যায় কারণ weight matrix-এর eigenvalues < 1। LSTM এইটা gate mechanism দিয়া fix করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport torch\nimport torch.nn as nn\n\n# Random vs Orthogonal initialization compare করো\nhidden_size = 100\n\n# Random init\nW_random = np.random.randn(hidden_size, hidden_size) * 0.01\neig_random = np.abs(np.linalg.eigvals(W_random))\n\n# Orthogonal init\nW_ortho = np.linalg.qr(np.random.randn(hidden_size, hidden_size))[0]\neig_ortho = np.abs(np.linalg.eigvals(W_ortho))\n\nprint(f'Random init eigenvalues:')\nprint(f'  Max |λ|: {eig_random.max():.4f}, Min |λ|: {eig_random.min():.4f}')\nprint(f'Orthogonal init eigenvalues:')\nprint(f'  Max |λ|: {eig_ortho.max():.4f}, Min |λ|: {eig_ortho.min():.4f}')\nprint('Orthogonal better — সব eigenvalue ≈ 1!')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Graph Neural Networks (GNN)",
+      "icon": "🕸️",
+      "explanation": "GNN-এ graph structure বোঝার জন্য adjacency matrix-এর eigendecomposition use হয়। Graph-এর spectral properties (eigenvalues) বলে দেয় graph কতটা connected, কয়টা component আছে, community structure কেমন।",
+      "realExample": "Molecule property prediction-এ molecular graph-এর Laplacian eigenvalues feature হিসাবে use করলে chemical properties ভালো predict করা যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Simple graph adjacency matrix\n# 6 nodes, 2 communities\nA = np.array([\n    [0,1,1,0,0,0],\n    [1,0,1,0,0,0],\n    [1,1,0,1,0,0],\n    [0,0,1,0,1,1],\n    [0,0,0,1,0,1],\n    [0,0,0,1,1,0]\n], dtype=float)\n\n# Graph Laplacian: L = D - A\nD = np.diag(A.sum(axis=1))\nL = D - A\n\neigenvalues, eigenvectors = np.linalg.eigh(L)\nprint('Laplacian eigenvalues:', np.round(eigenvalues, 3))\nprint(f'Number of components: {np.sum(eigenvalues < 1e-10)}')\n\n# Fiedler vector (2nd smallest eigenvalue-এর eigenvector)\nfiedler = eigenvectors[:, 1]\nprint(f'Fiedler vector: {np.round(fiedler, 3)}')\nprint(f'Community 1: {np.where(fiedler < 0)[0]}')\nprint(f'Community 2: {np.where(fiedler >= 0)[0]}')"
+      }
+    }
+  ],
+  "memoryTrick": "Eigen = নিজস্ব। Eigenvector = নিজস্ব দিক (matrix যেদিকে শুধু stretch করে), Eigenvalue = নিজস্ব মান (কতটুকু stretch)। লাটিমের axis মনে করো — সব ঘুরে কিন্তু axis স্থির!",
+  "tags": ["eigenvalue", "eigenvector", "characteristic-equation", "pca", "pagerank", "spectral", "decomposition"],
+  "prev": "rank-independence",
+  "next": "svd"
+}

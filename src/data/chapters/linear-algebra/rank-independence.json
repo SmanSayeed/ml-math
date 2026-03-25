@@ -1,0 +1,111 @@
+{
+  "slug": "rank-independence",
+  "title": "Rank ও Linear Independence — পদমর্যাদা",
+  "titleEn": "Rank and Linear Independence",
+  "category": "linear-algebra",
+  "order": 13,
+  "readTime": 14,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🏏",
+    "title": "মহাখালীর ক্রিকেট টিম",
+    "content": "ধর তুই মহাখালীতে গলির ক্রিকেট টিম বানাইতেছস। তোর টিমে ৫ জন আছে। রাজু ব্যাট করে, সোহেল বোলিং করে, কামাল ফিল্ডিং করে — তিনজনের unique skill আছে। কিন্তু বাকি দুইজন — মিলন আর জুয়েল — এরাও শুধু ব্যাট করে, রাজুর মতোই! মামা বলল 'ভাই ৫ জন আছে বইলা কি হইব, কাজের লোক তো ৩ জনই! বাকি দুইজন redundant — রাজু যা পারে এরাও তাই পারে!' টিমের actual strength = ৩, মানে unique skill holder = ৩।",
+    "reveal": "এইটাই Rank আর Linear Independence! Matrix-এর rank হইল unique, independent direction-এর সংখ্যা। ৫টা column থাকলেও যদি ৩টাই unique হয়, rank = 3। বাকিগুলা অন্যদের combination দিয়া বানানো যায় — linearly dependent!"
+  },
+  "definition": {
+    "content": "Matrix-এর Rank হইল তার সর্বোচ্চ linearly independent row বা column-এর সংখ্যা। Linearly independent মানে একটা vector-কে বাকিগুলার combination দিয়া বানানো যায় না — প্রতিটা unique direction-এ contribute করে।",
+    "formula": "\\text{rank}(A) = \\text{dim}(\\text{Col}(A)) = \\text{dim}(\\text{Row}(A))",
+    "formulaLabel": "Rank = Column Space-এর Dimension = Row Space-এর Dimension"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Linear Independence কি?",
+        "content": "কিছু vector linearly independent যদি তাদের কোনো non-trivial linear combination শূন্য না হয়। সোজা কথায়: কোনো vector-কে বাকিগুলা দিয়া বানানো যায় না। যেমন [1,0] আর [0,1] independent — একটা দিয়া আরেকটা বানাইতে পারবা না। কিন্তু [1,0], [0,1], আর [1,1] dependent — কারণ [1,1] = [1,0] + [0,1]।",
+        "formula": "c_1 \\mathbf{v}_1 + c_2 \\mathbf{v}_2 + \\cdots + c_n \\mathbf{v}_n = \\mathbf{0} \\implies c_1 = c_2 = \\cdots = c_n = 0"
+      },
+      {
+        "title": "Rank কিভাবে বাইর করবা",
+        "content": "Row Echelon Form-এ নিয়া যাও (Gaussian Elimination)। যতগুলা non-zero row থাকবে, সেইটাই rank। অথবা singular values বাইর করো — non-zero singular value-এর সংখ্যা = rank। Python-এ numpy.linalg.matrix_rank() দিয়া এক লাইনে হইব!",
+        "formula": "A = \\begin{bmatrix} 1 & 2 & 3 \\\\ 2 & 4 & 6 \\\\ 0 & 1 & 1 \\end{bmatrix} \\xrightarrow{\\text{REF}} \\begin{bmatrix} 1 & 2 & 3 \\\\ 0 & 1 & 1 \\\\ 0 & 0 & 0 \\end{bmatrix} \\implies \\text{rank} = 2"
+      },
+      {
+        "title": "Full Rank vs Rank Deficient",
+        "content": "m×n matrix-এর maximum possible rank = min(m, n)। যদি rank = min(m, n) হয়, তাহলে full rank — সবগুলা row/column unique। না হইলে rank deficient — কিছু row/column redundant। ML-এ feature matrix full rank হইলে ভালো, না হইলে মডেল ঠিকমতো শিখতে পারে না।",
+        "formula": "\\text{rank}(A_{m \\times n}) \\leq \\min(m, n)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Feature Matrix-এর Rank চেক করো",
+    "problem": "তোর dataset-এ ৩টা feature আছে: height (cm), height (inch), weight (kg)। Matrix A = [[170, 67, 65], [160, 63, 55], [180, 71, 80]]। এই feature matrix-এর rank কত? কোনো feature redundant?",
+    "steps": [
+      {
+        "label": "Step 1: Matrix দেখো",
+        "content": "লক্ষ্য করো column 2 (inch) ≈ column 1 (cm) / 2.54। তাহলে কি এরা dependent?",
+        "formula": "A = \\begin{bmatrix} 170 & 67 & 65 \\\\ 160 & 63 & 55 \\\\ 180 & 71 & 80 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 2: Relationship চেক করো",
+        "content": "170/2.54 = 66.93 ≈ 67, 160/2.54 = 62.99 ≈ 63, 180/2.54 = 70.87 ≈ 71। হ্যাঁ, দ্বিতীয় column প্রথমটার প্রায় 1/2.54 গুণ!",
+        "formula": "\\mathbf{col_2} \\approx \\frac{1}{2.54} \\mathbf{col_1}"
+      },
+      {
+        "label": "Step 3: Rank নির্ণয়",
+        "content": "তিনটা column আছে কিন্তু দুইটাই effectively same information দেয়। তাই rank = 2, full rank (3) না।",
+        "formula": "\\text{rank}(A) = 2 < 3 = \\min(3, 3)"
+      }
+    ],
+    "answer": "Rank = 2। height (cm) আর height (inch) linearly dependent — একটা রাখলেই চলবে। মামা বলে 'একই জিনিস দুইবার বললে কথা বেশি হয়, information বাড়ে না!'"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Feature Redundancy Detection",
+      "icon": "🔄",
+      "explanation": "Training data-র feature matrix-এর rank চেক করলে বুঝবা কোন features redundant। Rank < number of features হইলে কিছু feature বাদ দেওয়া যায়। এইটা model-কে simpler আর faster করে, overfitting-ও কমায়।",
+      "realExample": "E-commerce site-এ 'total_price', 'quantity', আর 'unit_price' তিনটাই feature দিলে redundant কারণ total = quantity × unit_price।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.datasets import load_iris\n\n# Iris dataset load করো\niris = load_iris()\nX = iris.data  # (150, 4)\n\nrank = np.linalg.matrix_rank(X)\nprint(f'Features: {X.shape[1]}, Rank: {rank}')\n\nif rank < X.shape[1]:\n    print(f'{X.shape[1] - rank} redundant features আছে!')\nelse:\n    print('All features independent — কোনো redundancy নাই')\n\n# Correlation check\ncorr = np.corrcoef(X.T)\nprint('\\nCorrelation matrix:')\nprint(np.round(corr, 2))"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Dimensionality ও Model Capacity",
+      "icon": "📏",
+      "explanation": "Data-র effective dimensionality = rank of feature matrix। ১০০টা feature থাকলেও rank ১০ হইলে data আসলে ১০-dimensional subspace-এ থাকে। PCA-এ এই concept use হয় — top principal components = effective dimensions।",
+      "realExample": "Face recognition-এ 10,000 pixel feature আছে কিন্তু rank analysis দেখায় effective dimension মাত্র ১০০-২০০, বাকিটা redundant।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\n\n# High-dimensional কিন্তু low-rank data\nnp.random.seed(42)\n# 3D তে data generate করো, কিন্তু 10D তে embed করো\ntrue_data = np.random.randn(100, 3)\nrandom_proj = np.random.randn(3, 10)\nX = true_data @ random_proj + 0.01 * np.random.randn(100, 10)\n\nprint(f'Feature dimensions: {X.shape[1]}')\nprint(f'Matrix rank: {np.linalg.matrix_rank(X)}')\n\n# PCA দিয়া effective dimension দেখো\npca = PCA()\npca.fit(X)\nvar_ratio = np.cumsum(pca.explained_variance_ratio_)\neffective_dim = np.argmax(var_ratio >= 0.99) + 1\nprint(f'Effective dimensions (99% var): {effective_dim}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "System of Equations Solvability",
+      "icon": "⚙️",
+      "explanation": "Linear regression normal equation Ax = b solve করতে হইলে A-র rank জানা দরকার। rank(A) = rank([A|b]) হইলে solution আছে, rank(A) = n হইলে unique solution। ML-এ underdetermined system (rank < features) মানে infinite solutions — regularization লাগবে।",
+      "realExample": "যখন training samples < features (যেমন genomics-এ ১০০ patient, ২০,০০০ genes), rank ≤ 100 হইব — Lasso/Ridge regularization mandatory।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Underdetermined system: 3 equations, 5 unknowns\nA = np.random.randn(3, 5)\nb = np.random.randn(3)\n\nrank_A = np.linalg.matrix_rank(A)\nprint(f'Equations: {A.shape[0]}, Unknowns: {A.shape[1]}')\nprint(f'Rank: {rank_A}')\n\nif rank_A < A.shape[1]:\n    print('Underdetermined! Infinite solutions — regularization লাগবে')\n    # Minimum norm solution (pseudoinverse)\n    x_min_norm = np.linalg.lstsq(A, b, rcond=None)[0]\n    print(f'Min norm solution: {np.round(x_min_norm, 3)}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Data Quality Check",
+      "icon": "✅",
+      "explanation": "Training শুরু করার আগে data matrix-এর rank চেক করা good practice। Rank drop হইলে বুঝবা duplicate rows আছে, constant columns আছে, বা perfectly correlated features আছে। এইগুলা clean না করলে model-এ সমস্যা হইব।",
+      "realExample": "Bank fraud detection-এ dataset-এ 'transaction_amount_usd' আর 'transaction_amount_cents' দুইটাই থাকলে rank drop হইব।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport pandas as pd\n\n# Problematic dataset simulate করো\nnp.random.seed(42)\nn = 100\ndf = pd.DataFrame({\n    'feature_1': np.random.randn(n),\n    'feature_2': np.random.randn(n),\n    'feature_3_duplicate': None,  # placeholder\n    'feature_4': np.random.randn(n),\n    'feature_5_constant': 5.0\n})\ndf['feature_3_duplicate'] = df['feature_1'] * 2  # dependent!\n\nX = df.values.astype(float)\nrank = np.linalg.matrix_rank(X)\nprint(f'Features: {X.shape[1]}, Rank: {rank}')\nprint(f'Redundant features: {X.shape[1] - rank}')\n\n# কোনগুলা redundant সেইটা খুঁজো\ncorr = np.corrcoef(X.T)\nfor i in range(corr.shape[0]):\n    for j in range(i+1, corr.shape[1]):\n        if abs(corr[i,j]) > 0.99:\n            print(f'Highly correlated: col {i} & col {j}')"
+      }
+    }
+  ],
+  "memoryTrick": "Rank = টিমের unique skill holder-এর সংখ্যা। ৫ জন থাকলেও ৩ জনেরই আলাদা skill থাকলে rank = 3। Independent মানে 'নিজে নিজে দাঁড়াইতে পারে, অন্যের combination না!'",
+  "tags": ["rank", "linear-independence", "redundancy", "dimensionality", "feature-selection", "gaussian-elimination"],
+  "prev": "determinant",
+  "next": "eigenvalue-eigenvector"
+}

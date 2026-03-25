@@ -1,0 +1,111 @@
+{
+  "slug": "determinant",
+  "title": "Determinant — ম্যাট্রিক্সের ভাগ্য নির্ধারক",
+  "titleEn": "Determinant",
+  "category": "linear-algebra",
+  "order": 12,
+  "readTime": 12,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🏘️",
+    "title": "গুলশানের জমি মাপার হিসাব",
+    "content": "ধর তোর মামা গুলশানে একটা প্লটের দালাল। একদিন দুইটা পার্টি আসছে জমি কিনতে। মামা বলল 'ভাই, এই জমিটার এক কোণা থেইকা একদিকে ৩ ফুট আর অন্যদিকে ৫ ফুট গেলে এক সীমানা, আরেকদিকে ২ ফুট আর ৪ ফুট গেলে আরেক সীমানা।' এখন জমির আসল ক্ষেত্রফল কত? মামা ক্যালকুলেটর বাইর করল — 3×4 - 5×2 = 12 - 10 = 2! মাত্র ২ বর্গফুট! পার্টি বলল 'এইটুকু জমি? এইখানে তো একটা মুরগিও দাঁড়াইতে পারব না!' মামা বলল 'ভাই, determinant ছোট মানে জমি ছোট, determinant শূন্য মানে জমিই নাই — সব একলাইনে!'",
+    "reveal": "এইটাই Determinant! ম্যাট্রিক্সের ভেক্টরগুলা কতটুকু area বা volume তৈরি করে সেইটার হিসাব। Determinant শূন্য হইলে ম্যাট্রিক্স singular — মানে inverse নাই, সব চ্যাপ্টা হইয়া গেছে!"
+  },
+  "definition": {
+    "content": "Determinant হইল একটা square matrix-এর একটা scalar value যেইটা বলে দেয় ম্যাট্রিক্সটা কতটুকু space-কে stretch বা squish করে। Determinant শূন্য হইলে matrix singular — মানে তার inverse নাই।",
+    "formula": "\\det(A) = \\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix} = ad - bc",
+    "formulaLabel": "2×2 Matrix-এর Determinant"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "2×2 Determinant — সোজা হিসাব",
+        "content": "2×2 matrix-এর determinant সবচেয়ে সোজা — তেরছা গুণ করো, তারপর বিয়োগ করো। মামা বলে 'ক্রস করো আর মাইনাস দাও!' উপরে-বামে × নিচে-ডানে থেকে বিয়োগ করো উপরে-ডানে × নিচে-বামে।",
+        "formula": "A = \\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}, \\quad \\det(A) = ad - bc"
+      },
+      {
+        "title": "3×3 Determinant — Cofactor Expansion",
+        "content": "3×3 হইলে একটু ঝামেলা বাড়ে। প্রথম row ধরো, তারপর প্রতিটা element-এর জন্য ছোট 2×2 matrix-এর determinant বাইর করো। চিহ্ন alternate করো — plus, minus, plus। ঢাকাইয়া ভাষায় বলি: 'বড় ভাইরে ছোটরা help করে!'",
+        "formula": "\\det(A) = a_{11}(a_{22}a_{33} - a_{23}a_{32}) - a_{12}(a_{21}a_{33} - a_{23}a_{31}) + a_{13}(a_{21}a_{32} - a_{22}a_{31})"
+      },
+      {
+        "title": "Determinant-এর Properties",
+        "content": "কিছু মজার properties আছে: দুইটা row swap করলে sign বদলায়, একটা row-এর multiple আরেকটায় যোগ করলে determinant same থাকে, আর দুইটা matrix গুণ করলে det(AB) = det(A) × det(B)। মামা বলে 'বদলালে চিহ্ন বদলায়, যোগ করলে কিছু হয় না!'",
+        "formula": "\\det(AB) = \\det(A) \\cdot \\det(B), \\quad \\det(A^T) = \\det(A)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "ম্যাট্রিক্স Invertible কিনা চেক করো",
+    "problem": "তোর কাছে একটা transformation matrix আছে A = [[4, 2], [6, 3]]। এইটা কি invertible? ছবি কি আসল সাইজে ফিরাইতে পারবা?",
+    "steps": [
+      {
+        "label": "Step 1: Matrix লেখো",
+        "content": "A matrix-টা সাজাও",
+        "formula": "A = \\begin{bmatrix} 4 & 2 \\\\ 6 & 3 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 2: Determinant বাইর করো",
+        "content": "2×2 formula apply করো — তেরছা গুণ করো আর বিয়োগ দাও",
+        "formula": "\\det(A) = (4)(3) - (2)(6) = 12 - 12 = 0"
+      },
+      {
+        "label": "Step 3: Result বোঝো",
+        "content": "Determinant শূন্য! মানে এই matrix singular — তার কোনো inverse নাই। তুমি এই transformation undo করতে পারবা না। দুইটা column দেখো: [4,6] আর [2,3] — দ্বিতীয়টা প্রথমটার ঠিক অর্ধেক! একই দিকে point করতেছে।",
+        "formula": "\\det(A) = 0 \\implies A^{-1} \\text{ does not exist}"
+      }
+    ],
+    "answer": "det(A) = 0, তাই matrix A invertible না। দুইটা column linearly dependent — একটা আরেকটার গুণিতক। মামা বলে 'শূন্য মানে শেষ — ফেরত আসার রাস্তা নাই!'"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Invertibility Check",
+      "icon": "🔍",
+      "explanation": "ML-এ অনেক algorithm-এ matrix inverse লাগে — Linear Regression-এ Normal Equation, Gaussian distribution-এ covariance matrix inverse। Determinant চেক করলে আগেই বুঝবা inverse possible কিনা। det = 0 হইলে pseudoinverse বা regularization লাগবে।",
+      "realExample": "Linear Regression-এ X^T X matrix singular হইলে Normal Equation কাজ করে না, তখন Ridge Regression (L2 regularization) use করতে হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Feature matrix\nX = np.array([[1, 2], [2, 4], [3, 6]])\n\n# X^T X check করো\nXTX = X.T @ X\ndet_val = np.linalg.det(XTX)\nprint(f'det(X^T X) = {det_val:.4f}')\n\nif abs(det_val) < 1e-10:\n    print('Singular! Ridge Regression use করো')\n    # Ridge: (X^T X + λI)^(-1) X^T y\n    lambda_val = 0.1\n    I = np.eye(XTX.shape[0])\n    XTX_reg = XTX + lambda_val * I\n    print(f'Regularized det = {np.linalg.det(XTX_reg):.4f}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Volume Scaling / Geometric Interpretation",
+      "icon": "📐",
+      "explanation": "Determinant-এর absolute value বলে দেয় transformation-এ area বা volume কতগুণ বাড়ে বা কমে। Negative হইলে orientation flip হয়। ML-এ data augmentation-এ image transformation-এর effect বুঝতে কাজে লাগে।",
+      "realExample": "Image augmentation-এ rotation matrix-এর det = 1 (area same), scaling matrix-এর det = scale² (area বাড়ে), আর shearing-এও det = 1 (area same, shape বদলায়)।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Rotation matrix (30 degree)\ntheta = np.radians(30)\nR = np.array([[np.cos(theta), -np.sin(theta)],\n              [np.sin(theta),  np.cos(theta)]])\nprint(f'Rotation det = {np.linalg.det(R):.4f}')  # 1.0\n\n# Scaling matrix (2x)\nS = np.array([[2, 0], [0, 2]])\nprint(f'Scale det = {np.linalg.det(S):.4f}')  # 4.0 (area 4x)\n\n# Singular (collapse) matrix\nC = np.array([[1, 2], [2, 4]])\nprint(f'Collapse det = {np.linalg.det(C):.4f}')  # 0.0"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Gaussian Distribution-এ Normalization",
+      "icon": "📊",
+      "explanation": "Multivariate Gaussian distribution-এর probability density function-এ covariance matrix-এর determinant লাগে। এইটা normalization constant-এ ব্যবহার হয় — ছাড়া probability ঠিকমতো calculate হইব না।",
+      "realExample": "Gaussian Mixture Model (GMM) clustering-এ প্রতিটা cluster-এর covariance matrix-এর determinant দিয়া cluster-এর 'spread' বোঝা যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom scipy.stats import multivariate_normal\n\n# 2D Gaussian-এর covariance matrix\ncov = np.array([[2.0, 0.5],\n                [0.5, 1.0]])\n\ndet_cov = np.linalg.det(cov)\nprint(f'det(Σ) = {det_cov:.4f}')\n# Normalization: 1/sqrt((2π)^k * det(Σ))\nk = 2\nnorm_const = 1 / np.sqrt((2*np.pi)**k * det_cov)\nprint(f'Normalization constant = {norm_const:.4f}')\n\n# scipy দিয়া directly\nmean = [0, 0]\nrv = multivariate_normal(mean, cov)\nprint(f'PDF at origin = {rv.pdf([0, 0]):.4f}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Feature Matrix Rank Check",
+      "icon": "🧮",
+      "explanation": "Training data-র feature matrix-এর determinant চেক করলে বুঝবা features-এ multicollinearity আছে কিনা। det ≈ 0 মানে কিছু feature redundant — একটা আরেকটা থেকে derive করা যায়। Model unstable হইব।",
+      "realExample": "House price prediction-এ 'area_sqft' আর 'area_sqm' দুইটাই দিলে det ≈ 0 হইব কারণ একটা আরেকটার ৯.২৯ গুণ।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.datasets import make_regression\n\n# Correlated features generate করো\nnp.random.seed(42)\nX = np.random.randn(100, 3)\nX[:, 2] = X[:, 0] * 2.0 + 0.01 * np.random.randn(100)\n\n# Feature correlation matrix-এর det\ncorr = np.corrcoef(X.T)\ndet_corr = np.linalg.det(corr)\nprint(f'det(correlation) = {det_corr:.6f}')\n# ≈ 0 মানে multicollinearity আছে!\n\nif abs(det_corr) < 0.01:\n    print('Warning: Features highly correlated!')\n    print('Feature 3 remove করো বা PCA use করো')"
+      }
+    }
+  ],
+  "memoryTrick": "Determinant = ভাগ্য নির্ধারক — মামার জমির ক্ষেত্রফলের মতো। শূন্য হইলে জমিই নাই, inverse-ও নাই। তেরছা গুণ করো, বিয়োগ দাও — ad - bc!",
+  "tags": ["determinant", "invertibility", "singular", "volume", "area", "cofactor"],
+  "prev": "identity-inverse",
+  "next": "rank-independence"
+}

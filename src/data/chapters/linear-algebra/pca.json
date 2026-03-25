@@ -1,0 +1,127 @@
+{
+  "slug": "pca",
+  "title": "PCA — Principal Component Analysis",
+  "titleEn": "Principal Component Analysis",
+  "category": "linear-algebra",
+  "order": 16,
+  "readTime": 17,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "📸",
+    "title": "নিউমার্কেটের ফটোগ্রাফার",
+    "content": "ধর তোর বন্ধু সাকিব নিউমার্কেটে ফটো স্টুডিও চালায়। বিয়ার ছবি তোলে, পাসপোর্ট ছবি তোলে। একদিন এক কাস্টমার আসল ১০০টা বিয়ার ছবি নিয়া আর বলল 'মামা, এই ১০০টা ছবি থেইকা ৫টা ছবি বাছো যেইগুলা দিয়া পুরা বিয়ার অনুষ্ঠান বোঝা যায়।' সাকিব বলল 'ভাই, প্রথমে সবচেয়ে important মুহূর্তটা — গায়ে হলুদ, তারপর আকদ, তারপর ওয়ালিমা, তারপর বিদায়, তারপর রিসেপশন। এই ৫টা ছবি দিলে ৯৫% story বোঝা যায়!' কাস্টমার বলল 'বাকি ৯৫টা?' সাকিব বলল 'ডুপ্লিকেট মামা — একই জিনিসের বারবার ছবি!'",
+    "reveal": "এইটাই PCA! অনেক features/dimensions থেকে সবচেয়ে important কয়েকটা direction (principal components) বাইর করা। ১০০ dimension থেকে ৫টা নিলে ৯৫% information retain হইতে পারে — বাকিগুলা redundant বা noise!"
+  },
+  "definition": {
+    "content": "PCA (Principal Component Analysis) হইল data-র covariance matrix-এর eigenvectors খুঁজে বাইর করা আর সবচেয়ে বড় eigenvalue-এর eigenvectors-এর দিকে data-কে project করা। এতে dimensionality কমে কিন্তু maximum variance (information) retain হয়।",
+    "formula": "\\text{Cov}(X) = \\frac{1}{n-1} X^T X = V \\Lambda V^T",
+    "formulaLabel": "Covariance Matrix-এর Eigendecomposition → Principal Components"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "PCA-এর ধাপগুলা",
+        "content": "PCA করতে ৪টা ধাপ: (১) Data mean-center করো (প্রতিটা feature থেকে mean বাদ দাও), (২) Covariance matrix বানাও, (৩) Eigenvalue ও eigenvector বাইর করো, (৪) Top-k eigenvectors select করো আর data-কে project করো। সাকিব মামার ভাষায়: 'প্রথমে সব ছবি এক জায়গায় আনো, তারপর কোনটা কতটা different দেখো, তারপর সবচেয়ে different গুলা বাছো!'",
+        "formula": "X_{\\text{centered}} = X - \\mu, \\quad \\text{Cov} = \\frac{1}{n-1} X_{\\text{centered}}^T X_{\\text{centered}}"
+      },
+      {
+        "title": "Variance Explained কি?",
+        "content": "প্রতিটা principal component কতটুকু total variance explain করে সেইটা eigenvalue দিয়া বোঝা যায়। λᵢ / Σλ = i-th component-এর explained variance ratio। Cumulative sum 95% হইলে বাকি components বাদ দাও — noise বা trivial information।",
+        "formula": "\\text{Explained Variance Ratio}_i = \\frac{\\lambda_i}{\\sum_{j=1}^{d} \\lambda_j}"
+      },
+      {
+        "title": "কয়টা Component রাখবা?",
+        "content": "Scree plot বানাও — eigenvalues plot করো। যেখানে elbow (হঠাৎ drop) দেখবা, সেখান পর্যন্ত রাখো। অথবা cumulative explained variance ≥ 95% হওয়া পর্যন্ত components রাখো। Rule of thumb: যদি ১০০ features থেকে ১০টা component-এ 95% variance capture হয়, তাহলে বাকি ৯০টা মূলত noise।",
+        "formula": "k = \\min \\left\\{ k : \\sum_{i=1}^{k} \\frac{\\lambda_i}{\\sum_j \\lambda_j} \\geq 0.95 \\right\\}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Iris Dataset-এ PCA",
+    "problem": "Iris dataset-এ ৪টা feature আছে (sepal length, sepal width, petal length, petal width)। PCA দিয়া 2D-তে নামাও যাতে 3 species visualize করা যায়।",
+    "steps": [
+      {
+        "label": "Step 1: Data Load ও Mean-Center",
+        "content": "150 samples, 4 features। প্রতিটা feature থেকে mean বাদ দাও।",
+        "formula": "X \\in \\mathbb{R}^{150 \\times 4}, \\quad X_{\\text{centered}} = X - \\bar{X}"
+      },
+      {
+        "label": "Step 2: Covariance Matrix",
+        "content": "4×4 covariance matrix বানাও। Eigenvalues হইব: λ₁ ≈ 4.23, λ₂ ≈ 0.24, λ₃ ≈ 0.08, λ₄ ≈ 0.02।",
+        "formula": "\\lambda_1 = 4.23, \\; \\lambda_2 = 0.24, \\; \\lambda_3 = 0.08, \\; \\lambda_4 = 0.02"
+      },
+      {
+        "label": "Step 3: Variance Explained",
+        "content": "PC1 = 4.23/4.57 = 92.5%, PC2 = 0.24/4.57 = 5.3%। দুইটা মিলায়া 97.8%!",
+        "formula": "\\text{PC1} = 92.5\\%, \\; \\text{PC2} = 5.3\\%, \\; \\text{Total} = 97.8\\%"
+      },
+      {
+        "label": "Step 4: Project to 2D",
+        "content": "Top-2 eigenvectors নিয়া 150×4 data-কে 150×2-তে project করো। Plot করলে 3 species আলাদা cluster দেখবা!",
+        "formula": "X_{\\text{2D}} = X_{\\text{centered}} \\cdot V_{[:, :2]} \\in \\mathbb{R}^{150 \\times 2}"
+      }
+    ],
+    "answer": "2 principal components-এ 97.8% variance capture! 4D থেকে 2D-তে নামলেও 3 species clearly আলাদা দেখা যায়। মামা বলে 'চারটা feature দিয়া confuse হওয়ার দরকার নাই — দুইটাই যথেষ্ট!'"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Dimensionality Reduction for ML",
+      "icon": "📉",
+      "explanation": "High-dimensional data-তে model train করা slow আর overfit-prone। PCA দিয়া dimension কমালে training faster হয়, overfitting কমে, আর অনেকসময় accuracy-ও বাড়ে কারণ noise বাদ পড়ে।",
+      "realExample": "MNIST handwritten digits (784 pixels) PCA দিয়া 50 components-এ নামালে classification accuracy almost same থাকে কিন্তু training 15x faster হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\nfrom sklearn.datasets import load_digits\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.svm import SVC\nfrom sklearn.metrics import accuracy_score\nimport time\n\n# Digits dataset (8x8 = 64 features)\ndigits = load_digits()\nX, y = digits.data, digits.target\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\n# Without PCA\nstart = time.time()\nsvm = SVC(kernel='rbf', random_state=42)\nsvm.fit(X_train, y_train)\nacc_full = accuracy_score(y_test, svm.predict(X_test))\ntime_full = time.time() - start\n\n# With PCA (15 components)\npca = PCA(n_components=15, random_state=42)\nX_train_pca = pca.fit_transform(X_train)\nX_test_pca = pca.transform(X_test)\n\nstart = time.time()\nsvm_pca = SVC(kernel='rbf', random_state=42)\nsvm_pca.fit(X_train_pca, y_train)\nacc_pca = accuracy_score(y_test, svm_pca.predict(X_test_pca))\ntime_pca = time.time() - start\n\nprint(f'Full ({X.shape[1]}D): acc={acc_full:.3f}, time={time_full:.3f}s')\nprint(f'PCA (15D): acc={acc_pca:.3f}, time={time_pca:.3f}s')\nprint(f'Variance retained: {pca.explained_variance_ratio_.sum():.1%}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Data Visualization",
+      "icon": "👁️",
+      "explanation": "High-dimensional data directly plot করা impossible। PCA দিয়া 2D বা 3D-তে নামালে scatter plot-এ cluster, pattern, outlier দেখতে পারবা। Data exploration-এর first step হিসাবে PCA visualization খুবই useful।",
+      "realExample": "Gene expression data-তে 20,000 genes আছে — PCA 2D plot দিয়া cancer vs normal tissue clearly আলাদা দেখা যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\nfrom sklearn.datasets import load_iris\n\n# Iris data load করো\niris = load_iris()\nX, y = iris.data, iris.target\n\n# PCA to 2D\npca = PCA(n_components=2)\nX_2d = pca.fit_transform(X)\n\nprint(f'Original: {X.shape[1]}D → PCA: {X_2d.shape[1]}D')\nprint(f'Variance explained: {pca.explained_variance_ratio_}')\nprint(f'Total: {pca.explained_variance_ratio_.sum():.1%}')\n\n# প্রতিটা species-এর center দেখো\nfor i, name in enumerate(iris.target_names):\n    mask = y == i\n    center = X_2d[mask].mean(axis=0)\n    print(f'{name}: center=({center[0]:.2f}, {center[1]:.2f})')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Noise Removal / Denoising",
+      "icon": "🔇",
+      "explanation": "Noisy data-তে signal top principal components-এ থাকে আর noise bottom components-এ। Top-k components রাইখা inverse transform করলে denoised data পাইবা। Image denoising, sensor data cleaning-এ use হয়।",
+      "realExample": "ECG (heart signal) data-তে PCA দিয়া muscle noise remove করা হয় — top 3-5 components signal, বাকিগুলা noise।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\n\n# Clean signal + noise\nnp.random.seed(42)\nn_samples, n_features = 200, 50\n\n# Low-rank clean signal (rank 3)\ntrue_signal = np.random.randn(n_samples, 3) @ np.random.randn(3, n_features)\nnoise = 0.5 * np.random.randn(n_samples, n_features)\nnoisy_data = true_signal + noise\n\n# PCA denoising: top 3 components রাখো\npca = PCA(n_components=3)\ndenoised = pca.inverse_transform(pca.fit_transform(noisy_data))\n\n# Error compare\nnoise_error = np.linalg.norm(true_signal - noisy_data)\ndenoised_error = np.linalg.norm(true_signal - denoised)\n\nprint(f'Noisy error: {noise_error:.2f}')\nprint(f'Denoised error: {denoised_error:.2f}')\nprint(f'Noise reduction: {(1 - denoised_error/noise_error)*100:.1f}%')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Feature Extraction / Eigenfaces",
+      "icon": "🧑",
+      "explanation": "PCA face image-এ apply করলে eigenfaces পাইবা — face-এর principal variations। নতুন face-কে eigenfaces-এর combination হিসাবে represent করলে face recognition efficient হয়। ১০,০০০ pixel → ১০০ coefficient!",
+      "realExample": "Facebook-এর face tagging system initially eigenfaces (PCA) use করত — প্রতিটা face মাত্র 100-200 numbers দিয়া represent হইত।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\nfrom sklearn.datasets import fetch_olivetti_faces\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.svm import SVC\nfrom sklearn.metrics import accuracy_score\n\n# Olivetti Faces dataset\nfaces = fetch_olivetti_faces()\nX, y = faces.data, faces.target  # 400 faces, 4096 pixels each\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\n# PCA: 4096 pixels → 80 eigenfaces\npca = PCA(n_components=80, whiten=True, random_state=42)\nX_train_pca = pca.fit_transform(X_train)\nX_test_pca = pca.transform(X_test)\n\nprint(f'Original: {X.shape[1]} pixels')\nprint(f'PCA: {X_train_pca.shape[1]} components')\nprint(f'Variance: {pca.explained_variance_ratio_.sum():.1%}')\n\n# Face recognition\nsvm = SVC(kernel='rbf', C=10, random_state=42)\nsvm.fit(X_train_pca, y_train)\nacc = accuracy_score(y_test, svm.predict(X_test_pca))\nprint(f'Recognition accuracy: {acc:.1%}')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Anomaly Detection",
+      "icon": "🚨",
+      "explanation": "Normal data PCA space-এ tight cluster করে। Anomalies (outliers) PCA space-এ cluster থেকে দূরে থাকে বা minor components-এ unusual values থাকে। Reconstruction error বড় হইলে anomaly!",
+      "realExample": "Credit card fraud detection-এ normal transactions PCA-তে tight cluster, fraudulent transactions cluster থেকে দূরে — reconstruction error দিয়া ধরা যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import PCA\n\n# Normal data generate করো\nnp.random.seed(42)\nnormal = np.random.randn(200, 10)  # 200 normal samples\n\n# Anomalies inject করো\nanomalies = np.random.randn(10, 10) * 5 + 3  # 10 outliers\nX = np.vstack([normal, anomalies])\nlabels = np.array([0]*200 + [1]*10)  # 0=normal, 1=anomaly\n\n# PCA fit on all data\npca = PCA(n_components=3)\nX_pca = pca.fit_transform(X)\nX_reconstructed = pca.inverse_transform(X_pca)\n\n# Reconstruction error = anomaly score\nerrors = np.sum((X - X_reconstructed)**2, axis=1)\nthreshold = np.percentile(errors, 95)\n\npredicted = (errors > threshold).astype(int)\nfrom sklearn.metrics import precision_score, recall_score\nprint(f'Precision: {precision_score(labels, predicted):.2f}')\nprint(f'Recall: {recall_score(labels, predicted):.2f}')\nprint('Reconstruction error বড় = anomaly!')"
+      }
+    }
+  ],
+  "memoryTrick": "PCA = সাকিব মামার ফটো বাছাই — ১০০ ছবি থেকে ৫টা important ছবি বাছলেই পুরা story বোঝা যায়। বড় eigenvalue = important direction, ছোট eigenvalue = noise। Variance maximize করো, dimension minimize করো!",
+  "tags": ["pca", "principal-components", "dimensionality-reduction", "eigenfaces", "variance", "covariance", "visualization"],
+  "prev": "svd",
+  "next": "tensor"
+}

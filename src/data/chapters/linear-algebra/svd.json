@@ -1,0 +1,127 @@
+{
+  "slug": "svd",
+  "title": "SVD — Singular Value Decomposition",
+  "titleEn": "Singular Value Decomposition",
+  "category": "linear-algebra",
+  "order": 15,
+  "readTime": 18,
+  "difficulty": "advanced",
+  "story": {
+    "icon": "🍛",
+    "title": "বিরিয়ানির রেসিপি ভাঙা",
+    "content": "ধর তোর বন্ধু ফারুক পুরান ঢাকায় বিরিয়ানির দোকান দিছে। তার বিরিয়ানি এতই ফেমাস যে সবাই recipe জানতে চায়। একদিন এক food blogger আসল আর বলল 'মামা, তোমার বিরিয়ানির secret কি?' ফারুক বলল 'ভাই, বিরিয়ানি মানে তিনটা জিনিস — (১) কোন কোন মশলা use করবা (U), (২) কোন মশলা কতটুকু important (Σ — singular values), আর (৩) কোন মশলা কোন স্বাদ দেয় (V^T)।' blogger বলল 'মানে তুমি recipe-টাকে তিন ভাগে decompose করছ?' ফারুক বলল 'এইটাই SVD মামা! যেকোনো জটিল জিনিসরে তিন ভাগে ভাইঙ্গা সোজা করা!'",
+    "reveal": "এইটাই SVD! যেকোনো matrix-কে তিনটা matrix-এর গুণফলে ভাঙা যায়: A = UΣV^T। U হইল left singular vectors (input space-এর directions), Σ হইল singular values (importance/strength), V^T হইল right singular vectors (output space-এর directions)। সবচেয়ে powerful decomposition!"
+  },
+  "definition": {
+    "content": "Singular Value Decomposition (SVD) হইল যেকোনো m×n matrix A-কে তিনটা matrix-এর product-এ ভাঙা: A = UΣV^T। U (m×m) orthogonal matrix, Σ (m×n) diagonal matrix (singular values), V^T (n×n) orthogonal matrix। এইটা square matrix না হইলেও কাজ করে — eigendecomposition-এর generalization!",
+    "formula": "A = U \\Sigma V^T",
+    "formulaLabel": "SVD: যেকোনো Matrix = Rotation × Scaling × Rotation"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "SVD-এর তিনটা অংশ",
+        "content": "A = UΣV^T-তে তিনটা part আছে: V^T প্রথমে input space-এ rotate করে, Σ scale করে (stretch/shrink), তারপর U output space-এ rotate করে। মানে যেকোনো linear transformation = rotation + scaling + rotation! ফারুক মামার ভাষায়: 'প্রথমে মশলা বাছো, তারপর পরিমাণ ঠিক করো, তারপর রান্না করো!'",
+        "formula": "A = U \\Sigma V^T, \\quad U^TU = I, \\quad V^TV = I, \\quad \\Sigma = \\text{diag}(\\sigma_1, \\sigma_2, \\ldots)"
+      },
+      {
+        "title": "Singular Values কি বলে",
+        "content": "Σ-এর diagonal-এ singular values থাকে: σ₁ ≥ σ₂ ≥ ... ≥ 0। এগুলা বলে কোন direction কতটুকু important। বড় singular value = বেশি important direction। ছোটগুলা noise হইতে পারে — বাদ দিলেও বেশি ক্ষতি নাই। এইটাই low-rank approximation-এর ভিত্তি!",
+        "formula": "\\sigma_1 \\geq \\sigma_2 \\geq \\cdots \\geq \\sigma_r > 0, \\quad r = \\text{rank}(A)"
+      },
+      {
+        "title": "Truncated SVD — Low-Rank Approximation",
+        "content": "সব singular value না রাইখা top-k টা রাখলে approximate version পাইবা: A ≈ U_k Σ_k V_k^T। Eckart-Young theorem বলে এইটাই best rank-k approximation! Data compression, noise removal, dimensionality reduction — সব এই trick দিয়া হয়।",
+        "formula": "A_k = \\sum_{i=1}^{k} \\sigma_i \\mathbf{u}_i \\mathbf{v}_i^T \\quad \\text{(best rank-k approximation)}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Image Compression with SVD",
+    "problem": "একটা 4×4 grayscale image matrix আছে। SVD দিয়া rank-2 approximation করো আর দেখো কতটুকু information retain হয়।",
+    "steps": [
+      {
+        "label": "Step 1: Original Matrix",
+        "content": "4×4 image matrix A দেখো",
+        "formula": "A = \\begin{bmatrix} 1 & 2 & 1 & 2 \\\\ 3 & 4 & 3 & 4 \\\\ 1 & 2 & 1 & 2 \\\\ 3 & 4 & 3 & 4 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 2: SVD করো",
+        "content": "NumPy দিয়া U, Σ, V^T বাইর করো। দেখবা singular values: σ₁ ≈ 10.0, σ₂ ≈ 1.0, σ₃ ≈ 0, σ₄ ≈ 0। মানে rank = 2!",
+        "formula": "\\sigma_1 \\approx 10.0, \\; \\sigma_2 \\approx 1.0, \\; \\sigma_3 = 0, \\; \\sigma_4 = 0"
+      },
+      {
+        "label": "Step 3: Rank-1 Approximation",
+        "content": "শুধু σ₁ রাখলে A₁ = σ₁ u₁ v₁^T — একটা rank-1 matrix। Information retained = σ₁²/(σ₁² + σ₂²) ≈ 99%!",
+        "formula": "A_1 = \\sigma_1 \\mathbf{u}_1 \\mathbf{v}_1^T \\quad \\text{(99% information)}"
+      },
+      {
+        "label": "Step 4: Compression Ratio",
+        "content": "Original: 4×4 = 16 numbers। Rank-1: 4 + 1 + 4 = 9 numbers। 44% compression with 99% accuracy!",
+        "formula": "\\text{Compression} = 1 - \\frac{4 + 1 + 4}{16} = 43.75\\%"
+      }
+    ],
+    "answer": "SVD দিয়া rank-2 approximation 100% accurate (কারণ original rank = 2), rank-1 approximation 99% accurate with 44% compression। মামা বলে 'বড় singular value-ই বড় কথা বলে, ছোটগুলা noise!'"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Dimensionality Reduction (Truncated SVD/LSA)",
+      "icon": "📉",
+      "explanation": "High-dimensional data-কে low-dimensional-এ নামাইতে truncated SVD use হয়। NLP-তে Latent Semantic Analysis (LSA) term-document matrix-এর SVD করে — semantically similar words কাছাকাছি আসে। Sparse data-তে PCA-র চেয়ে ভালো কাজ করে।",
+      "realExample": "Wikipedia-র 100,000 articles × 50,000 words matrix-কে SVD দিয়া 300 dimensions-এ নামানো হয় — similar articles automatically group হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.decomposition import TruncatedSVD\nfrom sklearn.feature_extraction.text import TfidfVectorizer\n\n# Simple document collection\ndocs = [\n    'machine learning is great',\n    'deep learning neural networks',\n    'cooking recipes for dinner',\n    'baking bread at home',\n    'neural network training optimization'\n]\n\n# TF-IDF matrix বানাও\nvec = TfidfVectorizer()\nX = vec.fit_transform(docs)\nprint(f'Original shape: {X.shape}')  # (5, vocab_size)\n\n# Truncated SVD (LSA)\nsvd = TruncatedSVD(n_components=2, random_state=42)\nX_reduced = svd.fit_transform(X)\nprint(f'Reduced shape: {X_reduced.shape}')  # (5, 2)\nprint(f'Variance retained: {svd.explained_variance_ratio_.sum():.2%}')\n\n# Similar documents কাছাকাছি\nfor i, doc in enumerate(docs):\n    print(f'  [{X_reduced[i,0]:.3f}, {X_reduced[i,1]:.3f}] {doc}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Recommendation Systems",
+      "icon": "🎬",
+      "explanation": "Netflix/Spotify-তে user-item rating matrix-এর SVD করলে latent factors বাইর হয়। Users-এর preference আর items-এর characteristics low-dimensional space-এ represent হয়। Missing ratings predict করা যায় — 'তোমার মতো taste-এর মানুষ এইটা পছন্দ করছে!'",
+      "realExample": "Netflix Prize competition-এ SVD-based method জিতছিল। User-movie matrix-এর SVD করলে 'action lover', 'comedy fan' এইরকম latent factors আপনাআপনি বাইর হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# User-Movie rating matrix (0 = not rated)\nratings = np.array([\n    [5, 4, 0, 1, 0],  # User 0: action lover\n    [4, 5, 1, 0, 0],  # User 1: action lover\n    [0, 0, 5, 4, 5],  # User 2: comedy fan\n    [1, 0, 4, 5, 4],  # User 3: comedy fan\n], dtype=float)\n\n# Fill missing (0) with row mean\nmask = ratings > 0\nrow_means = np.where(mask, ratings, np.nan)\nrow_means = np.nanmean(row_means, axis=1, keepdims=True)\nratings_filled = np.where(mask, ratings, row_means)\n\n# SVD করো\nU, sigma, Vt = np.linalg.svd(ratings_filled, full_matrices=False)\n\n# Rank-2 approximation (2 latent factors)\nk = 2\npredicted = U[:,:k] @ np.diag(sigma[:k]) @ Vt[:k,:]\nprint('Predicted ratings:')\nprint(np.round(predicted, 1))\nprint(f'\\nUser 0, Movie 3 (was 0): {predicted[0,2]:.1f}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Image Compression",
+      "icon": "🖼️",
+      "explanation": "Image matrix-এর SVD করলে top-k singular values রাখলেই ছবি recognizable থাকে। 1000×1000 image-এ rank-50 SVD মানে 1000×50 + 50 + 50×1000 = 100,050 numbers — original 1,000,000-এর মাত্র 10%!",
+      "realExample": "Medical imaging-এ MRI scan-এর SVD compression করলে storage 90% কমে কিন্তু diagnostic quality same থাকে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Grayscale image simulate করো (100x100)\nnp.random.seed(42)\nimage = np.random.randint(0, 256, (100, 100)).astype(float)\n\n# SVD করো\nU, sigma, Vt = np.linalg.svd(image, full_matrices=False)\n\n# বিভিন্ন rank-এ compression\nfor k in [5, 10, 25, 50]:\n    compressed = U[:,:k] @ np.diag(sigma[:k]) @ Vt[:k,:]\n    error = np.linalg.norm(image - compressed) / np.linalg.norm(image)\n    \n    # Storage calculation\n    original_size = 100 * 100\n    compressed_size = 100*k + k + k*100\n    ratio = compressed_size / original_size * 100\n    \n    print(f'Rank-{k:2d}: Error={error:.4f}, '\n          f'Storage={ratio:.1f}% of original')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Noise Removal / Denoising",
+      "icon": "🔇",
+      "explanation": "Noisy data-তে signal বড় singular values-এ থাকে আর noise ছোট singular values-এ। ছোট singular values বাদ দিলে noise remove হয়! Signal processing, image denoising, time series smoothing — সবখানে কাজে লাগে।",
+      "realExample": "Satellite image-এ cloud noise remove করতে SVD use হয় — top singular values = land features, bottom singular values = cloud/noise।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Clean signal + noise\nnp.random.seed(42)\nt = np.linspace(0, 2*np.pi, 100)\nclean = np.outer(np.sin(t), np.cos(t))  # rank-1 signal\nnoise = 0.3 * np.random.randn(100, 100)\nnoisy = clean + noise\n\n# SVD denoising\nU, sigma, Vt = np.linalg.svd(noisy, full_matrices=False)\n\n# শুধু top-1 singular value রাখো (signal rank-1)\ndenoised = sigma[0] * np.outer(U[:,0], Vt[0,:])\n\nprint(f'Original signal energy: {np.linalg.norm(clean):.2f}')\nprint(f'Noise energy: {np.linalg.norm(noise):.2f}')\nprint(f'Denoised error: {np.linalg.norm(clean - denoised):.4f}')\nprint(f'Noisy error: {np.linalg.norm(clean - noisy):.4f}')\nprint('SVD denoising noise 95%+ remove করছে!')"
+      }
+    },
+    {
+      "id": 5,
+      "title": "Pseudoinverse ও Least Squares",
+      "icon": "🧮",
+      "explanation": "Overdetermined system (equations > unknowns) solve করতে pseudoinverse (Moore-Penrose inverse) লাগে। SVD দিয়া pseudoinverse সবচেয়ে numerically stable ভাবে calculate হয়: A⁺ = VΣ⁺U^T। Linear regression internally এইটাই use করে!",
+      "realExample": "sklearn-এর LinearRegression internally SVD-based pseudoinverse use করে coefficient বাইর করতে — Normal Equation-এর চেয়ে numerically stable।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Overdetermined system: 5 equations, 2 unknowns\nA = np.array([[1, 1], [2, 1], [3, 1], [4, 1], [5, 1]], dtype=float)\nb = np.array([2.1, 3.9, 6.2, 7.8, 10.1])\n\n# SVD দিয়া pseudoinverse\nU, sigma, Vt = np.linalg.svd(A, full_matrices=False)\n# A+ = V * Σ+ * U^T\nsigma_inv = np.diag(1.0 / sigma)\nA_pinv = Vt.T @ sigma_inv @ U.T\nx_svd = A_pinv @ b\n\n# numpy-র lstsq দিয়া verify\nx_lstsq = np.linalg.lstsq(A, b, rcond=None)[0]\n\nprint(f'SVD solution: slope={x_svd[0]:.4f}, intercept={x_svd[1]:.4f}')\nprint(f'lstsq solution: slope={x_lstsq[0]:.4f}, intercept={x_lstsq[1]:.4f}')\nprint('Same result! lstsq internally SVD use করে।')"
+      }
+    }
+  ],
+  "memoryTrick": "SVD = বিরিয়ানি recipe ভাঙা — U (কোন মশলা), Σ (কতটুকু), V^T (কোন স্বাদে)। যেকোনো matrix-কে Rotation × Scaling × Rotation-এ ভাঙো। বড় σ = important, ছোট σ = noise!",
+  "tags": ["svd", "decomposition", "singular-values", "compression", "recommendation", "dimensionality-reduction", "pseudoinverse"],
+  "prev": "eigenvalue-eigenvector",
+  "next": "pca"
+}

@@ -1,0 +1,111 @@
+{
+  "slug": "vector-norm",
+  "title": "Vector Norm — ভেক্টরের মাপ",
+  "titleEn": "Vector Norm",
+  "category": "linear-algebra",
+  "order": 3,
+  "readTime": 9,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🗺️",
+    "title": "রিকশাওয়ালা জব্বারের রাস্তা",
+    "content": "ধর মামা, রিকশাওয়ালা জব্বার পুরান ঢাকা থেকে গুলিস্তান যাইব। দুইটা রাস্তা আছে। এক নম্বর — সোজা রাস্তায় যা, গলি দিয়া কাটাকাটি কর, পূর্বে ৩ কিলো আর উত্তরে ৪ কিলো — মোট ৩+৪ = ৭ কিলো হাঁটা। দুই নম্বর — সোজা তীর মাইরা যা, ঠিক কোণাকুণি — √(৩²+৪²) = ৫ কিলো। এক রাস্তায় ৭ কিলো, আরেক রাস্তায় ৫ কিলো — কিন্তু জায়গা একই!",
+    "reveal": "প্রথম রাস্তা (৩+৪=৭) হইল L1 Norm — সব component যোগ করো। দ্বিতীয় রাস্তা (√(৯+১৬)=৫) হইল L2 Norm — Pythagorean theorem। দুইটাই vector-এর 'মাপ' কিন্তু ভিন্ন ভাবে! বুঝলা?"
+  },
+  "definition": {
+    "content": "Vector Norm হইল vector-এর 'size' বা 'length' মাপার পদ্ধতি। বিভিন্ন norm বিভিন্নভাবে মাপে — L1 সব component-এর absolute value যোগ করে, L2 Euclidean distance দেয়।",
+    "formula": "\\|\\vec{v}\\|_1 = \\sum_{i=1}^{n} |v_i|, \\quad \\|\\vec{v}\\|_2 = \\sqrt{\\sum_{i=1}^{n} v_i^2}",
+    "formulaLabel": "L1 Norm (Manhattan) এবং L2 Norm (Euclidean)"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "L1 Norm — Manhattan Distance",
+        "content": "L1 Norm-এ সব component-এর absolute value যোগ করো। নাম Manhattan কারণ New York-এর block ধইরা হাঁটলে যেমন সোজা-বাঁক-সোজা যাইতে হয়, ঠিক তেমন। পুরান ঢাকার গলি দিয়া যাওয়ার মতো — পূর্বে যাও, তারপর উত্তরে।",
+        "formula": "\\|\\vec{v}\\|_1 = |v_1| + |v_2| + \\cdots + |v_n|"
+      },
+      {
+        "title": "L2 Norm — Euclidean Distance",
+        "content": "L2 Norm হইল 'সোজা লাইনে' দূরত্ব — পাখি যেমন উড়ে সোজা যায়। Pythagorean theorem-এর extension। ML-এ সবচেয়ে বেশি ব্যবহার হয় কারণ এইটা smooth — gradient compute করা সহজ।",
+        "formula": "\\|\\vec{v}\\|_2 = \\sqrt{v_1^2 + v_2^2 + \\cdots + v_n^2}"
+      },
+      {
+        "title": "L∞ Norm — Max Norm",
+        "content": "L∞ Norm আরো সোজা — সবচেয়ে বড় component-টা নাও, ব্যস! ধর vector [3, -7, 2] হইলে L∞ = 7। এইটা adversarial ML-এ দেখবি — attacker কোনো একটা feature-কে কতটুকু বদলাইতে পারবে সেইটা bound করতে।",
+        "formula": "\\|\\vec{v}\\|_\\infty = \\max(|v_1|, |v_2|, \\ldots, |v_n|)"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "জব্বারের রাস্তার Norm হিসাব",
+    "problem": "জব্বার পূর্বে ৩ কিলো আর উত্তরে ৪ কিলো যাইব। Vector v = [3, 4]। L1, L2, আর L∞ Norm বাইর কর।",
+    "steps": [
+      {
+        "label": "Step 1: L1 Norm (গলি পথ)",
+        "content": "সব component-এর absolute value যোগ করো",
+        "formula": "\\|\\vec{v}\\|_1 = |3| + |4| = 7 \\text{ km}"
+      },
+      {
+        "label": "Step 2: L2 Norm (সোজা পথ)",
+        "content": "Square করো, যোগ করো, root নাও",
+        "formula": "\\|\\vec{v}\\|_2 = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5 \\text{ km}"
+      },
+      {
+        "label": "Step 3: L∞ Norm (সবচেয়ে বড়)",
+        "content": "সবচেয়ে বড় component নাও",
+        "formula": "\\|\\vec{v}\\|_\\infty = \\max(|3|, |4|) = 4 \\text{ km}"
+      }
+    ],
+    "answer": "L1 = ৭ কিলো (গলি পথ), L2 = ৫ কিলো (সোজা পথ), L∞ = ৪ কিলো (সবচেয়ে বড় component)। তিন নর্মে তিন উত্তর — কিন্তু সবাই vector-এর size-ই মাপতেছে!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "L2 Regularization (Ridge)",
+      "icon": "🛡️",
+      "explanation": "Model যখন overfit করে, weight-গুলা অনেক বড় হইয়া যায়। L2 Norm দিয়া weight vector-এর size-এ penalty দিলে weight ছোট থাকে — model সিম্পল থাকে। এইটারে Ridge Regression বা Weight Decay বলে।",
+      "realExample": "GPT training-এ weight decay = 0.1 use করা হয় — মানে প্রতি step-এ weight vector-এর L2 norm ১০% কমায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.linear_model import Ridge\n\n# L2 regularization (Ridge)\nX = np.array([[1, 2], [3, 4], [5, 6], [7, 8]])\ny = np.array([3, 7, 11, 15])\n\nmodel = Ridge(alpha=1.0)  # alpha = regularization strength\nmodel.fit(X, y)\n\nweights = model.coef_\nl2_norm = np.linalg.norm(weights, ord=2)\nprint(f'Weights: {weights}')\nprint(f'L2 Norm of weights: {l2_norm:.4f}')\n# alpha বাড়লে L2 norm কমবে — simpler model"
+      }
+    },
+    {
+      "id": 2,
+      "title": "L1 Regularization (Lasso) — Feature Selection",
+      "icon": "✂️",
+      "explanation": "L1 Norm-এর মজার ব্যাপার হইল এইটা weight-কে exactly ০ করে দিতে পারে! মানে কিছু feature-কে পুরাপুরি বাদ দিয়া দেয়। এইটারে feature selection বলে — অপ্রয়োজনীয় feature কাটছাট!",
+      "realExample": "ক্যান্সার diagnosis-এ ১০০০টা gene feature থেকে Lasso শুধু ২০টা important gene select করে — বাকি ৯৮০টার weight 0!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.linear_model import Lasso\n\nX = np.random.randn(100, 10)  # 10 features\ny = 3*X[:, 0] + 2*X[:, 3] + np.random.randn(100)*0.1\n# শুধু feature 0 আর 3 important\n\nmodel = Lasso(alpha=0.1)\nmodel.fit(X, y)\n\nprint('Weights:', np.round(model.coef_, 3))\n# Output: [2.9, 0, 0, 1.9, 0, 0, 0, 0, 0, 0]\n# L1 norm বাকি feature-র weight ০ করে দিছে!"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Distance Metric — kNN",
+      "icon": "📏",
+      "explanation": "k-Nearest Neighbors-এ নতুন data point-এর কাছে কারা আছে সেইটা বাইর করতে হয়। দুইটা vector-এর মধ্যে L2 distance মাপলেই পাওয়া যায় কে কার কাছে। Distance ছোট = বেশি similar!",
+      "realExample": "Spotify-তে তোর গান শোনার pattern vector-এর সাথে অন্যদের vector-এর L2 distance মাইপা similar users খুঁজে বাইর করে।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.neighbors import KNeighborsClassifier\n\n# দুইটা point-এর মধ্যে L2 distance\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\n\nl2_dist = np.linalg.norm(a - b)\nprint(f'L2 Distance: {l2_dist:.4f}')  # 5.196\n\nl1_dist = np.linalg.norm(a - b, ord=1)\nprint(f'L1 Distance: {l1_dist:.4f}')  # 9.0\n\n# kNN classifier\nknn = KNeighborsClassifier(n_neighbors=3, metric='euclidean')\n# euclidean = L2 norm ব্যবহার করে distance মাপে"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Batch Normalization",
+      "icon": "⚖️",
+      "explanation": "Deep learning-এ layer-এর output vector-গুলার norm অনেক বড় বা ছোট হইয়া গেলে training ভেঙ্গে পড়ে। Batch normalization vector-গুলার norm-কে control-এ রাখে — না বেশি বড়, না বেশি ছোট।",
+      "realExample": "ResNet-50-এ প্রতিটা convolutional layer-এর পরে BatchNorm আছে — এইটা ছাড়া deep network train করা almost impossible ছিল।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Batch Normalization — vector norm control করে\nbn = nn.BatchNorm1d(num_features=4)\n\n# Random feature vectors (batch of 3, 4 features each)\nx = torch.randn(3, 4) * 100  # অনেক বড় values\nprint(f'Before BN - norms: {torch.norm(x, dim=1)}')\n\ny = bn(x)  # normalize করো\nprint(f'After BN - norms: {torch.norm(y, dim=1)}')\n# Norm অনেক ছোট আর consistent হইয়া গেছে!"
+      }
+    }
+  ],
+  "memoryTrick": "Norm = মাপের ফিতা। L1 = রিকশার গলি পথ (ব্লক ধইরা), L2 = পাখির সোজা উড়ান, L∞ = সবচেয়ে লম্বা ডেগ। ML-এ L1 কাটছাট করে, L2 শান্ত রাখে!",
+  "tags": ["norm", "L1", "L2", "manhattan", "euclidean", "regularization", "distance"],
+  "prev": "vector",
+  "next": "unit-vector"
+}

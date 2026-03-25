@@ -1,0 +1,105 @@
+{
+  "slug": "unit-vector",
+  "title": "Unit Vector — একক ভেক্টর",
+  "titleEn": "Unit Vector",
+  "category": "linear-algebra",
+  "order": 4,
+  "readTime": 7,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🧭",
+    "title": "নাবিকের কম্পাসের গল্প",
+    "content": "ধর ভাই, সদরঘাটে নাবিক মতিন ভাই launch চালায়। তারে জিজ্ঞেস করলি 'কোনদিকে যাইতেছেন?' সে বলল 'উত্তর-পূর্ব দিকে।' কত দূর যাইব সেইটা বলে নাই — শুধু দিকটা বলছে। কম্পাসের কাঁটা সবসময় একটা direction দেখায়, কিন্তু কম্পাসের কাঁটার length সবসময় same — ১ unit। কম্পাসের কাঁটা কখনো লম্বা-খাটো হয় না, তাই না?",
+    "reveal": "এইটাই Unit Vector — দিক আছে কিন্তু length ঠিক ১। যেকোনো vector-কে তার norm দিয়া ভাগ করলে unit vector পাওয়া যায়। শুধু দিকটা রাখো, মান ১ করো। বুঝলা মামা?"
+  },
+  "definition": {
+    "content": "Unit Vector হইল এমন vector যার magnitude (norm) ঠিক ১। যেকোনো non-zero vector-কে তার L2 norm দিয়া ভাগ করলে unit vector পাওয়া যায়। এই process-কে normalization বলে।",
+    "formula": "\\hat{v} = \\frac{\\vec{v}}{\\|\\vec{v}\\|_2}, \\quad \\|\\hat{v}\\|_2 = 1",
+    "formulaLabel": "Unit vector v̂ — vector-কে তার norm দিয়া ভাগ"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Unit Vector কেন দরকার?",
+        "content": "অনেক সময় আমরা শুধু direction-টা জানতে চাই, magnitude-টা গুরুত্বপূর্ণ না। ধর দুইটা রাস্তা — একটা ৫ কিলো লম্বা উত্তরদিকে, আরেকটা ১০০ কিলো লম্বা উত্তরদিকে। দিক কিন্তু same! Unit vector দিয়া শুধু direction-টা capture করি।",
+        "formula": "\\vec{a} = \\begin{bmatrix} 0 \\\\ 5 \\end{bmatrix}, \\quad \\vec{b} = \\begin{bmatrix} 0 \\\\ 100 \\end{bmatrix}, \\quad \\hat{a} = \\hat{b} = \\begin{bmatrix} 0 \\\\ 1 \\end{bmatrix}"
+      },
+      {
+        "title": "Normalization Process",
+        "content": "যেকোনো vector-কে unit vector বানাইতে ৩ step: (১) L2 norm বাইর কর, (২) প্রতিটা component-কে norm দিয়া ভাগ কর, (৩) check কর norm = ১ হইছে কিনা। এইটুকুই!",
+        "formula": "\\vec{v} = \\begin{bmatrix} 3 \\\\ 4 \\end{bmatrix} \\Rightarrow \\|\\vec{v}\\| = 5 \\Rightarrow \\hat{v} = \\begin{bmatrix} 3/5 \\\\ 4/5 \\end{bmatrix} = \\begin{bmatrix} 0.6 \\\\ 0.8 \\end{bmatrix}"
+      },
+      {
+        "title": "Standard Basis Vectors",
+        "content": "সবচেয়ে basic unit vector-গুলা হইল axis-বরাবর। 2D-তে î = [1,0] (পূর্বদিক) আর ĵ = [0,1] (উত্তরদিক)। যেকোনো vector-কে এই basis unit vector-এর combination দিয়া লেখা যায়।",
+        "formula": "\\hat{i} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix}, \\quad \\hat{j} = \\begin{bmatrix} 0 \\\\ 1 \\end{bmatrix}, \\quad \\vec{v} = 3\\hat{i} + 4\\hat{j}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "মতিন ভাইয়ের Launch-এর Direction",
+    "problem": "মতিন ভাইয়ের launch পূর্বে ৬ কিলো আর উত্তরে ৮ কিলো গেছে। Launch-এর direction-এর unit vector বাইর কর।",
+    "steps": [
+      {
+        "label": "Step 1: Vector লেখো",
+        "content": "পূর্বে ৬, উত্তরে ৮",
+        "formula": "\\vec{v} = \\begin{bmatrix} 6 \\\\ 8 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 2: L2 Norm বাইর কর",
+        "content": "Pythagorean theorem দিয়া magnitude বাইর কর",
+        "formula": "\\|\\vec{v}\\| = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10"
+      },
+      {
+        "label": "Step 3: Norm দিয়া ভাগ কর",
+        "content": "প্রতিটা component-কে ১০ দিয়া ভাগ কর",
+        "formula": "\\hat{v} = \\frac{1}{10} \\begin{bmatrix} 6 \\\\ 8 \\end{bmatrix} = \\begin{bmatrix} 0.6 \\\\ 0.8 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 4: Verify কর",
+        "content": "Check কর unit vector-এর norm ১ কিনা",
+        "formula": "\\|\\hat{v}\\| = \\sqrt{0.6^2 + 0.8^2} = \\sqrt{0.36 + 0.64} = \\sqrt{1} = 1 \\checkmark"
+      }
+    ],
+    "answer": "Unit vector হইল [0.6, 0.8] — norm ঠিক ১। মতিন ভাই ঠিক এই direction-এ launch চালাইতেছে, distance যতই হোক!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Feature Normalization",
+      "icon": "⚖️",
+      "explanation": "ML-এ বিভিন্ন feature-এর scale ভিন্ন — বয়স ০-১০০, income ০-১০০০০০০। Normalize না করলে বড় scale-এর feature dominate করে। Unit vector-এ convert করলে সব feature-এর scale same হইয়া যায়!",
+      "realExample": "scikit-learn-এর Normalizer প্রতিটা sample-কে unit vector-এ convert করে — text classification-এ document vector normalize করতে অনেক ব্যবহার হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom sklearn.preprocessing import Normalizer\n\n# বিভিন্ন scale-এর features\nX = np.array([\n    [25, 50000, 3],   # age, income, rooms\n    [40, 80000, 5],\n    [30, 60000, 2]\n])\n\nnormalizer = Normalizer(norm='l2')\nX_unit = normalizer.transform(X)\n\n# প্রতিটা row এখন unit vector\nfor i in range(len(X_unit)):\n    norm = np.linalg.norm(X_unit[i])\n    print(f'Row {i} norm: {norm:.6f}')  # 1.000000"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Gradient Direction",
+      "icon": "🧭",
+      "explanation": "Gradient descent-এ gradient vector-এর direction-ই important — magnitude না। অনেক সময় gradient-কে normalize করে unit vector বানানো হয় যাতে step size consistent থাকে। এইটারে 'gradient clipping by norm' বলে।",
+      "realExample": "LSTM/RNN training-এ exploding gradient problem-এ gradient-এর norm ১০০০+ হইয়া যায়। Gradient clipping-এ norm 1.0-এ আনলে training stable হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(10, 5)\nloss_fn = nn.MSELoss()\n\nx = torch.randn(3, 10)\ny = torch.randn(3, 5)\n\nloss = loss_fn(model(x), y)\nloss.backward()\n\n# Gradient clipping — norm কে max 1.0-এ রাখো\ntotal_norm = nn.utils.clip_grad_norm_(\n    model.parameters(), max_norm=1.0\n)\nprint(f'Gradient norm after clipping: {total_norm:.4f}')\n# Direction same থাকছে, magnitude controlled"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Embedding Normalization",
+      "icon": "📐",
+      "explanation": "Search আর recommendation system-এ embedding vector-কে unit vector-এ normalize করলে cosine similarity হিসাব করা সহজ হয় — শুধু dot product নিলেই হয়! OpenAI-র text-embedding-ada-002 normalized vector return করে।",
+      "realExample": "Pinecone, Weaviate-তে vector search-এ normalized embedding use করলে query ৩x faster হয় — কারণ cosine similarity = dot product হইয়া যায়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Embedding vectors\ndoc1 = np.array([3.0, 4.0, 0.0])\ndoc2 = np.array([1.0, 0.0, 1.0])\n\n# Unit vector-এ normalize\ndoc1_unit = doc1 / np.linalg.norm(doc1)\ndoc2_unit = doc2 / np.linalg.norm(doc2)\n\nprint(f'doc1 unit: {doc1_unit}')\nprint(f'doc1 norm: {np.linalg.norm(doc1_unit):.4f}')  # 1.0\n\n# Normalized vector-এ cosine similarity = dot product\nsimilarity = np.dot(doc1_unit, doc2_unit)\nprint(f'Cosine Similarity: {similarity:.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Unit Vector = কম্পাসের কাঁটা — সবসময় length ১, শুধু direction বলে। যেকোনো vector-কে norm দিয়া ভাগ করলেই কম্পাস পাইবি!",
+  "tags": ["unit-vector", "normalization", "direction", "basis-vector", "gradient-clipping"],
+  "prev": "vector-norm",
+  "next": "dot-product"
+}

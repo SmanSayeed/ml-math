@@ -1,0 +1,111 @@
+{
+  "slug": "matrix",
+  "title": "Matrix — সংখ্যার সাজানো বাগান",
+  "titleEn": "Matrix",
+  "category": "linear-algebra",
+  "order": 8,
+  "readTime": 10,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🏫",
+    "title": "মতিঝিল আইডিয়াল স্কুলের ক্লাস সিটিং",
+    "content": "ধর তুই মতিঝিল আইডিয়াল স্কুলের ক্লাস টিচার। তোর ক্লাসে ৩ সারিতে ৪ জন কইরা ছাত্র বসে। তুই attendance নিতে গিয়া একটা Excel sheet খুললি — ৩টা row, ৪টা column। প্রতিটা cell-এ ছাত্রের roll number। সারি ধইরা পড়লে একটা row পাবি, কলাম ধইরা পড়লে একটা column। পুরা sheet-টাই একটা Matrix! এখন হেডমাস্টার বললেন 'প্রতিটা ছাত্রের ৫ বিষয়ের নম্বর দাও।' তুই ৩০ জন ছাত্রের ৫ বিষয়ের নম্বর সাজাইলি — ৩০×৫ ম্যাট্রিক্স! Excel-এর প্রতিটা sheet-ই আসলে একটা matrix, মামা।",
+    "reveal": "এইটাই হইল Matrix — সংখ্যাগুলা row আর column-এ সাজানো! Excel sheet-এর মতো — m টা row, n টা column, ব্যস!"
+  },
+  "definition": {
+    "content": "Matrix হইল সংখ্যাগুলারে rectangular grid-এ সাজানো — m টা row আর n টা column-এ। এইটারে m×n matrix বলে। প্রতিটা element-এর address হইল (row, column) — ঠিক Excel cell-এর মতো A1, B2।",
+    "formula": "A_{m \\times n} = \\begin{bmatrix} a_{11} & a_{12} & \\cdots & a_{1n} \\\\ a_{21} & a_{22} & \\cdots & a_{2n} \\\\ \\vdots & \\vdots & \\ddots & \\vdots \\\\ a_{m1} & a_{m2} & \\cdots & a_{mn} \\end{bmatrix}",
+    "formulaLabel": "m×n Matrix — m rows, n columns"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Matrix-এর Dimension বোঝা",
+        "content": "Matrix-এর size বলার নিয়ম হইল 'row × column'। ৩ সারি ৪ কলাম হইলে বলবা 3×4 matrix। মনে রাখবা — আগে row (নিচে যাও), পরে column (পাশে যাও)। মতিঝিল স্কুলের ক্লাসে ৩ সারি ৪ জন = 3×4। মোট element = 3 × 4 = 12 টা।",
+        "formula": "A_{3 \\times 4} = \\begin{bmatrix} 1 & 2 & 3 & 4 \\\\ 5 & 6 & 7 & 8 \\\\ 9 & 10 & 11 & 12 \\end{bmatrix}"
+      },
+      {
+        "title": "Element Access — নির্দিষ্ট জায়গার সংখ্যা",
+        "content": "Matrix-এর কোনো element বোঝাতে দুইটা index লাগে — row number আর column number। a_{2,3} মানে ২য় row-এর ৩য় column-এর element। Python-এ index ০ থেকে শুরু, কিন্তু math-এ ১ থেকে। Excel-এ যেমন B3 মানে ৩য় row, ২য় column — same concept!",
+        "formula": "a_{ij} = \\text{element at row } i, \\text{ column } j"
+      },
+      {
+        "title": "Special Matrices — বিশেষ ম্যাট্রিক্স",
+        "content": "কিছু matrix-এর special নাম আছে। Row vector (1×n) — একটা row-ই matrix। Column vector (m×1) — একটা column-ই matrix। Square matrix (n×n) — row আর column সমান। Zero matrix — সব element ০। ML-এ এই সবগুলাই কাজে আসে।",
+        "formula": "\\text{Row: } \\begin{bmatrix} 1 & 2 & 3 \\end{bmatrix}, \\quad \\text{Column: } \\begin{bmatrix} 1 \\\\ 2 \\\\ 3 \\end{bmatrix}, \\quad \\text{Square: } \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Dataset-কে Matrix হিসেবে দেখা",
+    "problem": "৩ জন ছাত্রের ৪ বিষয়ের নম্বর আছে — রহিম: [৮০, ৭৫, ৯০, ৮৫], করিম: [৭০, ৮৫, ৬৫, ৯০], জামাল: [৯৫, ৮০, ৮৮, ৭২]। এইটারে matrix হিসেবে লেখ এবং dimension বল। করিমের ৩য় বিষয়ের নম্বর কত?",
+    "steps": [
+      {
+        "label": "Step 1: Matrix বানাও",
+        "content": "প্রতিটা ছাত্র = ১ row, প্রতিটা বিষয় = ১ column",
+        "formula": "A = \\begin{bmatrix} 80 & 75 & 90 & 85 \\\\ 70 & 85 & 65 & 90 \\\\ 95 & 80 & 88 & 72 \\end{bmatrix}"
+      },
+      {
+        "label": "Step 2: Dimension বল",
+        "content": "৩ জন ছাত্র (rows) × ৪ বিষয় (columns) = 3×4 matrix",
+        "formula": "A \\in \\mathbb{R}^{3 \\times 4}"
+      },
+      {
+        "label": "Step 3: নির্দিষ্ট element বের কর",
+        "content": "করিম = ২য় row, ৩য় বিষয় = ৩য় column, তাইলে a_{2,3}",
+        "formula": "a_{2,3} = 65"
+      }
+    ],
+    "answer": "3×4 matrix! করিমের ৩য় বিষয়ের নম্বর = 65। ML dataset-ও ঠিক এইভাবেই matrix — প্রতিটা row একটা sample, প্রতিটা column একটা feature!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Dataset Representation",
+      "icon": "📋",
+      "explanation": "ML-এর সবচেয়ে basic কাজ — data-কে matrix আকারে represent করা। প্রতিটা row একটা data sample (ছাত্র, customer, image), প্রতিটা column একটা feature (নম্বর, বয়স, pixel)। Pandas DataFrame, NumPy array — সবই matrix! ১০০০ customer-এর ২০ feature থাকলে 1000×20 matrix।",
+      "realExample": "Kaggle Titanic dataset: ৮৯১ জন passenger × ১২ features (age, fare, class, etc.) = 891×12 matrix।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nimport pandas as pd\n\n# Dataset = Matrix!\ndata = np.array([\n    [80, 75, 90, 85],  # ছাত্র ১\n    [70, 85, 65, 90],  # ছাত্র ২\n    [95, 80, 88, 72],  # ছাত্র ৩\n])\n\nprint(f'Shape: {data.shape}')  # (3, 4) = 3×4 matrix\nprint(f'Element [1,2]: {data[1, 2]}')  # 65 (করিমের ৩য় নম্বর)\n\n# Pandas DataFrame-ও matrix!\ndf = pd.DataFrame(data, \n    columns=['Math', 'English', 'Science', 'Bengali'],\n    index=['Rahim', 'Karim', 'Jamal'])\nprint(df)"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Image as Matrix",
+      "icon": "🖼️",
+      "explanation": "একটা grayscale image হইল 2D matrix — প্রতিটা pixel একটা number (0=কালো, 255=সাদা)। Color image হইল 3D matrix (height × width × 3 channels — RGB)। তোর ফোনের প্রতিটা ছবি আসলে একটা বিশাল matrix! 1920×1080 ছবি মানে ২০ লাখ+ সংখ্যার matrix।",
+      "realExample": "Instagram filter = matrix-এর প্রতিটা element-এ mathematical operation! Brightness বাড়ানো = matrix-এ scalar যোগ।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\nfrom PIL import Image\n\n# Image load করলে matrix পাবা!\nimg = Image.open('dhaka_skyline.jpg')\nimg_matrix = np.array(img)\n\nprint(f'Image shape: {img_matrix.shape}')\n# Output: (1080, 1920, 3) = height × width × RGB\n\n# Grayscale conversion\ngray = np.mean(img_matrix, axis=2)  # 3 channel → 1\nprint(f'Grayscale shape: {gray.shape}')  # (1080, 1920)\n\n# Brightness বাড়াও — scalar addition to matrix!\nbrighter = np.clip(img_matrix + 50, 0, 255).astype(np.uint8)\nprint('Brightness বাড়ানো হইল — matrix + scalar!')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Neural Network Weights",
+      "icon": "🧠",
+      "explanation": "Neural network-এর প্রতিটা layer-এর weights একটা matrix-এ store হয়। যদি একটা layer-এ ৪ input neuron আর ৩ output neuron থাকে, weight matrix হইব 4×3। Training মানে এই matrix-এর values ঠিক করা! পুরা deep learning হইল matrix-এর খেলা।",
+      "realExample": "GPT-4-এর একটা single attention layer-এর weight matrix হইতে পারে 12288×12288 = ১৫ কোটি+ numbers!",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Neural network layer = weight MATRIX\nlayer = nn.Linear(in_features=4, out_features=3)\n\n# Weight matrix দেখ\nprint(f'Weight matrix shape: {layer.weight.shape}')\n# Output: torch.Size([3, 4]) — 3×4 matrix!\n\nprint(f'Weight matrix:\\n{layer.weight.data}')\n# 3 rows (output neurons) × 4 cols (input neurons)\n\n# Bias vector\nprint(f'Bias vector shape: {layer.bias.shape}')\n# Output: torch.Size([3]) — 3-dim vector"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Confusion Matrix",
+      "icon": "🎯",
+      "explanation": "Classification model evaluate করতে confusion matrix use হয় — এইটা একটা square matrix যেখানে row = actual class, column = predicted class। Diagonal-এ যত বেশি number, model তত ভালো। ঢাকার traffic-এ গাড়ি চেনার model-এ bus কে truck বলতেছে কিনা — confusion matrix-ই বলবে!",
+      "realExample": "COVID-19 test result: True Positive, False Positive, True Negative, False Negative — 2×2 confusion matrix।",
+      "code": {
+        "language": "python",
+        "snippet": "from sklearn.metrics import confusion_matrix\nimport numpy as np\n\n# Actual vs Predicted labels\ny_true = [0, 1, 1, 0, 1, 0, 1, 1, 0, 0]\ny_pred = [0, 1, 0, 0, 1, 1, 1, 1, 0, 0]\n\n# Confusion Matrix — it's a MATRIX!\ncm = confusion_matrix(y_true, y_pred)\nprint(f'Confusion Matrix:\\n{cm}')\n# [[4, 1],   ← actual 0: 4 correct, 1 wrong\n#  [1, 4]]   ← actual 1: 1 wrong, 4 correct\n\nprint(f'Shape: {cm.shape}')  # (2, 2) — square matrix!\nprint(f'Accuracy: {np.trace(cm) / cm.sum():.2%}')"
+      }
+    }
+  ],
+  "memoryTrick": "Matrix = Excel Sheet! Row = সারি (নিচে যাও), Column = কলাম (পাশে যাও)। m×n মানে m সারি n কলাম। Dataset-এর প্রতিটা row = ১ জন, প্রতিটা column = ১ feature!",
+  "tags": ["matrix", "dimension", "rows", "columns", "dataset", "image", "2d-array"],
+  "prev": "vector-operations",
+  "next": "matrix-multiplication"
+}

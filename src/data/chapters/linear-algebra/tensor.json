@@ -1,0 +1,127 @@
+{
+  "slug": "tensor",
+  "title": "Tensor — বহুমাত্রিক তথ্যভাণ্ডার",
+  "titleEn": "Tensor",
+  "category": "linear-algebra",
+  "order": 17,
+  "readTime": 15,
+  "difficulty": "intermediate",
+  "story": {
+    "icon": "🧊",
+    "title": "বসুন্ধরার শপিং মল",
+    "content": "ধর তুই বসুন্ধরা সিটিতে গেছস শপিং করতে। মলটার কথা ভাবো: প্রতিটা ফ্লোরে অনেক দোকান আছে, প্রতিটা দোকানে অনেক shelf, প্রতিটা shelf-এ অনেক product। তুই যদি এই পুরা মলের inventory track করতে চাস — শুধু একটা list (1D) দিয়া হইব না, table (2D)-ও যথেষ্ট না! তোর লাগবে একটা 3D structure: floor × shop × shelf। মামা বলল 'ভাই, এইটাকেই tensor বলে! একটা Rubik's Cube মনে করো — লম্বা, চওড়া, আর গভীরতা — তিন দিকে data!' আরেকজন বলল 'মামা, ভিডিওতে তো time-ও আছে!' মামা বলল '4D tensor! Frame × Height × Width × Color — CNN যেভাবে ভিডিও দেখে!'",
+    "reveal": "এইটাই Tensor! Scalar (0D), Vector (1D), Matrix (2D)-এর পর আসে Tensor (3D, 4D, 5D, ...)। Multi-dimensional array যেইটা complex, structured data store করে। ML/Deep Learning-এর সব data tensor আকারে থাকে — PyTorch আর TensorFlow নামেই tensor আছে!"
+  },
+  "definition": {
+    "content": "Tensor হইল multi-dimensional array — scalar (0D), vector (1D), matrix (2D)-এর generalization। n-dimensional tensor-এর n টা axis বা dimension থাকে। Deep learning-এ সব data (images, text, audio) tensor আকারে process হয়।",
+    "formula": "T \\in \\mathbb{R}^{d_1 \\times d_2 \\times \\cdots \\times d_n}",
+    "formulaLabel": "n-dimensional Tensor: n টা axis-এ data সাজানো"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Tensor-এর Dimension/Rank বোঝো",
+        "content": "Tensor-এর 'rank' (dimension/order) মানে কয়টা axis আছে। Scalar = rank-0 (কোনো axis নাই), Vector = rank-1 (1 axis), Matrix = rank-2 (2 axes: row × col), 3D Tensor = rank-3 (3 axes)। PyTorch-এ .ndim দিয়া rank আর .shape দিয়া প্রতিটা axis-এর size দেখবা। Note: এই 'rank' আর matrix rank আলাদা জিনিস!",
+        "formula": "\\text{Scalar: } s \\in \\mathbb{R}, \\quad \\text{Vector: } \\mathbf{v} \\in \\mathbb{R}^n, \\quad \\text{Matrix: } M \\in \\mathbb{R}^{m \\times n}, \\quad \\text{3D Tensor: } T \\in \\mathbb{R}^{a \\times b \\times c}"
+      },
+      {
+        "title": "ML-এ Common Tensor Shapes",
+        "content": "Images: (batch, channels, height, width) = 4D। Text: (batch, sequence_length, embedding_dim) = 3D। Video: (batch, frames, channels, height, width) = 5D। Tabular data: (batch, features) = 2D। Batch dimension সামনে থাকে কারণ GPU parallel processing করে।",
+        "formula": "\\text{Image Batch: } (B, C, H, W), \\quad \\text{Text Batch: } (B, T, D)"
+      },
+      {
+        "title": "Tensor Operations",
+        "content": "Tensors-এ element-wise operations (add, multiply), reshaping (view, reshape, permute), slicing (indexing), আর contraction (einsum, matmul) করা যায়। Broadcasting rule: ছোট tensor-কে automatically বড়টার shape-এ expand করে। Reshape সবচেয়ে common — CNN-এর output flatten করো, তারপর linear layer-এ দাও।",
+        "formula": "\\text{reshape}(T_{B \\times C \\times H \\times W}) = T_{B \\times (C \\cdot H \\cdot W)}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Image Batch Tensor বানাও",
+    "problem": "তোর কাছে 4টা RGB image আছে, প্রতিটা 32×32 pixel। এইগুলারে একটা batch tensor-এ সাজাও আর CNN-এ দেওয়ার জন্য prepare করো।",
+    "steps": [
+      {
+        "label": "Step 1: Dimensions বোঝো",
+        "content": "4 images, প্রতিটা RGB (3 channels), 32 height, 32 width",
+        "formula": "\\text{Batch shape: } (4, 3, 32, 32) = (B, C, H, W)"
+      },
+      {
+        "label": "Step 2: Total Elements",
+        "content": "4 × 3 × 32 × 32 = 12,288 numbers — এতগুলা number একটা organized structure-এ!",
+        "formula": "\\text{Total elements} = 4 \\times 3 \\times 32 \\times 32 = 12{,}288"
+      },
+      {
+        "label": "Step 3: Accessing Data",
+        "content": "batch[2, 1, 15, 20] মানে 3rd image-র Green channel-এর 16th row, 21st column pixel। 4D tensor-এ ঠিক ঠিকানা!",
+        "formula": "T[b, c, h, w] = \\text{pixel value at batch } b, \\text{ channel } c, \\text{ row } h, \\text{ col } w"
+      },
+      {
+        "label": "Step 4: CNN-এর জন্য Reshape",
+        "content": "CNN-এর Conv2d layer সরাসরি (B, C, H, W) নেয়। কিন্তু FC layer-এ দিতে হইলে flatten করো: (4, 3, 32, 32) → (4, 3072)।",
+        "formula": "(4, 3, 32, 32) \\xrightarrow{\\text{flatten}} (4, 3072)"
+      }
+    ],
+    "answer": "4টা 32×32 RGB image = (4, 3, 32, 32) tensor = 12,288 numbers। মামা বলে 'tensor হইল বসুন্ধরা মল — floor (batch) × wing (channel) × row (height) × column (width)!'"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "PyTorch Tensors — Deep Learning-এর ভিত্তি",
+      "icon": "🔥",
+      "explanation": "PyTorch-এ সব data torch.Tensor আকারে থাকে। GPU acceleration, automatic differentiation (autograd), আর efficient memory management — সব tensor-এর মাধ্যমে হয়। Neural network-এর input, weights, gradients — সবই tensor!",
+      "realExample": "GPT-4 training-এ trillions of parameters tensor আকারে multiple GPU-তে distribute করা হয়। প্রতিটা layer-এর weight একটা tensor।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\n# বিভিন্ন rank-এর tensor\nscalar = torch.tensor(3.14)       # rank-0\nvector = torch.tensor([1, 2, 3])  # rank-1\nmatrix = torch.randn(3, 4)        # rank-2\ntensor3d = torch.randn(2, 3, 4)   # rank-3\n\nfor name, t in [('Scalar', scalar), ('Vector', vector),\n                ('Matrix', matrix), ('3D Tensor', tensor3d)]:\n    print(f'{name}: shape={t.shape}, ndim={t.ndim}, '\n          f'numel={t.numel()}, dtype={t.dtype}')\n\n# GPU-তে পাঠাও\nif torch.cuda.is_available():\n    gpu_tensor = tensor3d.cuda()\n    print(f'\\nGPU tensor device: {gpu_tensor.device}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "CNN Input — Image Processing",
+      "icon": "🖼️",
+      "explanation": "CNN (Convolutional Neural Network)-এ image input (B, C, H, W) format-এ tensor হিসাবে যায়। B = batch size (parallel images), C = channels (RGB=3, grayscale=1), H = height, W = width। Conv2d layer এই 4D tensor-এ filter slide করায়।",
+      "realExample": "ImageNet classification-এ ResNet-50 input shape (batch, 3, 224, 224) — 224×224 RGB images। Batch size 32 হইলে প্রতি step-এ 32×3×224×224 = 4.8M numbers process হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Image batch simulate করো\nbatch_size = 8\nimages = torch.randn(batch_size, 3, 64, 64)  # 8 RGB 64x64 images\nprint(f'Input shape: {images.shape}')  # (8, 3, 64, 64)\n\n# Simple CNN\ncnn = nn.Sequential(\n    nn.Conv2d(3, 16, kernel_size=3, padding=1),  # (8,16,64,64)\n    nn.ReLU(),\n    nn.MaxPool2d(2),                              # (8,16,32,32)\n    nn.Conv2d(16, 32, kernel_size=3, padding=1),  # (8,32,32,32)\n    nn.ReLU(),\n    nn.AdaptiveAvgPool2d(1),                      # (8,32,1,1)\n    nn.Flatten(),                                  # (8,32)\n    nn.Linear(32, 10)                              # (8,10)\n)\n\noutput = cnn(images)\nprint(f'Output shape: {output.shape}')  # (8, 10) — 10 classes\n\n# প্রতিটা layer-এর shape দেখো\nx = images\nfor i, layer in enumerate(cnn):\n    x = layer(x)\n    print(f'Layer {i} ({layer.__class__.__name__}): {x.shape}')"
+      }
+    },
+    {
+      "id": 3,
+      "title": "NLP — Text Embeddings",
+      "icon": "📝",
+      "explanation": "NLP-তে text-কে 3D tensor-এ represent করা হয়: (batch, sequence_length, embedding_dim)। প্রতিটা word/token একটা embedding vector, sentence হইল sequence of vectors, batch হইল multiple sentences। Transformer এই 3D tensor process করে।",
+      "realExample": "BERT model-এ input shape (batch, 512, 768) — 512 tokens, প্রতিটা 768-dimensional embedding। Batch 16 হইলে 16×512×768 = 6.3M numbers per forward pass।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\nimport torch.nn as nn\n\n# Text batch simulate করো\nvocab_size = 10000\nembed_dim = 256\nseq_length = 50\nbatch_size = 4\n\n# Token IDs (integers)\ntoken_ids = torch.randint(0, vocab_size, (batch_size, seq_length))\nprint(f'Token IDs shape: {token_ids.shape}')  # (4, 50)\n\n# Embedding layer: int → float vector\nembedding = nn.Embedding(vocab_size, embed_dim)\nembedded = embedding(token_ids)\nprint(f'Embedded shape: {embedded.shape}')  # (4, 50, 256)\n\n# Transformer Encoder\nencoder_layer = nn.TransformerEncoderLayer(\n    d_model=embed_dim, nhead=8, batch_first=True\n)\nencoder = nn.TransformerEncoder(encoder_layer, num_layers=2)\noutput = encoder(embedded)\nprint(f'Encoder output: {output.shape}')  # (4, 50, 256)\n\n# [CLS] token দিয়া classification\ncls_output = output[:, 0, :]  # (4, 256)\nprint(f'CLS token: {cls_output.shape}')"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Tensor Reshaping ও Manipulation",
+      "icon": "🔄",
+      "explanation": "Deep learning-এ tensor reshape করা সবচেয়ে common operation। CNN output-কে flatten করা, attention-এ multi-head split করা, image-কে patches-এ ভাঙা — সব reshape। ভুল reshape করলে model কাজ করবে কিন্তু ভুল result দিবে — shape mismatch সবচেয়ে common bug!",
+      "realExample": "Vision Transformer (ViT)-এ 224×224 image-কে 16×16 patches-এ ভাঙা হয় — (1, 3, 224, 224) → (1, 196, 768) reshape দিয়া।",
+      "code": {
+        "language": "python",
+        "snippet": "import torch\n\n# 4D tensor (image batch)\nx = torch.randn(2, 3, 8, 8)\nprint(f'Original: {x.shape}')  # (2, 3, 8, 8)\n\n# Flatten (CNN → FC)\nflat = x.view(2, -1)  # -1 = auto-calculate\nprint(f'Flatten: {flat.shape}')  # (2, 192)\n\n# Reshape (multi-head attention)\nbatch, channels, h, w = x.shape\nnum_heads = 3\nx_heads = x.view(batch, num_heads, channels//num_heads, h, w)\nprint(f'Multi-head: {x_heads.shape}')  # (2, 3, 1, 8, 8)\n\n# Permute (channel order বদলাও)\nx_nhwc = x.permute(0, 2, 3, 1)  # NCHW → NHWC\nprint(f'NHWC: {x_nhwc.shape}')  # (2, 8, 8, 3)\n\n# Squeeze/Unsqueeze (dimension add/remove)\nx_5d = x.unsqueeze(0)  # video-র time dimension\nprint(f'5D (video): {x_5d.shape}')  # (1, 2, 3, 8, 8)"
+      }
+    },
+    {
+      "id": 5,
+      "title": "TensorFlow/Keras Tensors",
+      "icon": "🧠",
+      "explanation": "TensorFlow-এও সব data tf.Tensor। PyTorch-এর মতোই shape, dtype, device আছে। Keras high-level API দিয়া model বানালেও internally সব tensor operation হয়। TensorFlow-এর নামেই 'Tensor' + 'Flow' — tensors-এর flow!",
+      "realExample": "Google-এর production ML systems (Search, Translate, Photos) সব TensorFlow tensor দিয়া চলে — billions of tensors daily process হয়।",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# NumPy দিয়া tensor operations (TF/PyTorch-এর ভিত্তি)\n# Scalar (0D)\nscalar = np.array(42)\nprint(f'Scalar: ndim={scalar.ndim}, shape={scalar.shape}')\n\n# Vector (1D)\nvector = np.array([1, 2, 3, 4])\nprint(f'Vector: ndim={vector.ndim}, shape={vector.shape}')\n\n# Matrix (2D)\nmatrix = np.random.randn(3, 4)\nprint(f'Matrix: ndim={matrix.ndim}, shape={matrix.shape}')\n\n# 3D Tensor (text batch)\ntext_batch = np.random.randn(8, 100, 512)\nprint(f'Text batch: ndim={text_batch.ndim}, shape={text_batch.shape}')\n\n# 4D Tensor (image batch)\nimg_batch = np.random.randn(16, 3, 224, 224)\nprint(f'Image batch: ndim={img_batch.ndim}, shape={img_batch.shape}')\n\n# Broadcasting example\na = np.random.randn(4, 3, 1)   # (4, 3, 1)\nb = np.random.randn(1, 1, 5)   # (1, 1, 5)\nc = a + b                       # (4, 3, 5) — auto broadcast!\nprint(f'\\nBroadcast: {a.shape} + {b.shape} = {c.shape}')"
+      }
+    }
+  ],
+  "memoryTrick": "Tensor = বসুন্ধরা মলের inventory — ফ্লোর × দোকান × shelf × product। Scalar = একটা সংখ্যা, Vector = একটা list, Matrix = একটা table, Tensor = multi-dimensional table। PyTorch-এ .shape দেখো আর .ndim গুনো!",
+  "tags": ["tensor", "multi-dimensional", "pytorch", "tensorflow", "cnn", "nlp", "reshape", "broadcasting"],
+  "prev": "pca",
+  "next": "functions-limits"
+}

@@ -1,0 +1,111 @@
+{
+  "slug": "matrix-transpose",
+  "title": "Matrix Transpose — ম্যাট্রিক্স উলটানো",
+  "titleEn": "Matrix Transpose",
+  "category": "linear-algebra",
+  "order": 10,
+  "readTime": 9,
+  "difficulty": "beginner",
+  "story": {
+    "icon": "🪞",
+    "title": "নিউমার্কেটের আয়নার দোকান",
+    "content": "ধর তুই নিউমার্কেটে আয়নার দোকানে গেছস। দোকানদার একটা আয়না ধরল তোর সামনে — তুই দেখলি তোর ডান হাত আয়নায় বাম হাতে গেছে! এবার ধর তোর কাছে একটা Excel sheet আছে — ৩ জন ছাত্রের ৪ বিষয়ের নম্বর, 3×4 matrix। তুই যদি এই sheet-টারে 'আয়নায় দেখাস' — মানে row গুলারে column বানাস আর column গুলারে row — তাইলে পাবি 4×3 matrix! ছাত্র ভিত্তিক data বিষয় ভিত্তিক হইয়া যাইব। রহিমের সব নম্বর যেইটা আগে row ছিল, এখন column হইয়া গেছে। এইটাই Transpose — diagonal বরাবর flip!",
+    "reveal": "এইটাই Matrix Transpose — row আর column swap! আয়নার মতো diagonal বরাবর উলটাও। A-এর transpose = Aᵀ। (m×n) → (n×m)!"
+  },
+  "definition": {
+    "content": "Matrix Transpose হইল একটা matrix-এর row আর column swap করা। A matrix-এর transpose Aᵀ-তে element a_{ij} চইলা যায় position a_{ji}-তে। মানে ১ম row হইয়া যায় ১ম column, ২য় row হইয়া যায় ২য় column। (m×n) matrix-এর transpose হইব (n×m)।",
+    "formula": "(A^T)_{ij} = A_{ji}",
+    "formulaLabel": "Transpose: row i, column j → row j, column i"
+  },
+  "explanation": {
+    "steps": [
+      {
+        "title": "Transpose কিভাবে কাজ করে",
+        "content": "Matrix-এর diagonal (উপরে-বামে থেকে নিচে-ডানে) বরাবর flip কর। ১ম row পুরাটা ১ম column হইয়া যাইব, ২য় row ২য় column হইব। মনে রাখ — diagonal-এর element গুলা জায়গায়ই থাকে (কারণ a_{ii} = a_{ii})। বাকি সবগুলা diagonal-এর 'আয়নায়' চইলা যায়।",
+        "formula": "A = \\begin{bmatrix} 1 & 2 & 3 \\\\ 4 & 5 & 6 \\end{bmatrix} \\implies A^T = \\begin{bmatrix} 1 & 4 \\\\ 2 & 5 \\\\ 3 & 6 \\end{bmatrix}"
+      },
+      {
+        "title": "Transpose-এর Properties",
+        "content": "কিছু মজার properties আছে: (1) দুইবার transpose করলে আসলে ফিরা আসে — (Aᵀ)ᵀ = A। আয়নায় আয়না দেখালে আসল দেখা যায়! (2) (A+B)ᵀ = Aᵀ + Bᵀ — যোগের transpose = transpose-এর যোগ। (3) (AB)ᵀ = BᵀAᵀ — গুণের transpose-এ order উলটা যায়! এইটা গুরুত্বপূর্ণ।",
+        "formula": "(A^T)^T = A, \\quad (A + B)^T = A^T + B^T, \\quad (AB)^T = B^T A^T"
+      },
+      {
+        "title": "Symmetric Matrix — বিশেষ ম্যাট্রিক্স",
+        "content": "যদি কোনো matrix-এর transpose সে নিজেই হয়, মানে Aᵀ = A, তাইলে সেইটা symmetric matrix। Diagonal বরাবর আয়নার মতো — উপরে যা নিচেও তা। Covariance matrix, distance matrix — সব symmetric! ML-এ এইটা অনেক কাজে আসে কারণ symmetric matrix-এর বিশেষ properties আছে।",
+        "formula": "A = A^T \\implies a_{ij} = a_{ji} \\quad \\text{(symmetric matrix)}"
+      }
+    ]
+  },
+  "workedExample": {
+    "title": "Dataset Transpose করে Feature Analysis",
+    "problem": "৩ জন ছাত্রের ২ বিষয়ের নম্বর আছে — রহিম [৮০, ৭০], করিম [৯০, ৬০], জামাল [৮৫, ৭৫]। Matrix বানাও, transpose কর, আর বল transpose-এর ২য় column কী represent করে।",
+    "steps": [
+      {
+        "label": "Step 1: Original Matrix (ছাত্র × বিষয়)",
+        "content": "৩ ছাত্র × ২ বিষয় = 3×2 matrix",
+        "formula": "A = \\begin{bmatrix} 80 & 70 \\\\ 90 & 60 \\\\ 85 & 75 \\end{bmatrix} \\quad (3 \\times 2)"
+      },
+      {
+        "label": "Step 2: Transpose কর",
+        "content": "Row গুলা column হইব, column গুলা row হইব — 2×3 হইব",
+        "formula": "A^T = \\begin{bmatrix} 80 & 90 & 85 \\\\ 70 & 60 & 75 \\end{bmatrix} \\quad (2 \\times 3)"
+      },
+      {
+        "label": "Step 3: ২য় column বিশ্লেষণ",
+        "content": "Transpose-এর ২য় column = original-এর ২য় row = করিমের সব নম্বর!",
+        "formula": "A^T_{:,2} = \\begin{bmatrix} 90 \\\\ 60 \\end{bmatrix} = \\text{করিমের সব বিষয়ের নম্বর}"
+      }
+    ],
+    "answer": "Transpose-এ ২য় column = করিমের সব নম্বর [90, 60]! Transpose করলে ছাত্র-ভিত্তিক data বিষয়-ভিত্তিক হইয়া যায় — এখন প্রতিটা row একটা বিষয়, প্রতিটা column একটা ছাত্র!"
+  },
+  "mlUseCases": [
+    {
+      "id": 1,
+      "title": "Covariance Matrix",
+      "icon": "📊",
+      "explanation": "Feature-গুলা কিভাবে একসাথে vary করে সেইটা বোঝাতে covariance matrix use হয় — আর এইটা বানাতে transpose লাগে! Formula: Cov = (1/n) × Xᵀ × X। Data matrix-কে transpose কইরা নিজের সাথে গুণ করলেই covariance matrix পাবা। এইটা PCA, feature selection সবখানে লাগে।",
+      "realExample": "Stock market analysis-এ ৫০০ stock-এর covariance matrix (500×500) বানাতে transpose essential — portfolio risk calculate করতে!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Dataset: 100 samples, 3 features\nX = np.random.randn(100, 3)\n\n# Mean centering\nX_centered = X - X.mean(axis=0)\n\n# Covariance matrix = X^T × X / n\ncov_matrix = (X_centered.T @ X_centered) / (len(X) - 1)\nprint(f'Data shape: {X.shape}')          # (100, 3)\nprint(f'X^T shape: {X_centered.T.shape}')  # (3, 100) ← transpose!\nprint(f'Cov shape: {cov_matrix.shape}')   # (3, 3) ← symmetric!\n\n# Verify: cov_matrix == cov_matrix^T (symmetric!)\nprint(f'Symmetric: {np.allclose(cov_matrix, cov_matrix.T)}')"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Backpropagation-এ Gradient",
+      "icon": "⬅️",
+      "explanation": "Neural network training-এ forward pass-এ y = Wx, কিন্তু backpropagation-এ gradient বের করতে transpose লাগে! ∂L/∂x = Wᵀ × ∂L/∂y। Forward-এ W, backward-এ Wᵀ — এইজন্য deep learning-এ transpose সবসময় দরকার। মানে weight matrix-এর transpose ছাড়া network শিখতেই পারত না!",
+      "realExample": "PyTorch-এ loss.backward() call করলে ভিতরে ভিতরে প্রতিটা layer-এ weight transpose হইতেছে gradient calculate করতে!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Forward pass: y = Wx\nW = np.array([[0.2, 0.8], [0.5, 0.3], [0.7, 0.1]])  # 3×2\nx = np.array([1.0, 0.5])  # input (2,)\ny = W @ x  # output (3,)\n\n# Backpropagation: gradient flows BACKWARDS through W^T\ngrad_y = np.array([0.1, -0.2, 0.3])  # upstream gradient\n\n# Gradient w.r.t. input = W^T × grad_y\ngrad_x = W.T @ grad_y  # (2×3) × (3,) = (2,)\nprint(f'W shape: {W.shape}')      # (3, 2) — forward\nprint(f'W^T shape: {W.T.shape}')  # (2, 3) — backward!\nprint(f'grad_x: {grad_x}')        # gradient for input\n\n# Gradient w.r.t. weights\ngrad_W = np.outer(grad_y, x)  # (3,) ⊗ (2,) = (3, 2)\nprint(f'grad_W shape: {grad_W.shape}')  # same as W!"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Data Reshaping — Row/Column Swap",
+      "icon": "🔄",
+      "explanation": "অনেক সময় ML pipeline-এ data-এর orientation পাল্টানো লাগে। কিছু algorithm চায় sample-per-row, কিছু চায় feature-per-row। Transpose দিয়া সহজেই swap করা যায়। Image data-তেও channel-first (PyTorch) আর channel-last (TensorFlow) switch করতে transpose লাগে।",
+      "realExample": "TensorFlow থেকে PyTorch-এ model convert করতে weight matrix transpose করা লাগে — channel ordering different!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Sample-per-row format (sklearn style)\ndata_row = np.array([\n    [170, 65, 25],  # height, weight, age\n    [165, 55, 30],\n    [180, 75, 22],\n])  # (3 samples, 3 features)\n\n# Feature-per-row format (some APIs need this)\ndata_col = data_row.T  # Transpose!\nprint(f'Row-major: {data_row.shape}')  # (3, 3)\nprint(f'Col-major: {data_col.shape}')  # (3, 3)\n\n# Image: Channel-last → Channel-first\nimg_tf = np.random.randn(224, 224, 3)  # TensorFlow (H,W,C)\nimg_pt = img_tf.transpose(2, 0, 1)     # PyTorch (C,H,W)\nprint(f'TF format: {img_tf.shape}')     # (224, 224, 3)\nprint(f'PT format: {img_pt.shape}')     # (3, 224, 224)"
+      }
+    },
+    {
+      "id": 4,
+      "title": "Gram Matrix — Style Transfer",
+      "icon": "🎨",
+      "explanation": "Neural style transfer-এ (যেখানে একটা ছবিকে Van Gogh-এর style-এ আঁকা হয়) Gram matrix use হয় — G = FᵀF। Feature map-কে transpose কইরা নিজের সাথে গুণ করলে style information capture হয়। Transpose ছাড়া তোর ছবি Picasso style-এ বানানো সম্ভব হইতো না!",
+      "realExample": "Prisma app-এ photo filter = neural style transfer = Gram matrix (transpose) computation!",
+      "code": {
+        "language": "python",
+        "snippet": "import numpy as np\n\n# Feature map from CNN layer\n# 3 channels, flattened to (channels × spatial_positions)\nF = np.random.randn(3, 16)  # 3 channels, 4×4 spatial\n\n# Gram Matrix = F × F^T (captures style!)\nG = F @ F.T  # (3×16) × (16×3) = (3×3)\nprint(f'Feature map: {F.shape}')   # (3, 16)\nprint(f'Gram matrix: {G.shape}')   # (3, 3) — symmetric!\nprint(f'Symmetric: {np.allclose(G, G.T)}')  # True!\n\n# Style loss = ||G_generated - G_style||²\nG_style = np.random.randn(3, 3)\nstyle_loss = np.sum((G - G_style) ** 2)\nprint(f'Style loss: {style_loss:.4f}')"
+      }
+    }
+  ],
+  "memoryTrick": "Transpose = আয়না! Row হইয়া যায় Column, Column হইয়া যায় Row। (m×n) → (n×m)। দুইবার আয়না = আসল। Forward-এ W, backward-এ Wᵀ!",
+  "tags": ["transpose", "matrix", "symmetric", "covariance", "backpropagation", "gram-matrix"],
+  "prev": "matrix-multiplication",
+  "next": "identity-inverse"
+}
